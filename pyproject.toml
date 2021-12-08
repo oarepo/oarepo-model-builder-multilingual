@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "oarepo-model-builder-multilingual"
-version = "0.0.1"
+version = "0.0.2"
 description = ""
 authors = ["Alzbeta Pokorna <alzbeta.pokorna@cesnet.cz>"]
 readme = "README.md"
@@ -37,3 +37,5 @@ pytest = "^6"
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
+[tool.poetry.plugins."oarepo_model_builder.property_preprocessors"]
+12-multilingual = "oarepo_model_builder_multilingual.property_preprocessors.multilingual:MultilangPreprocessor"
