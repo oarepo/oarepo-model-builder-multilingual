@@ -3,7 +3,7 @@ from oarepo_model_builder.builders.mapping import MappingBuilder
 from oarepo_model_builder.invenio.invenio_record_schema import InvenioRecordSchemaBuilder
 from oarepo_model_builder.property_preprocessors import PropertyPreprocessor, process
 from oarepo_model_builder.utils.deepmerge import deepmerge
-from oarepo_model_builder.stack import ModelBuilderStack, ReplaceElement
+from oarepo_model_builder.stack import  ReplaceElement
 from deepmerge import always_merger
 
 def titles_gen(supported_langs, key):
@@ -21,7 +21,6 @@ class MultilangPreprocessor(PropertyPreprocessor):
              path='**/properties/*',
              condition=lambda current: current.type == 'multilingual')
     def modify_multilang_schema(self, data, stack, **kwargs):
-        print('dataaa',self.settings.supported_langs)
         data['type'] = 'array'
         data['items'] = {
             "type": 'object',
@@ -67,7 +66,7 @@ class MultilangPreprocessor(PropertyPreprocessor):
         data['type'] = 'object'
         deepmerge(data.setdefault('oarepo:marshmallow', {}), {
             'imports': [{
-                'import': 'oarepo_model_builder_multilingual',
+                'import': 'oarepo_model_builder_multilingual.schema',
                 'alias': 'multilingual'
             }],
             'class': 'multilingual.MultilingualSchema',

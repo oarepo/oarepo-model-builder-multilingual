@@ -13,14 +13,14 @@ import langcodes
 import marshmallow
 from marshmallow import ValidationError
 from marshmallow.fields import Nested, List
-
-from oarepo_model_builder_multilingual.schema import MultilingualSchema
+import oarepo_model_builder_multilingual.schema as multilingual
+# from oarepo_model_builder_multilingual.schema import MultilingualSchema
 
 
 def test_withoutApp():
     print(langcodes.Language.get('ava').is_valid())
     class MD(marshmallow.Schema):
-         title = List(Nested(MultilingualSchema()))
+         title = List(Nested(multilingual.MultilingualSchema()))
 
     data = {'title':
        [{'lang': 'cs', 'value': 'xxx'}, {'lang': 'en', 'value': 'xxx'}, {'lang': '_', 'value': 'xxx'}]
