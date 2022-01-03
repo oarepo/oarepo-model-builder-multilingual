@@ -1,9 +1,9 @@
-from oarepo_model_builder.builders.jsonschema import JSONSchemaBuilder
-from oarepo_model_builder.builders.mapping import MappingBuilder
-from oarepo_model_builder.invenio.invenio_record_schema import InvenioRecordSchemaBuilder
-from oarepo_model_builder.property_preprocessors import PropertyPreprocessor, process
-from oarepo_model_builder.utils.deepmerge import deepmerge
-from oarepo_model_builder.stack import  ReplaceElement
+from oarepo_model_builder_multilingual.model_preprocessors.jsonschema import JSONSchemaBuilder
+from oarepo_model_builder_multilingual.model_preprocessors.mapping import MappingBuilder
+from oarepo_model_builder_multilingual.invenio.invenio_record_schema import InvenioRecordSchemaBuilder
+from oarepo_model_builder_multilingual.property_preprocessors import PropertyPreprocessor, process
+from oarepo_model_builder_multilingual.utils.deepmerge import deepmerge
+from oarepo_model_builder_multilingual.stack import  ReplaceElement
 from deepmerge import always_merger
 
 def titles_gen(supported_langs, key):
