@@ -1,8 +1,8 @@
-from .invenio_base import InvenioBaseClassPythonBuilder
-from oarepo_model_builder_multilingual.model_preprocessors import process
-from oarepo_model_builder_multilingual.stack import ModelBuilderStack
-from ..outputs.json_stack import JSONStack
-from ..utils.schema import is_schema_element
+from oarepo_model_builder.invenio.invenio_base import InvenioBaseClassPythonBuilder
+from oarepo_model_builder.builders import process
+from oarepo_model_builder.stack import ModelBuilderStack
+from oarepo_model_builder.outputs.json_stack import JSONStack
+from oarepo_model_builder.utils.schema import is_schema_element
 
 paths = []
 
