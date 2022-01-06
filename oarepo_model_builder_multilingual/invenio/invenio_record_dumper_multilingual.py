@@ -3,6 +3,7 @@ from oarepo_model_builder.builders import process
 from oarepo_model_builder.stack import ModelBuilderStack
 from oarepo_model_builder.outputs.json_stack import JSONStack
 from oarepo_model_builder.utils.schema import is_schema_element
+from oarepo_model_builder.utils.jinja import package_name
 
 paths = []
 
@@ -17,15 +18,20 @@ class InvenioRecordMultilingualDumperBuilder(InvenioBaseClassPythonBuilder):
         self.stack = JSONStack()
 
 
-    def finish(self):
+    def finish(self, **extra_kwargs):
 
         super().finish(
             langs = self.settings.supported_langs,
             paths = paths
 
         )
-    @process('/model/**', condition=lambda current: is_schema_element(current.stack))
+        python_path = self.class_to_path(self.settings.python['record-class'])
+        self.process_template(python_path, "record-multilingual",
+                              current_package_name=package_name(self.settings.python['record-class']),
+                              **extra_kwargs)
+    @process('/model/**', condition=lambda current, stack: is_schema_element(stack))
     def enter_model_element(self, stack: ModelBuilderStack):
+
         self.model_element_enter(stack)
         yield
 

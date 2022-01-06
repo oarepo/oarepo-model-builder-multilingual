@@ -1,0 +1,8 @@
+from {{ python.record_dumper_class|package_name }} import MultilingualDumper
+
+
+{% for b in python.record_bases %}
+from {{ b|package_name }} import {{ b|base_name }}
+{% endfor %}
+
+{{ python.record_class|base_name }}.dumper_extensions.append(MultilingualDumper)

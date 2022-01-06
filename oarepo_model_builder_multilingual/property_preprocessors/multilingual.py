@@ -3,7 +3,7 @@ from oarepo_model_builder.builders.mapping import MappingBuilder
 from oarepo_model_builder.invenio.invenio_record_schema import InvenioRecordSchemaBuilder
 from oarepo_model_builder.property_preprocessors import PropertyPreprocessor, process
 from oarepo_model_builder.utils.deepmerge import deepmerge
-from oarepo_model_builder.stack import  ReplaceElement
+from oarepo_model_builder.stack import ReplaceElement, ModelBuilderStack
 from deepmerge import always_merger
 
 def titles_gen(supported_langs, key):
@@ -17,10 +17,12 @@ def titles_gen(supported_langs, key):
 
 
 class MultilangPreprocessor(PropertyPreprocessor):
+
+
     @process(model_builder=JSONSchemaBuilder,
              path='**/properties/*',
-             condition=lambda current: current.type == 'multilingual')
-    def modify_multilang_schema(self, data, stack, **kwargs):
+             condition=lambda current, stack: current.type == 'multilingual')
+    def modify_multilang_schema(self, data, stack: ModelBuilderStack, **kwargs):
         data['type'] = 'array'
         data['items'] = {
             "type": 'object',
@@ -37,8 +39,8 @@ class MultilangPreprocessor(PropertyPreprocessor):
 
     @process(model_builder=MappingBuilder,
              path='**/properties/*',
-             condition=lambda current: current.type == 'multilingual')
-    def modify_multilang_mapping(self, data, stack, **kwargs):
+             condition=lambda current, stack: current.type == 'multilingual')
+    def modify_multilang_mapping(self, data, stack: ModelBuilderStack, **kwargs):
         alternative = titles_gen(self.settings.supported_langs, stack.top.key)
 
         data = {
@@ -61,8 +63,8 @@ class MultilangPreprocessor(PropertyPreprocessor):
 
     @process(model_builder=InvenioRecordSchemaBuilder,
              path='**/properties/*',
-             condition=lambda current: current.type == 'multilingual')
-    def modify_multilang_marshmallow(self, data, stack, **kwargs):
+             condition=lambda current, stack: current.type == 'multilingual')
+    def modify_multilang_marshmallow(self, data, stack: ModelBuilderStack, **kwargs):
         data['type'] = 'object'
         deepmerge(data.setdefault('oarepo:marshmallow', {}), {
             'imports': [{
