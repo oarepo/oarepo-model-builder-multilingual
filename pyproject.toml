@@ -45,3 +45,6 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.plugins."oarepo_model_builder.model_preprocessors"]
 30-multilingual = "oarepo_model_builder_multilingual.model_preprocessors.multilingual:MultilingualModelPreprocessor"
+
+[tool.poetry.plugins."oarepo_model_builder.templates"]
+100-multilingual_templates = "oarepo_model_builder_multilingual.invenio"
