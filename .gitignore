@@ -74,4 +74,5 @@ docs/migration/data
 .envrc
 /.python-version
 /poetry.lock
+./poetry.lock
 example/data
