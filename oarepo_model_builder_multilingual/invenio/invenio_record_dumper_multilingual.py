@@ -15,7 +15,7 @@ class InvenioRecordMultilingualDumperBuilder(InvenioBaseClassPythonBuilder):
 
     def begin(self, schema, settings):
         super().begin(schema, settings)
-        self.stack = JSONStack()
+        # self.stack = JSONStack()
 
 
     def finish(self, **extra_kwargs):
@@ -30,30 +30,30 @@ class InvenioRecordMultilingualDumperBuilder(InvenioBaseClassPythonBuilder):
                               current_package_name=package_name(self.settings.python['record-class']),
                               **extra_kwargs)
     @process('/model/**', condition=lambda current, stack: is_schema_element(stack))
-    def enter_model_element(self, stack: ModelBuilderStack):
+    def enter_model_element(self):
 
-        self.model_element_enter(stack)
+        self.model_element_enter()
         yield
 
-        data = stack.top.data
+        data = self.stack.top.data
         if isinstance(data, dict):
 
             if 'type' in data and 'multilingual' in data['type']:
-                path = stack.path.replace('/model/properties', '/metadata')
+                path = self.stack.path.replace('/model/properties', '/metadata')
                 paths.append(path)
 
 
-        self.model_element_leave(stack)
+        self.model_element_leave()
 
-    def model_element_leave(self, stack: ModelBuilderStack):
+    def model_element_leave(self):
         self.stack.pop()
-    def model_element_enter(self, stack: ModelBuilderStack):
-        top = stack.top
-        match stack.top_type:
-            case stack.PRIMITIVE:
+    def model_element_enter(self):
+        top = self.stack.top
+        match self.stack.top_type:
+            case self.stack.PRIMITIVE:
                 self.stack.push(top.key, top.data)
-            case stack.LIST:
+            case self.stack.LIST:
                 self.stack.push(top.key, [])
-            case stack.DICT:
+            case self.stack.DICT:
                 self.stack.push(top.key, {})
 
