@@ -12,7 +12,7 @@ def titles_gen(supported_langs, key):
         alt = {key + '_' + lan : {
                 'type': 'fulltext'
             }}
-        always_merger.merge(data, alt)
+        deepmerge(data, alt)
     return data
 
 
@@ -57,7 +57,7 @@ class MultilangPreprocessor(PropertyPreprocessor):
             }
         }
 
-        always_merger.merge(data, alternative)
+        deepmerge(data, alternative)
 
         raise ReplaceElement(data)
 
