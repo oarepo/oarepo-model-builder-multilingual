@@ -20,7 +20,8 @@ class InvenioMultilingualPoetryBuilder(OutputBuilder):
         )
 
         sample_app = output.get("tool.poetry.extras", "sample-app")
-        print(sample_app.append('deepmerge'))
+        if 'deepmerge' not in sample_app:
+            sample_app.append('deepmerge')
 
         output.set(
             "tool.poetry.extras",
