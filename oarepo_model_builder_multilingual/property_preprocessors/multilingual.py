@@ -2,9 +2,9 @@ from oarepo_model_builder.builders.jsonschema import JSONSchemaBuilder
 from oarepo_model_builder.builders.mapping import MappingBuilder
 from oarepo_model_builder.invenio.invenio_record_schema import InvenioRecordSchemaBuilder
 from oarepo_model_builder.property_preprocessors import PropertyPreprocessor, process
-from oarepo_model_builder.utils.deepmerge import deepmerge
 from oarepo_model_builder.stack import ReplaceElement, ModelBuilderStack
-from deepmerge import always_merger
+from oarepo_model_builder.utils.deepmerge import deepmerge
+
 
 def titles_gen(supported_langs, key):
     data = {}
@@ -12,7 +12,7 @@ def titles_gen(supported_langs, key):
         alt = {key + '_' + lan : {
                 'type': 'fulltext'
             }}
-        always_merger.merge(data, alt)
+        data = deepmerge(data, alt)
     return data
 
 
