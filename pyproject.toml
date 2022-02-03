@@ -38,6 +38,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.plugins."oarepo_model_builder.builders"]
 360-invenio_record_multilingual_dumper = "oarepo_model_builder_multilingual.invenio.invenio_record_dumper_multilingual:InvenioRecordMultilingualDumperBuilder"
+0901-invenio_multiligual_poetry = "oarepo_model_builder.invenio.invenio_multilingual_poetry:InvenioMultilingualPoetryBuilder"
 
 [tool.poetry.plugins."oarepo_model_builder.property_preprocessors"]
 700-multilingual = "oarepo_model_builder_multilingual.property_preprocessors.multilingual:MultilangPreprocessor"
