@@ -12,16 +12,15 @@ packages = [
 [tool.poetry.dependencies]
 python = ">=3.10,<4.0"
 json5 = { version = "^0.9.6", optional = true }
-libcst = "^0.3.19"
+libcst = "^0.4.1"
 click = ">=7.1"
-tomlkit = "^0.7.2"
+tomlkit = "^0.9.0"
 jsonpointer = "^2.2"
 PyYAML = { version = "^6.0", optional = true }
 Jinja2 = "^3.0.3"
 isort = "^5.10.1"
 langcodes = ">=3.3.0"
-oarepo-model-builder = "^0.9.2"
-deepmerge = "^0.3.0"
+oarepo-model-builder = ">=0.9.17"
 marshmallow = "^3.14.1"
 
 
@@ -48,3 +47,6 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.plugins."oarepo_model_builder.templates"]
 100-multilingual_templates = "oarepo_model_builder_multilingual.invenio"
+
+[tool.poetry.plugins."oarepo.model_schemas"]
+es-strings = "oarepo_model_builder_multilingual:multilingual_jsonschema.json5"
