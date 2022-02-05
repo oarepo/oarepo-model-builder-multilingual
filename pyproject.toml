@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "oarepo-model-builder-multilingual"
-version = "0.1.1"
+version = "0.1.2"
 description = ""
 authors = ["Alzbeta Pokorna <alzbeta.pokorna@cesnet.cz>"]
 readme = "README.md"
@@ -20,7 +20,7 @@ PyYAML = { version = "^6.0", optional = true }
 Jinja2 = "^3.0.3"
 isort = "^5.10.1"
 langcodes = ">=3.3.0"
-oarepo-model-builder = ">=0.9.17"
+oarepo-model-builder = ">=0.9.20"
 marshmallow = "^3.14.1"
 
 

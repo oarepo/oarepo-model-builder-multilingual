@@ -109,7 +109,7 @@ from invenio_records_resources.services.records.schema import BaseRecordSchema a
 class TestSchema(ma.Schema, ):
     \"""TestSchema schema.\"""
     
-    a = ma_fields.List(ma_fields.Nested(MultilingualSchema()))
+    a = ma_fields.List(ma_fields.Nested(lambda: MultilingualSchema()))
     
     id = ma_fields.String()
     

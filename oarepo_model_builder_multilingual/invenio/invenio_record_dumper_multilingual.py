@@ -2,7 +2,6 @@ from oarepo_model_builder.invenio.invenio_base import InvenioBaseClassPythonBuil
 from oarepo_model_builder.builders import process
 from oarepo_model_builder.stack import ModelBuilderStack
 from oarepo_model_builder.outputs.json_stack import JSONStack
-from oarepo_model_builder.utils.schema import is_schema_element
 from oarepo_model_builder.utils.jinja import package_name
 
 paths = []
@@ -29,7 +28,7 @@ class InvenioRecordMultilingualDumperBuilder(InvenioBaseClassPythonBuilder):
         self.process_template(python_path, "record-multilingual",
                               current_package_name=package_name(self.settings.python['record-class']),
                               **extra_kwargs)
-    @process('/model/**', condition=lambda current, stack: is_schema_element(stack))
+    @process('/model/**', condition=lambda current, stack: stack.schema_valid)
     def enter_model_element(self):
 
         self.model_element_enter()
