@@ -1,6 +1,7 @@
 from oarepo_model_builder.builders.jsonschema import JSONSchemaBuilder
 from oarepo_model_builder.builders.mapping import MappingBuilder
 from oarepo_model_builder.invenio.invenio_record_schema import InvenioRecordSchemaBuilder
+from oarepo_model_builder.invenio.invenio_script_sample_data import InvenioScriptSampleDataBuilder
 from oarepo_model_builder.property_preprocessors import PropertyPreprocessor, process
 from oarepo_model_builder.stack import ReplaceElement, ModelBuilderStack
 from oarepo_model_builder.utils.deepmerge import deepmerge
@@ -9,17 +10,16 @@ from oarepo_model_builder.utils.deepmerge import deepmerge
 def titles_gen(supported_langs, key):
     data = {}
     for lan in supported_langs:
-        alt = {key + '_' + lan : {
-                'type': 'fulltext'
-            }}
+        alt = {key + '_' + lan: {
+            'type': 'fulltext+keyword'
+        }}
         data = deepmerge(data, alt)
     return data
 
 
 class MultilangPreprocessor(PropertyPreprocessor):
 
-
-    @process(model_builder=JSONSchemaBuilder,
+    @process(model_builder=[JSONSchemaBuilder, InvenioScriptSampleDataBuilder],
              path='**/properties/*',
              condition=lambda current, stack: current.type == 'multilingual')
     def modify_multilang_schema(self, data, stack: ModelBuilderStack, **kwargs):

@@ -40,7 +40,13 @@ def test_mapping():
                 }
             },
             "a_cs": {
-                "type": "text"
+                "type": "text",
+                "fields":{
+                    "keyword":{
+                        "type":"keyword",
+                        "ignore_above":50
+                    }
+                }
             },
             "id": {
                 "type": "keyword",
