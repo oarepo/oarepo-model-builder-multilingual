@@ -12,19 +12,11 @@ class InvenioMultilingualPoetryBuilder(OutputBuilder):
         output.setdefault(
             "tool.poetry.dependencies.deepmerge",
             "version",
-            "^1.0.1",
-            "optional",
-            True,
-            "allow-prereleases",
-            True,
+            "^1.0.1"
         )
 
-        sample_app = output.get("tool.poetry.extras", "sample-app")
-        if 'deepmerge' not in sample_app:
-            sample_app.append('deepmerge')
-
-        output.set(
-            "tool.poetry.extras",
-            "sample-app",
-            sample_app,
+        output.setdefault(
+            "tool.poetry.dependencies.langcodes",
+            "version",
+            "^3.3.0",
         )

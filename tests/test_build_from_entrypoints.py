@@ -4,11 +4,14 @@ import re
 from oarepo_model_builder.entrypoints import load_model, create_builder_from_entrypoints
 from tests.mock_filesystem import MockFilesystem
 
+import yaml
+
+
 def test_mapping():
     schema = load_model(
         "test.yaml",
         "test",
-        model_content={"oarepo:use": "invenio", "settings": {"supported_langs": ["cs"]},
+        model_content={"oarepo:use": "invenio", "settings": {"supported-langs": ["cs"]},
                        "model": {"properties": {"a": {"type": "multilingual"}}}},
         isort=False,
         black=False,
@@ -67,11 +70,14 @@ def test_mapping():
 }
     """,
     )
+
+
 def test_generated_schema():
     schema = load_model(
         "test.yaml",
         "test",
-        model_content={"oarepo:use": "invenio","settings": {"supported_langs" : ["cs"]}, "model": {"properties": {"a": {"type": "multilingual"}}}},
+        model_content={"oarepo:use": "invenio", "settings": {"supported-langs": ["cs"]},
+                       "model": {"properties": {"a": {"type": "multilingual"}}}},
         isort=False,
         black=False,
     )
@@ -99,14 +105,9 @@ import marshmallow.validate as ma_valid
 
 
 
-import oarepo_model_builder_multilingual.schema as multilingual
+from test.services.multilingual_schema import MultilingualSchema
 
 
-
-
-
-
-from multilingual import MultilingualSchema
 from invenio_records_resources.services.records.schema import BaseRecordSchema as InvenioBaseRecordSchema
 
 
@@ -126,3 +127,26 @@ class TestSchema(ma.Schema, ):
     _schema = ma_fields.String(data_key='$schema')
     """,
     )
+
+
+def test_sample_data():
+    schema = load_model(
+        "test.yaml",
+        "test",
+        model_content={"oarepo:use": "invenio", "settings": {"supported-langs": ["cs", "en"]},
+                       "model": {"properties": {"a": {"type": "multilingual"}}},
+                       "oarepo:sample": {"count": 1}},
+        isort=False,
+        black=False,
+    )
+
+    filesystem = MockFilesystem()
+    builder = create_builder_from_entrypoints(filesystem=filesystem)
+
+    builder.build(schema, "")
+
+    data = yaml.full_load(builder.filesystem.open(os.path.join("scripts", "sample_data.yaml")).read())
+
+    assert isinstance(data['a'], list)
+    assert len(data['a']) == 2
+    assert set(x['lang'] for x in data['a']) == {'cs', 'en'}

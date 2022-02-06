@@ -8,7 +8,7 @@ def test_pyproject():
     schema = load_model(
         "test.yaml",
         "test",
-        model_content={"oarepo:use": "invenio", "settings": {"supported_langs": ["cs"]},
+        model_content={"oarepo:use": "invenio", "settings": {"supported-langs": ["cs"]},
                        "model": {"properties": {"a": {"type": "multilingual"}}}},
         isort=False,
         black=False,
@@ -23,8 +23,8 @@ def test_pyproject():
 
     assert """[tool.poetry.dependencies.deepmerge]
 version = "^1.0.1"
-optional = true
-allow-prereleases = true""" in data
+""" in data
 
-    assert """[tool.poetry.extras]
-sample-app = ["invenio", "invenio-records-resources", "pyyaml", "deepmerge"]""" in data
+    assert """[tool.poetry.dependencies.langcodes]
+version = "^3.3.0"
+""" in data

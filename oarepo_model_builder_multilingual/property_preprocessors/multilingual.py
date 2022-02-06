@@ -19,7 +19,7 @@ def titles_gen(supported_langs, key):
 
 class MultilangPreprocessor(PropertyPreprocessor):
 
-    @process(model_builder=[JSONSchemaBuilder, InvenioScriptSampleDataBuilder],
+    @process(model_builder=JSONSchemaBuilder,
              path='**/properties/*',
              condition=lambda current, stack: current.type == 'multilingual')
     def modify_multilang_schema(self, data, stack: ModelBuilderStack, **kwargs):
@@ -67,11 +67,7 @@ class MultilangPreprocessor(PropertyPreprocessor):
     def modify_multilang_marshmallow(self, data, stack: ModelBuilderStack, **kwargs):
         data['type'] = 'object'
         deepmerge(data.setdefault('oarepo:marshmallow', {}), {
-            'imports': [{
-                'import': 'oarepo_model_builder_multilingual.schema',
-                'alias': 'multilingual'
-            }],
-            'class': 'multilingual.MultilingualSchema',
+            'class': self.settings.python.multilingual_schema_class,
             'list_nested': True
         })
         return data
