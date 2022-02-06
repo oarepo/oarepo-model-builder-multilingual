@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "oarepo-model-builder-multilingual"
-version = "0.1.3"
+version = "0.1.4"
 description = ""
 authors = ["Alzbeta Pokorna <alzbeta.pokorna@cesnet.cz>"]
 readme = "README.md"
@@ -12,7 +12,7 @@ packages = [
 [tool.poetry.dependencies]
 python = ">=3.10,<4.0"
 langcodes = ">=3.3.0"
-oarepo-model-builder = ">=0.9.21"
+oarepo-model-builder = ">=0.9.22"
 
 
 
@@ -21,7 +21,7 @@ json5 = ["json5"]
 pyyaml = ["pyyaml"]
 
 [tool.poetry.dev-dependencies]
-pytest = "^6"
+pytest = "^7"
 marshmallow = "^3.14.1"
 
 [build-system]
