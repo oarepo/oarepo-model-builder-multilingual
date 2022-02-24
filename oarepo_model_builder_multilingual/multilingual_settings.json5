@@ -2,7 +2,7 @@
   "settings": {
     "type": "object",
     "properties": {
-      "supported_langs": {
+      "supported-langs": {
         "type": "object",
         "additionalProperties": true
       }

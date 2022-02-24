@@ -11,7 +11,7 @@ def test_mapping():
     schema = load_model(
         "test.yaml",
         "test",
-        model_content={"oarepo:use": "invenio", "settings": {"supported_langs": {
+        model_content={"oarepo:use": "invenio", "settings": {"supported-langs": {
             'cs': {
                 'text': {
                     'analyzer': 'czech',
@@ -65,7 +65,7 @@ def test_generated_schema():
     schema = load_model(
         "test.yaml",
         "test",
-        model_content={"oarepo:use": "invenio", "settings": {"supported_langs": {
+        model_content={"oarepo:use": "invenio", "settings": {"supported-langs": {
             'cs': {
                 'text': {
                     'analyzer': 'czech',
@@ -142,7 +142,7 @@ def test_sample_data():
     schema = load_model(
         "test.yaml",
         "test",
-        model_content={"oarepo:use": "invenio", "settings": {"supported_langs": {
+        model_content={"oarepo:use": "invenio", "settings": {"supported-langs": {
             'cs': {
                 'text': {
                     'analyzer': 'czech',
@@ -184,7 +184,7 @@ def test_search_options():
     schema = load_model(
         "test.yaml",
         "test",
-        model_content={"oarepo:use": "invenio", "settings": {"supported_langs": {
+        model_content={"oarepo:use": "invenio", "settings": {"supported-langs": {
             'cs': {
                 'text': {
                     'analyzer': 'czech',

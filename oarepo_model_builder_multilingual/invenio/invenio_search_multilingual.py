@@ -45,8 +45,7 @@ class InvenioRecordSearchOptionsBuilderMultilingual(InvenioBaseClassPythonBuilde
         data = self.stack.top.data
 
         if schema_element_type == "property" and data.type == "multilingual" and OAREPO_SORTABLE_PROPERTY in data:
-            print('jej')
-            print(self.settings.supported_langs)
+
             for lang in self.settings.supported_langs:
 
                 if 'key' in data[OAREPO_SORTABLE_PROPERTY]:
