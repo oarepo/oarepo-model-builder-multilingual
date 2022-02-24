@@ -19,7 +19,7 @@ def multilingual_sample_provider(faker, settings, stack, params):
             'lang': lang,
             'value': get_faker(lang).sentence(nb_words=6)
         }
-        for lang in faker.random_elements(elements=settings.supported_langs,
-                                          length=min(3, len(settings.supported_langs)),
+        for lang in faker.random_elements(elements=settings.supported_langs.keys(),
+                                          length=min(3, len(settings.supported_langs.keys())),
                                           unique=True)
     ]

@@ -7,13 +7,31 @@ from oarepo_model_builder.stack import ReplaceElement, ModelBuilderStack
 from oarepo_model_builder.utils.deepmerge import deepmerge
 
 
-def titles_gen(supported_langs, key):
+def alternative_gen(supported_langs, key):
     data = {}
     for lan in supported_langs:
         alt = {key + '_' + lan: {
-            'type': 'fulltext+keyword'
+            'type': 'fulltext+keyword',
         }}
+        multilang_options = {}
+
+        if 'text' in supported_langs[lan]:
+            deepmerge(multilang_options, supported_langs[lan]['text'])
+
+        if 'sort' in supported_langs[lan]:
+            sort = deepmerge(supported_langs[lan]['sort'], {'index': False, 'language': lan})
+            deepmerge(multilang_options, {'sort': sort})
+
+        if 'keyword' in supported_langs[lan]:
+            deepmerge(multilang_options, {'fields': {'keyword': supported_langs[lan]['keyword']}})
+        deepmerge(
+            alt[key + '_' + lan].setdefault("oarepo:mapping", {}),
+            multilang_options,
+            [],
+        )
+
         data = deepmerge(data, alt)
+
     return data
 
 
@@ -34,6 +52,7 @@ class MultilangPreprocessor(PropertyPreprocessor):
                     'type': 'string'
                 }
             }
+
         }
         return data
 
@@ -41,7 +60,8 @@ class MultilangPreprocessor(PropertyPreprocessor):
              path='**/properties/*',
              condition=lambda current, stack: current.type == 'multilingual')
     def modify_multilang_mapping(self, data, stack: ModelBuilderStack, **kwargs):
-        alternative = titles_gen(self.settings.supported_langs, stack.top.key)
+        print('path', stack.path.split('/')[3:])
+        alternative = alternative_gen(self.settings.supported_langs, stack.top.key)
 
         data = {
             stack.top.key: {
@@ -70,4 +90,5 @@ class MultilangPreprocessor(PropertyPreprocessor):
             'class': self.settings.python.multilingual_schema_class,
             'list_nested': True
         })
+
         return data

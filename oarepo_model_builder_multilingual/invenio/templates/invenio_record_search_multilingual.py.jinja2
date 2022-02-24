@@ -1,0 +1,19 @@
+from invenio_records_resources.services import SearchOptions as InvenioSearchOptions
+from . import facets
+
+{% for b in python.record_search_options_bases %}
+from {{ b|package_name }} import {{ b|base_name }}
+{% endfor %}
+
+class {{ python.record_search_options_class|base_name }}({% for b in python.record_search_options_bases %}{{ b|base_name }}, {% endfor %}InvenioSearchOptions):
+    """{{ python.record_class|base_name }} search options."""
+
+    sort_options = {
+{% for dict in sort_definition %}
+{% for key, value in dict.items()%}
+    '{{ key }}': {{ value }},
+{% endfor %}
+{% endfor %}
+    }
+
+

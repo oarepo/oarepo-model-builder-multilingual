@@ -2,11 +2,9 @@
   "settings": {
     "type": "object",
     "properties": {
-      "supported-langs": {
-        "type": "array",
-        "items": {
-          "type": "string"
-        }
+      "supported_langs": {
+        "type": "object",
+        "additionalProperties": true
       }
     }
   },

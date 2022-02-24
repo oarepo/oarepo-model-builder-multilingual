@@ -29,6 +29,7 @@ requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.plugins."oarepo_model_builder.builders"]
+0301-invenio_record_search_options_multilang = "oarepo_model_builder_multilingual.invenio.invenio_search_multilingual:InvenioRecordSearchOptionsBuilderMultilingual"
 360-invenio_record_multilingual_dumper = "oarepo_model_builder_multilingual.invenio.invenio_record_dumper_multilingual:InvenioRecordMultilingualDumperBuilder"
 360-invenio_schema_multilingual = "oarepo_model_builder_multilingual.invenio.invenio_schema_multilingual:InvenioSchemaMultilingualBuilder"
 0901-invenio_multiligual_poetry = "oarepo_model_builder_multilingual.invenio.invenio_multilingual_poetry:InvenioMultilingualPoetryBuilder"
