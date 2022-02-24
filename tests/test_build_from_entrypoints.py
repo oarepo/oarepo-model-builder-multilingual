@@ -256,7 +256,7 @@ class TestSearchOptions(InvenioSearchOptions):
     sort_options = {
 
 
-    'a_cs': {'fields': ['a_cs']},
+    'a': {'fields': ['a']},'a_cs': {'fields': ['a_cs']},
 
 
 
