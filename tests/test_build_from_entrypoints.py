@@ -215,12 +215,17 @@ def test_search_options():
     builder.build(schema, "")
 
     data = builder.filesystem.open(os.path.join("test", "services", "search.py")).read()
+    print(data)
     assert re.sub(r"\s", "", data) == re.sub(
         r"\s",
         "",
         """
 from invenio_records_resources.services import SearchOptions as InvenioSearchOptions
 from . import facets
+
+def _(x):
+    \"""Identity function for string extraction.\"""
+    return x
 
 
 
@@ -250,8 +255,19 @@ class TestSearchOptions(InvenioSearchOptions):
 
 
     }
-
     sort_options = {
+            "bestmatch": dict(
+                title=_('Best match'),
+                fields=['_score'],  # ES defaults to desc on `_score` field
+            ),
+            "newest": dict(
+                title=_('Newest'),
+                fields=['-created'],
+            ),
+            "oldest": dict(
+                title=_('Oldest'),
+                fields=['created'],
+            ),
 
 
     'a': {'fields': ['a']},'a_cs': {'fields': ['a_cs']},
