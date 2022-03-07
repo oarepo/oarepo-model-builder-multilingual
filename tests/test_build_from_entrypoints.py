@@ -43,7 +43,6 @@ def test_mapping():
     builder.build(schema, "")
 
     data = builder.filesystem.open(os.path.join("test", "records", "mappings", "v7", "test", "test-1.0.0.json")).read()
-    print(data)
     assert re.sub(r"\s", "", data) == re.sub(
         r"\s",
         "",
@@ -216,7 +215,6 @@ def test_search_options():
     builder.build(schema, "")
 
     data = builder.filesystem.open(os.path.join("test", "services", "search.py")).read()
-    print(data)
     assert re.sub(r"\s", "", data) == re.sub(
         r"\s",
         "",

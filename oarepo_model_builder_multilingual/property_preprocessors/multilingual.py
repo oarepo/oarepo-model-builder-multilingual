@@ -60,7 +60,6 @@ class MultilangPreprocessor(PropertyPreprocessor):
              path='**/properties/*',
              condition=lambda current, stack: current.type == 'multilingual')
     def modify_multilang_mapping(self, data, stack: ModelBuilderStack, **kwargs):
-        print('path', stack.path.split('/')[3:])
         alternative = alternative_gen(self.settings['supported-langs'], stack.top.key)
 
         data = {
