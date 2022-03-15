@@ -3,5 +3,6 @@ TEMPLATES = {
     "record-multilingual": "templates/invenio_record_multilingual.py.jinja2",
     "subschema-multilingual": "templates/invenio_schema_multilingual.py.jinja2",
     "multi-search": "templates/invenio_record_search_multilingual.py.jinja2",
+    "subschema-i18n": "templates/invenio_schema_i18n.py.jinja2",
 
 }

@@ -16,6 +16,9 @@
       },
       "multilingual-schema-class": {
         "type": "string"
+      },
+      "i18n-schema-class": {
+        "type": "string"
       }
     }
   }

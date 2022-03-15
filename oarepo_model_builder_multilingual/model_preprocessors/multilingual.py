@@ -6,3 +6,5 @@ class MultilingualModelPreprocessor(ModelPreprocessor):
                  lambda: f'{settings.python.record_records_package}.multilingual_dumper.MultilingualDumper')
         self.set(settings.python, 'multilingual-schema-class',
                  lambda: f'{settings.python.record_services_package}.multilingual_schema.MultilingualSchema')
+        self.set(settings.python, 'i18n-schema-class',
+                 lambda: f'{settings.python.record_services_package}.i18nStr_schema.i18nStrSchema')

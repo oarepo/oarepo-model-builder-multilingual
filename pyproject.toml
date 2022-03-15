@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "oarepo-model-builder-multilingual"
-version = "0.1.8"
+version = "0.1.9"
 description = ""
 authors = ["Alzbeta Pokorna <alzbeta.pokorna@cesnet.cz>"]
 readme = "README.md"
@@ -28,14 +28,22 @@ marshmallow = "^3.14.1"
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
+[tool.poetry.plugins."oarepo.models"]
+i18n = "oarepo_model_builder_multilingual.builtin_models:i18n.json"
+
 [tool.poetry.plugins."oarepo_model_builder.builders"]
 0301-invenio_record_search_options_multilang = "oarepo_model_builder_multilingual.invenio.invenio_search_multilingual:InvenioRecordSearchOptionsBuilderMultilingual"
 360-invenio_record_multilingual_dumper = "oarepo_model_builder_multilingual.invenio.invenio_record_dumper_multilingual:InvenioRecordMultilingualDumperBuilder"
 360-invenio_schema_multilingual = "oarepo_model_builder_multilingual.invenio.invenio_schema_multilingual:InvenioSchemaMultilingualBuilder"
 0901-invenio_multiligual_poetry = "oarepo_model_builder_multilingual.invenio.invenio_multilingual_poetry:InvenioMultilingualPoetryBuilder"
 
+#i18n
+360-invenio_schema_i18n = "oarepo_model_builder_multilingual.invenio.invenio_schema_i18n:InvenioSchemaI18nStrBuilder"
+
 [tool.poetry.plugins."oarepo_model_builder.property_preprocessors"]
 700-multilingual = "oarepo_model_builder_multilingual.property_preprocessors.multilingual:MultilangPreprocessor"
+1001-i18n = "oarepo_model_builder_multilingual.property_preprocessors.i18nStr:I18nStrPreprocessor"
+701-marshmallow-class-i18n = "oarepo_model_builder_multilingual.property_preprocessors.i18n_marshmallow_class_generator:MarshmallowClassGeneratorPreprocessor"
 
 [tool.poetry.plugins."oarepo_model_builder.model_preprocessors"]
 30-multilingual = "oarepo_model_builder_multilingual.model_preprocessors.multilingual:MultilingualModelPreprocessor"
@@ -46,6 +54,7 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry.plugins."oarepo.model_schemas"]
 es-strings = "oarepo_model_builder_multilingual:multilingual_jsonschema.json5"
 mult-settings = "oarepo_model_builder_multilingual:multilingual_settings.json5"
+i18n = "oarepo_model_builder_multilingual:i18n.json5"
 
 [tool.poetry.plugins."oarepo_model_builder.sample_data_providers"]
 multilingual = "oarepo_model_builder_multilingual.faker:multilingual_sample_provider"

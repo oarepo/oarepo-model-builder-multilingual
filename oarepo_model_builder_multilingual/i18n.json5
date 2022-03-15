@@ -1,0 +1,27 @@
+{
+  "jsonschema-property": {
+    "properties": {
+      "oarepo:multilingual": {
+        "type": "object",
+        "properties": {
+          "i18n": {
+            "type": "boolean"
+          },
+          "usei18n": {
+            "type": "boolean"
+          },
+          "sortable": {
+            "type": "boolean"
+          },
+          "lang-field": {
+            "type": "string"
+          },
+          "value-field": {
+            "type": "string"
+          }
+        }
+      },
+      "oarepo:use": "string"
+    }
+  }
+}

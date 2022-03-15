@@ -4,6 +4,7 @@
       "type": {
         "enum": [
           "multilingual",
+          "i18nStr"
         ]
       }
     }
