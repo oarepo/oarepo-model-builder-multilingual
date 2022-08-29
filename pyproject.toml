@@ -55,6 +55,7 @@ i18n = "oarepo_model_builder_multilingual.builtin_models:i18n.json"
 es-strings = "oarepo_model_builder_multilingual:multilingual_jsonschema.json5"
 mult-settings = "oarepo_model_builder_multilingual:multilingual_settings.json5"
 i18n = "oarepo_model_builder_multilingual:i18n.json5"
+ui = "oarepo_model_builder_multilingual:ui_jsonschema.json5"
 
 [tool.poetry.plugins."oarepo_model_builder.sample_data_providers"]
 multilingual = "oarepo_model_builder_multilingual.faker:multilingual_sample_provider"
