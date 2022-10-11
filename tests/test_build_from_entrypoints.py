@@ -59,6 +59,43 @@ def test_mapping():
     """,
     )
 
+def test_dumper():
+    schema = load_model(
+        "test.yaml",
+        "test",
+        model_content={"oarepo:use": "invenio", "settings": {"supported-langs": {
+            'cs': {
+                'text': {
+                    'analyzer': 'czech',
+                },
+                'sort': {
+                    'type': 'icu_collation_keyword'
+                },
+                'keyword': {
+                    'test': 'test'
+                }
+            },
+            'en': {
+                'text': {
+                    'analyzer': 'en'
+                },
+                'sort': {
+                    'type': 'icu_collation_keyword'
+                }
+            }
+        }},
+                       "model": {"properties": {"a": {"type": "multilingual"}}}},
+        isort=False,
+        black=False,
+    )
+
+    filesystem = MockFilesystem()
+    builder = create_builder_from_entrypoints(filesystem=filesystem)
+
+    builder.build(schema, "")
+
+    data = builder.filesystem.open(os.path.join("test", "records", "multilingual_dumper.py")).read()
+    print(data)
 
 def test_generated_schema():
     schema = load_model(
