@@ -1,3 +1,4 @@
+import munch
 from oarepo_model_builder.builders import process
 from oarepo_model_builder.utils.jinja import package_name
 
@@ -16,12 +17,14 @@ class InvenioRecordMultilingualDumperBuilder(InvenioBaseClassPythonBuilder):
     def begin(self, schema, settings):
         super().begin(schema, settings)
         self.paths = []
-
-
+        self.langs = []
 
     def finish(self, **extra_kwargs):
+        for lang in self.settings['supported-langs']:
+            self.langs.append(lang)
+            
         super().finish(
-            langs=self.settings.supported_langs,
+            langs=self.langs,
             paths=self.paths
         )
         python_path = self.class_to_path(self.settings.python['record-class'])
