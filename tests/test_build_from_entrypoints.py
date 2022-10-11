@@ -45,41 +45,6 @@ def test_dumper():
     # data = builder.filesystem.open(os.path.join("test", "records", "multilingual_dumper.py")).read()
     # print(data)
     data = builder.filesystem.open(os.path.join("test", "records", "api.py")).read()
-    assert re.sub(r"\s", "", data) == re.sub(
-        r"\s",
-        "",
-    """
-    from invenio_records.systemfields import ConstantField, RelationsField
-from invenio_records_resources.records.systemfields import IndexField,
-
-from invenio_records_resources.records.systemfields.pid import PIDField, PIDFieldContext
-from invenio_pidstore.providers.recordid_v2 import RecordIdProviderV2
-from invenio_records_resources.records.api import Record as InvenioBaseRecord
-
-
-from test.records.models import TestMetadata
-from test.records.dumper import TestDumper
-from test.records.multilingual_dumper import MultilingualDumper
-
-
-
-
-class TestRecord(InvenioBaseRecord):
-    model_cls = TestMetadata
-    schema = ConstantField("$schema", "http://localhost/schemas/test-1.0.0.json")
-    index = IndexField("test-test-1.0.0")
-
-    pid = PIDField(
-        create=True,
-        provider=RecordIdProviderV2,
-        context_cls = PIDFieldContext
-    )
-
-    dumper_extensions = [
-    MultilingualDumper()]
-    dumper = TestDumper(extensions=dumper_extensions)
-    """,
-    )
 
 def test_generated_schema():
     schema = basic_schema()
