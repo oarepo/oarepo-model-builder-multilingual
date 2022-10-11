@@ -6,36 +6,11 @@ from tests.mock_filesystem import MockFilesystem
 
 import yaml
 
+from tests.test_helper import basic_schema
+
 
 def test_mapping():
-    schema = load_model(
-        "test.yaml",
-        "test",
-        model_content={"oarepo:use": "invenio", "settings": {"supported-langs": {
-            'cs': {
-                'text': {
-                    'analyzer': 'czech',
-                },
-                'sort': {
-                    'type': 'icu_collation_keyword'
-                },
-                'keyword': {
-                    'test': 'test'
-                }
-            },
-            'en': {
-                'text': {
-                    'analyzer': 'en'
-                },
-                'sort': {
-                    'type': 'icu_collation_keyword'
-                }
-            }
-        }},
-                       "model": {"properties": {"a": {"type": "multilingual"}}}},
-        isort=False,
-        black=False,
-    )
+    schema = basic_schema()
 
     filesystem = MockFilesystem()
     builder = create_builder_from_entrypoints(filesystem=filesystem)
@@ -60,34 +35,7 @@ def test_mapping():
     )
 
 def test_dumper():
-    schema = load_model(
-        "test.yaml",
-        "test",
-        model_content={"oarepo:use": "invenio", "settings": {"supported-langs": {
-            'cs': {
-                'text': {
-                    'analyzer': 'czech',
-                },
-                'sort': {
-                    'type': 'icu_collation_keyword'
-                },
-                'keyword': {
-                    'test': 'test'
-                }
-            },
-            'en': {
-                'text': {
-                    'analyzer': 'en'
-                },
-                'sort': {
-                    'type': 'icu_collation_keyword'
-                }
-            }
-        }},
-                       "model": {"properties": {"a": {"type": "multilingual"}}}},
-        isort=False,
-        black=False,
-    )
+    schema = basic_schema()
 
     filesystem = MockFilesystem()
     builder = create_builder_from_entrypoints(filesystem=filesystem)
@@ -98,34 +46,7 @@ def test_dumper():
     print(data)
 
 def test_generated_schema():
-    schema = load_model(
-        "test.yaml",
-        "test",
-        model_content={"oarepo:use": "invenio", "settings": {"supported-langs": {
-            'cs': {
-                'text': {
-                    'analyzer': 'czech',
-                },
-                'sort': {
-                    'type': 'icu_collation_keyword'
-                },
-                'keyword': {
-                    'test': 'test'
-                }
-            },
-            'en': {
-                'text': {
-                    'analyzer': 'czech'
-                },
-                'sort': {
-                    'type': 'icu_collation_keyword'
-                }
-            }
-        }},
-                       "model": {"properties": {"a": {"type": "multilingual"}}}},
-        isort=False,
-        black=False,
-    )
+    schema = basic_schema()
 
     filesystem = MockFilesystem()
     builder = create_builder_from_entrypoints(filesystem=filesystem)
