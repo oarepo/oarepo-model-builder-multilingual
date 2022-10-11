@@ -5,4 +5,8 @@ from {{ python.multilingual_dumper_class|package_name }} import MultilingualDump
 from {{ b|package_name }} import {{ b|base_name }}
 {% endfor %}
 
-{{ python.record_class|base_name }}.dumper_extensions.append(MultilingualDumper)
+class {{ python.record_class|base_name }}({% for b in python.record_bases %}{{ b|base_name }}, {% endfor %}InvenioBaseRecord):
+    dumper_extensions = [
+    MultilingualDumper()
+    ]
+
