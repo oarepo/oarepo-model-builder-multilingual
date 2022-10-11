@@ -22,7 +22,7 @@ class InvenioRecordMultilingualDumperBuilder(InvenioBaseClassPythonBuilder):
     def finish(self, **extra_kwargs):
         for lang in self.settings['supported-langs']:
             self.langs.append(lang)
-            
+
         super().finish(
             langs=self.langs,
             paths=self.paths
@@ -47,7 +47,7 @@ class InvenioRecordMultilingualDumperBuilder(InvenioBaseClassPythonBuilder):
         if isinstance(data, dict):
 
             if 'type' in data and 'multilingual' in data['type']:
-                path = self.stack.path.replace('/model/properties', '/metadata')
+                path = self.stack.path.replace('/model/properties', '')
                 self.paths.append(path)
 
 
