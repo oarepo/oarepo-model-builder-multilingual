@@ -31,7 +31,7 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry.plugins."oarepo.models"]
 i18n = "oarepo_model_builder_multilingual.builtin_models:i18n.json"
 
-[tool.poetry.plugins."oarepo_model_builder.builders"]
+[tool.poetry.plugins."oarepo_model_builder.builders.model"]
 0301-invenio_record_search_options_multilang = "oarepo_model_builder_multilingual.invenio.invenio_search_multilingual:InvenioRecordSearchOptionsBuilderMultilingual"
 #360-invenio_record_multilingual_dumper = "oarepo_model_builder_multilingual.invenio.invenio_record_dumper_multilingual:InvenioRecordMultilingualDumperBuilder"
 360-invenio_schema_multilingual = "oarepo_model_builder_multilingual.invenio.invenio_schema_multilingual:InvenioSchemaMultilingualBuilder"
@@ -41,12 +41,12 @@ i18n = "oarepo_model_builder_multilingual.builtin_models:i18n.json"
 #i18n
 360-invenio_schema_i18n = "oarepo_model_builder_multilingual.invenio.invenio_schema_i18n:InvenioSchemaI18nStrBuilder"
 
-[tool.poetry.plugins."oarepo_model_builder.property_preprocessors"]
+[tool.poetry.plugins."oarepo_model_builder.property_preprocessors.model"]
 700-multilingual = "oarepo_model_builder_multilingual.property_preprocessors.multilingual:MultilangPreprocessor"
 1001-i18n = "oarepo_model_builder_multilingual.property_preprocessors.i18nStr:I18nStrPreprocessor"
 701-marshmallow-class-i18n = "oarepo_model_builder_multilingual.property_preprocessors.i18n_marshmallow_class_generator:MarshmallowClassGeneratorPreprocessor"
 
-[tool.poetry.plugins."oarepo_model_builder.model_preprocessors"]
+[tool.poetry.plugins."oarepo_model_builder.model_preprocessors.model"]
 30-multilingual = "oarepo_model_builder_multilingual.model_preprocessors.multilingual:MultilingualModelPreprocessor"
 
 [tool.poetry.plugins."oarepo_model_builder.templates"]
