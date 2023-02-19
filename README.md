@@ -177,7 +177,7 @@ i18nStr. For this purpose you need to add to the field: `'multilingual': {'i18n'
 #### Example:
 ##### Model:
 ```json
-"model": {"properties": {"a": {"type": "fulltext", "multilingual": {"i18n": True}}}
+"model": {"properties": {"a": {"type": "fulltext", "multilingual": {"i18n": true}}}
         "settings": {"supported-langs": {"cs": {}, "en": {}}}}
 ```
 ##### Schema:
