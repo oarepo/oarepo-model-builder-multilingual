@@ -86,18 +86,18 @@ respectively. All supplied data for the supported language will be inserted into
                 "text": {
                     "analyzer": "czech",
                 },
-                "sort"': {
+                "sort": {
                     "type": "icu_collation_keyword"
                 },
-                "keyword"': {
+                "keyword": {
                     "test": "test"
                 }
             },
-            "en"': {
+            "en": {
                 "text": {
                     "analyzer": "en"
                 },
-                "sort"': {
+                "sort": {
                     "type": "icu_collation_keyword"
                 }
             }}}}
@@ -177,7 +177,7 @@ i18nStr. For this purpose you need to add to the field: `'multilingual': {'i18n'
 #### Example:
 ##### Model:
 ```json
-"model": {"properties": {"a": {"type": "fulltext", "multilingual": {'i18n': True}}}
+"model": {"properties": {"a": {"type": "fulltext", "multilingual": {"i18n": True}}}
         "settings": {"supported-langs": {"cs": {}, "en": {}}}}
 ```
 ##### Schema:
