@@ -82,23 +82,23 @@ respectively. All supplied data for the supported language will be inserted into
 ```json
 "model": {"properties": {"a": {"type": "multilingual"}}
           "settings": {"supported-langs": {
-            'cs': {
-                'text': {
-                    'analyzer': 'czech',
+            "cs": {
+                "text": {
+                    "analyzer": "czech",
                 },
-                'sort': {
-                    'type': 'icu_collation_keyword'
+                "sort"': {
+                    "type": "icu_collation_keyword"
                 },
-                'keyword': {
-                    'test': 'test'
+                "keyword"': {
+                    "test": "test"
                 }
             },
-            'en': {
-                'text': {
-                    'analyzer': 'en'
+            "en"': {
+                "text": {
+                    "analyzer": "en"
                 },
-                'sort': {
-                    'type': 'icu_collation_keyword'
+                "sort"': {
+                    "type": "icu_collation_keyword"
                 }
             }}}}
 ```
