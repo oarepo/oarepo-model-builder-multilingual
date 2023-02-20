@@ -76,3 +76,6 @@ docs/migration/data
 /poetry.lock
 ./poetry.lock
 example/data
+
+.vscode
+

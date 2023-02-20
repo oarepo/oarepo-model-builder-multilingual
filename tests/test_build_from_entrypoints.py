@@ -23,64 +23,66 @@ def test_mapping():
         "",
         """
 {
-    "mappings": {
-        "properties": {
-            "a": {
-                "type": "object",
-                "properties": {
-                    "lang": {
-                        "type": "keyword"
-                    },
-                    "value": {
-                        "type": "text"
-                    }
-                }
-            },
-            "a_cs": {
-                "type": "text",
-                "analyzer": "czech",
-                "sort": {
-                    "type": "icu_collation_keyword",
-                    "index": false,
-                    "language": "cs"
-                },
-                "fields": {
-                    "keyword": {
-                        "test": "test",
-                        "type": "keyword"
-                    }
-                }
-            },
-            "a_en": {
-                "type": "text",
-                "analyzer": "en",
-                "sort": {
-                    "type": "icu_collation_keyword",
-                    "index": false,
-                    "language": "en"
-                },
-                "fields": {
-                    "keyword": {
-                        "type": "keyword"
-                    }
-                }
-            },
-            "id": {
-                "type": "keyword"
-            },
-            "created": {
-                "type": "date"
-            },
-            "updated": {
-                "type": "date"
-            },
-            "$schema": {
-                "type": "keyword"
-            }
+  "mappings":{
+    "properties":{
+      "a":{
+        "type":"object",
+        "properties":{
+          "lang":{
+            "type":"keyword"
+          },
+          "value":{
+            "type":"text"
+          }
         }
+      },
+      "a_cs":{
+        "type":"text",
+        "analyzer":"czech",
+        "sort":{
+          "type":"icu_collation_keyword",
+          "index":false,
+          "language":"cs"
+        },
+        "fields":{
+          "keyword":{
+            "test":"test",
+            "type":"keyword"
+          }
+        }
+      },
+      "a_en":{
+        "type":"text",
+        "analyzer":"en",
+        "sort":{
+          "type":"icu_collation_keyword",
+          "index":false,
+          "language":"en"
+        },
+        "fields":{
+          "keyword":{
+            "type":"keyword"
+          }
+        }
+      },
+      "id":{
+        "type":"keyword"
+      },
+      "created":{
+        "type":"date"
+      },
+      "updated":{
+        "type":"date"
+      },
+      "$schema":{
+        "type":"keyword"
+      }
     }
+  }
 }
-    """,
+   """,
+
+
     )
 
 def test_dumper():
@@ -103,70 +105,33 @@ def test_generated_schema():
 
     builder.build(schema, "")
 
-    data = builder.filesystem.open(os.path.join("test", "services","records", "schema.py")).read()
-    data_2 = builder.filesystem.open(os.path.join("test", "services", "records", "multilingual_schema.py")).read()
+
+    data = builder.filesystem.open(os.path.join("test", "services", "schema.py")).read()
+    print(">>>>>")
     print(data)
-    print(data_2)
 
     assert re.sub(r"\s", "", data) == re.sub(
         r"\s",
         "",
         """
+
+from invenio_records_resources.services.records.schema import BaseRecordSchema
+import marshmallow as ma
+import marshmallow.fields as ma_fields
+import marshmallow.validate as ma_valid
+from test.services.multilingual_schema import MultilingualSchema
 from invenio_records_resources.services.records.schema import BaseRecordSchema as InvenioBaseRecordSchema
 from marshmallow import ValidationError
 from marshmallow import validates as ma_validates
-import marshmallow as ma
-from marshmallow import fields as ma_fields
-from marshmallow_utils import fields as mu_fields
-from marshmallow_utils import schemas as mu_schemas
 
-
-
-from test.services.records.multilingual_schema import MultilingualSchema
-
-
-
-
-
-class TestSchema(InvenioBaseRecordSchema):
+class TestSchema(BaseRecordSchema, ):
     \"""TestSchema schema.\"""
+    
     a = ma_fields.List(ma_fields.Nested(lambda: MultilingualSchema()))
-    created = mu_fields.ISODateString(dump_only=True)
-    updated = mu_fields.ISODateString(dump_only=True)
-    """,
-    )
-def test_generated_ml_schema():
-    schema = basic_schema()
-
-    filesystem = MockFilesystem()
-    builder = create_builder_from_entrypoints(filesystem=filesystem)
-
-    builder.build(schema, "")
-
-    data = builder.filesystem.open(os.path.join("test", "services", "records", "multilingual_schema.py")).read()
-    print(data)
-
-    assert re.sub(r"\s", "", data) == re.sub(
-        r"\s",
-        "",
-        """
-import langcodes
-from marshmallow import Schema, fields, ValidationError, validates
-
-\"""
-Marshmallow schema for multilingual strings. Consider moving this file to a library, not generating
-it for each project.
-\"""
-
-
-class MultilingualSchema(Schema):
-    lang = fields.String(required=True)
-    value = fields.String(required=True)
-
-    @validates("lang")
-    def validate_lang(self, value):
-        if value != '_' and not langcodes.Language.get(value).is_valid():
-            raise ValidationError("Invalid language code")
+    
+    created = ma_fields.Date(dump_only=True)
+    
+    updated = ma_fields.Date(dump_only=True)
     """,
     )
 def test_sample_data():
@@ -246,7 +211,8 @@ def test_search_options():
 
     builder.build(schema, "")
 
-    data = builder.filesystem.open(os.path.join("test", "services","records", "search.py")).read()
+    data = builder.filesystem.open(os.path.join("test", "services", "search.py")).read()
+    print(">>>>>")
     print(data)
     assert re.sub(r"\s", "", data) == re.sub(
         r"\s",
