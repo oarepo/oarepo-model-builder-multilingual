@@ -101,10 +101,11 @@ class MultilangPreprocessor(PropertyPreprocessor):
              path='**/properties/*',
              condition=lambda current, stack: current.type == 'multilingual')
     def modify_multilang_marshmallow(self, data, stack: ModelBuilderStack, **kwargs):
-        data['type'] = 'object'
-        deepmerge(data.setdefault('oarepo:marshmallow', {}), {
-            'class': self.settings.python.multilingual_schema_class,
-            'list_nested': True
-        })
+        data['type'] = 'array'
+        data['items'] = {'type': 'object', 'oarepo:marshmallow': {'schema-class': self.settings.python.multilingual_schema_class, 'generate': False}}
+        # deepmerge(data.setdefault('oarepo:marshmallow', {}), {
+        #     'schema_class': self.settings.python.multilingual_schema_class,
+        #     # 'list_nested': True
+        # })
 
         return data

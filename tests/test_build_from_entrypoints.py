@@ -81,6 +81,8 @@ def test_mapping():
   }
 }
    """,
+
+
     )
 
 def test_dumper():
@@ -103,13 +105,16 @@ def test_generated_schema():
 
     builder.build(schema, "")
 
+
     data = builder.filesystem.open(os.path.join("test", "services", "schema.py")).read()
     print(">>>>>")
     print(data)
+
     assert re.sub(r"\s", "", data) == re.sub(
         r"\s",
         "",
         """
+
 from invenio_records_resources.services.records.schema import BaseRecordSchema
 import marshmallow as ma
 import marshmallow.fields as ma_fields
@@ -129,8 +134,6 @@ class TestSchema(BaseRecordSchema, ):
     updated = ma_fields.Date(dump_only=True)
     """,
     )
-
-
 def test_sample_data():
     schema = load_model(
         "test.yaml",
