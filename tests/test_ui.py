@@ -7,17 +7,18 @@ def test_validity():
     schema = load_model(
         "test.yaml",
         "test",
-        model_content={"oarepo:use": "invenio", "settings": {"supported-langs": {
-            'en': {
-                'text': {
-                    'analyzer': 'czech'
-                },
-                'sort': {
-                    'type': 'icu_collation_keyword'
+        model_content={
+            "oarepo:use": "invenio",
+            "settings": {
+                "supported-langs": {
+                    "en": {
+                        "text": {"analyzer": "czech"},
+                        "sort": {"type": "icu_collation_keyword"},
+                    }
                 }
-            }
-        }},
-                       "model": {"properties": {"a": {"type": "multilingual", "oarepo:ui": {} }}}},
+            },
+            "model": {"properties": {"a": {"type": "multilingual", "oarepo:ui": {}}}},
+        },
         isort=False,
         black=False,
     )

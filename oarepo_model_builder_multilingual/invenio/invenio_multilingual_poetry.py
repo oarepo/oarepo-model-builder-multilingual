@@ -1,6 +1,7 @@
 from oarepo_model_builder.builders import OutputBuilder
 from oarepo_model_builder.outputs.toml import TOMLOutput
 
+
 class InvenioMultilingualPoetryBuilder(OutputBuilder):
     TYPE = "invenio_multilingual_poetry"
 
@@ -9,11 +10,7 @@ class InvenioMultilingualPoetryBuilder(OutputBuilder):
 
         output: TOMLOutput = self.builder.get_output("toml", "pyproject.toml")
 
-        output.setdefault(
-            "tool.poetry.dependencies.deepmerge",
-            "version",
-            "^1.0.1"
-        )
+        output.setdefault("tool.poetry.dependencies.deepmerge", "version", "^1.0.1")
 
         output.setdefault(
             "tool.poetry.dependencies.langcodes",

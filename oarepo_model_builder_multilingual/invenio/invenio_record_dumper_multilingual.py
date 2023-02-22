@@ -1,17 +1,15 @@
 import munch
 from oarepo_model_builder.builders import process
-from oarepo_model_builder.utils.jinja import package_name
-
+from oarepo_model_builder.invenio.invenio_base import InvenioBaseClassPythonBuilder
 from oarepo_model_builder.outputs.json_stack import JSONStack
 from oarepo_model_builder.utils.deepmerge import deepmerge
 from oarepo_model_builder.utils.hyphen_munch import HyphenMunch
-from oarepo_model_builder.invenio.invenio_base import InvenioBaseClassPythonBuilder
-
+from oarepo_model_builder.utils.jinja import package_name
 
 
 class InvenioRecordMultilingualDumperBuilder(InvenioBaseClassPythonBuilder):
-    TYPE = 'invenio_record_dumper'
-    class_config = 'multilingual-dumper-class'
+    TYPE = "invenio_record_dumper"
+    class_config = "multilingual-dumper-class"
     template = "multilingual-record-dumper"
 
     def begin(self, schema, settings):
@@ -20,20 +18,17 @@ class InvenioRecordMultilingualDumperBuilder(InvenioBaseClassPythonBuilder):
         self.langs = []
 
     def finish(self, **extra_kwargs):
-        for lang in self.settings['supported-langs']:
+        for lang in self.settings["supported-langs"]:
             self.langs.append(lang)
 
-        super().finish(
-            langs=self.langs,
-            paths=self.paths
+        super().finish(langs=self.langs, paths=self.paths)
+        python_path = self.class_to_path(self.settings.python["record-class"])
+        self.process_template(
+            python_path,
+            "record-multilingual",
+            current_package_name=package_name(self.settings.python["record-class"]),
+            **extra_kwargs,
         )
-        python_path = self.class_to_path(self.settings.python['record-class'])
-        self.process_template(python_path, "record-multilingual",
-                              current_package_name=package_name(self.settings.python['record-class']),
-                              **extra_kwargs)
-
-
-
 
     @process("/model/**", condition=lambda current, stack: stack.schema_valid)
     def enter_model_element(self):
@@ -45,9 +40,6 @@ class InvenioRecordMultilingualDumperBuilder(InvenioBaseClassPythonBuilder):
             self.build_children()
         data = self.stack.top.data
         if isinstance(data, dict):
-
-            if 'type' in data and 'multilingual' in data['type']:
-                path = self.stack.path.replace('/model/properties', '')
+            if "type" in data and "multilingual" in data["type"]:
+                path = self.stack.path.replace("/model/properties", "")
                 self.paths.append(path)
-
-

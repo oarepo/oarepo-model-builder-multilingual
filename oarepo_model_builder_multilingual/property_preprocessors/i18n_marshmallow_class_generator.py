@@ -1,4 +1,6 @@
-from oarepo_model_builder.invenio.invenio_record_schema import InvenioRecordSchemaBuilder
+from oarepo_model_builder.invenio.invenio_record_schema import (
+    InvenioRecordSchemaBuilder,
+)
 from oarepo_model_builder.property_preprocessors import PropertyPreprocessor, process
 from oarepo_model_builder.stack import ModelBuilderStack
 from oarepo_model_builder.utils.camelcase import camel_case
@@ -16,22 +18,17 @@ class MarshmallowClassGeneratorPreprocessor(PropertyPreprocessor):
         schema_element_type = stack.top.schema_element_type
 
         try:
-            definition = data['oarepo:multilingual']
+            definition = data["oarepo:multilingual"]
         except:
             definition = None
         if definition:
-            lang_filed = definition.get('lang-field', 'lang')
-            value_filed = definition.get('value-field', 'value')
-            properties = data.get('properties', {})
-            data['properties'] = {
-
-                lang_filed: {
-                    'type': 'string'
-                },
-                value_filed: {
-                    'type': 'string'
-                }, **properties
-
+            lang_filed = definition.get("lang-field", "lang")
+            value_filed = definition.get("value-field", "value")
+            properties = data.get("properties", {})
+            data["properties"] = {
+                lang_filed: {"type": "string"},
+                value_filed: {"type": "string"},
+                **properties,
             }
         if schema_element_type == "properties":
             for k, v in stack.top.data.items():
@@ -46,7 +43,9 @@ class MarshmallowClassGeneratorPreprocessor(PropertyPreprocessor):
         definition = data.setdefault("oarepo:marshmallow", {})
         if "class" in definition:
             return
-        definition["class"] = camel_case(key or self.get_property_name(stack)) + "Schema"
+        definition["class"] = (
+            camel_case(key or self.get_property_name(stack)) + "Schema"
+        )
 
     def get_property_name(self, stack):
         for el in reversed(stack.stack):
