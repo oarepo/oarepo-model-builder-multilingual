@@ -1,11 +1,10 @@
 import os
 import re
 
-from oarepo_model_builder.entrypoints import load_model, create_builder_from_entrypoints
-from tests.mock_filesystem import MockFilesystem
-
 import yaml
+from oarepo_model_builder.entrypoints import create_builder_from_entrypoints, load_model
 
+from tests.mock_filesystem import MockFilesystem
 from tests.test_helper import basic_schema
 
 
@@ -17,7 +16,9 @@ def test_mapping():
 
     builder.build(schema, "")
 
-    data = builder.filesystem.open(os.path.join("test", "records", "mappings", "os-v2", "test", "test-1.0.0.json")).read()
+    data = builder.filesystem.open(
+        os.path.join("test", "records", "mappings", "os-v2", "test", "test-1.0.0.json")
+    ).read()
     assert re.sub(r"\s", "", data) == re.sub(
         r"\s",
         "",
@@ -81,9 +82,8 @@ def test_mapping():
   }
 }
    """,
-
-
     )
+
 
 def test_dumper():
     schema = basic_schema()
@@ -97,6 +97,7 @@ def test_dumper():
     # print(data)
     data = builder.filesystem.open(os.path.join("test", "records", "api.py")).read()
 
+
 def test_generated_schema():
     schema = basic_schema()
 
@@ -104,7 +105,6 @@ def test_generated_schema():
     builder = create_builder_from_entrypoints(filesystem=filesystem)
 
     builder.build(schema, "")
-
 
     data = builder.filesystem.open(os.path.join("test", "services", "schema.py")).read()
     print(">>>>>")
@@ -134,33 +134,32 @@ class TestSchema(BaseRecordSchema, ):
     updated = ma_fields.Date(dump_only=True)
     """,
     )
+
+
 def test_sample_data():
     schema = load_model(
         "test.yaml",
         "test",
-        model_content={"oarepo:use": "invenio", "settings": {"supported-langs": {
-            'cs': {
-                'text': {
-                    'analyzer': 'czech',
-                },
-                'sort': {
-                    'type': 'icu_collation_keyword'
-                },
-                'keyword': {
-                    'test': 'test'
+        model_content={
+            "oarepo:use": "invenio",
+            "settings": {
+                "supported-langs": {
+                    "cs": {
+                        "text": {
+                            "analyzer": "czech",
+                        },
+                        "sort": {"type": "icu_collation_keyword"},
+                        "keyword": {"test": "test"},
+                    },
+                    "en": {
+                        "text": {"analyzer": "czech"},
+                        "sort": {"type": "icu_collation_keyword"},
+                    },
                 }
             },
-            'en': {
-                'text': {
-                    'analyzer': 'czech'
-                },
-                'sort': {
-                    'type': 'icu_collation_keyword'
-                }
-            }
-        }},
-                       "model": {"properties": {"a": {"type": "multilingual"}}},
-                       "oarepo:sample": {"count": 1}},
+            "model": {"properties": {"a": {"type": "multilingual"}}},
+            "oarepo:sample": {"count": 1},
+        },
         isort=False,
         black=False,
     )
@@ -170,38 +169,40 @@ def test_sample_data():
 
     builder.build(schema, "")
 
-    data = yaml.full_load(builder.filesystem.open(os.path.join("scripts", "sample_data.yaml")).read())
+    data = yaml.full_load(
+        builder.filesystem.open(os.path.join("scripts", "sample_data.yaml")).read()
+    )
 
-    assert isinstance(data['a'], list)
-    assert len(data['a']) == 2
-    assert set(x['lang'] for x in data['a']) == {'cs', 'en'}
+    assert isinstance(data["a"], list)
+    assert len(data["a"]) == 2
+    assert set(x["lang"] for x in data["a"]) == {"cs", "en"}
+
 
 def test_search_options():
     schema = load_model(
         "test.yaml",
         "test",
-        model_content={"oarepo:use": "invenio", "settings": {"supported-langs": {
-            'cs': {
-                'text': {
-                    'analyzer': 'czech',
-                },
-                'sort': {
-                    'type': 'icu_collation_keyword'
-                },
-                'keyword': {
-                    'test': 'test'
+        model_content={
+            "oarepo:use": "invenio",
+            "settings": {
+                "supported-langs": {
+                    "cs": {
+                        "text": {
+                            "analyzer": "czech",
+                        },
+                        "sort": {"type": "icu_collation_keyword"},
+                        "keyword": {"test": "test"},
+                    },
+                    "en": {
+                        "text": {"analyzer": "czech"},
+                        "sort": {"type": "icu_collation_keyword"},
+                    },
                 }
             },
-            'en': {
-                'text': {
-                    'analyzer': 'czech'
-                },
-                'sort': {
-                    'type': 'icu_collation_keyword'
-                }
-            }
-        }},
-                       "model": {"properties": {"a": {"type": "multilingual", "oarepo:sortable":{}}}}},
+            "model": {
+                "properties": {"a": {"type": "multilingual", "oarepo:sortable": {}}}
+            },
+        },
         isort=False,
         black=False,
     )

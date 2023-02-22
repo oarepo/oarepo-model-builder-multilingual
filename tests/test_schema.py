@@ -8,36 +8,36 @@
 
 from __future__ import absolute_import, print_function
 
-import pytest
 import langcodes
 import marshmallow
+import pytest
 from marshmallow import ValidationError
-from marshmallow.fields import Nested, List
+from marshmallow.fields import List, Nested
+
 from . import multilingual_schema
 
 
 def test_withoutApp():
-    print(langcodes.Language.get('ava').is_valid())
-    class MD(marshmallow.Schema):
-         title = List(Nested(multilingual_schema.MultilingualSchema()))
+    print(langcodes.Language.get("ava").is_valid())
 
-    data = {'title':
-       [{'lang': 'cs', 'value': 'xxx'}, {'lang': 'en', 'value': 'xxx'}, {'lang': '_', 'value': 'xxx'}]
+    class MD(marshmallow.Schema):
+        title = List(Nested(multilingual_schema.MultilingualSchema()))
+
+    data = {
+        "title": [
+            {"lang": "cs", "value": "xxx"},
+            {"lang": "en", "value": "xxx"},
+            {"lang": "_", "value": "xxx"},
+        ]
     }
 
     assert data == MD().load(data)
-    data = {'title':
-        ['xx']
-    }
+    data = {"title": ["xx"]}
 
     with pytest.raises(ValidationError):
         MD().load(data)
 
-    data = {'title':
-                [{'lang': 'cx', 'value': 'xxx'}, {'lang': 'en', 'value': 'xxx'}]
-    }
+    data = {"title": [{"lang": "cx", "value": "xxx"}, {"lang": "en", "value": "xxx"}]}
 
     with pytest.raises(ValidationError):
         MD().load(data)
-
-

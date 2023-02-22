@@ -1,6 +1,7 @@
 import langcodes
-from marshmallow import fields, validates_schema, INCLUDE, ValidationError
+from marshmallow import INCLUDE, ValidationError, fields, validates_schema
 from oarepo_model_builder.validation.utils import ExtendablePartSchema
+
 
 class SupportedLangs(ExtendablePartSchema):
     class Meta:
@@ -12,10 +13,11 @@ class SupportedLangs(ExtendablePartSchema):
             if not langcodes.Language.get(lang).is_valid():
                 raise ValidationError("Invalid language code")
 
+
 class ModelSchema(ExtendablePartSchema):
-    supported_langs = fields.Nested(data_key="supported-langs", required=False, nested=SupportedLangs())
+    supported_langs = fields.Nested(
+        data_key="supported-langs", required=False, nested=SupportedLangs()
+    )
 
-validators = {"root" : ModelSchema}
 
-
-
+validators = {"root": ModelSchema}

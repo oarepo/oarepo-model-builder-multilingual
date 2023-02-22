@@ -1,12 +1,12 @@
 from oarepo_model_builder.builders import process
-from oarepo_model_builder.utils.jinja import package_name
-
+from oarepo_model_builder.invenio.invenio_base import InvenioBaseClassPythonBuilder
 from oarepo_model_builder.outputs.json_stack import JSONStack
 from oarepo_model_builder.utils.deepmerge import deepmerge
 from oarepo_model_builder.utils.hyphen_munch import HyphenMunch
-from oarepo_model_builder.invenio.invenio_base import InvenioBaseClassPythonBuilder
+from oarepo_model_builder.utils.jinja import package_name
 
 OAREPO_SORTABLE_PROPERTY = "oarepo:sortable"
+
 
 class InvenioRecordSearchOptionsBuilderMultilingual(InvenioBaseClassPythonBuilder):
     TYPE = "invenio_record_search"
@@ -23,13 +23,8 @@ class InvenioRecordSearchOptionsBuilderMultilingual(InvenioBaseClassPythonBuilde
 
         self.settings = settings
 
-
     def finish(self, **extra_kwargs):
-        super().finish(
-                       sort_definition = self.sort_options_data)
-
-
-
+        super().finish(sort_definition=self.sort_options_data)
 
     @process("/model/**", condition=lambda current, stack: stack.schema_valid)
     def enter_model_element(self):
@@ -44,19 +39,21 @@ class InvenioRecordSearchOptionsBuilderMultilingual(InvenioBaseClassPythonBuilde
 
         data = self.stack.top.data
 
-        if schema_element_type == "property" and data.type == "multilingual" and OAREPO_SORTABLE_PROPERTY in data:
-
+        if (
+            schema_element_type == "property"
+            and data.type == "multilingual"
+            and OAREPO_SORTABLE_PROPERTY in data
+        ):
             for lang in self.settings.supported_langs:
-
-                if 'key' in data[OAREPO_SORTABLE_PROPERTY]:
-                    key = data[OAREPO_SORTABLE_PROPERTY]['key'] + '_' + lang
+                if "key" in data[OAREPO_SORTABLE_PROPERTY]:
+                    key = data[OAREPO_SORTABLE_PROPERTY]["key"] + "_" + lang
                 else:
-                    key = self.process_name(self.stack.path, type="name") + '_' + lang
-                field = self.process_name(self.stack.path, type="field") + '_' + lang
-                order = data[OAREPO_SORTABLE_PROPERTY].get('order', 'asc')
+                    key = self.process_name(self.stack.path, type="name") + "_" + lang
+                field = self.process_name(self.stack.path, type="field") + "_" + lang
+                order = data[OAREPO_SORTABLE_PROPERTY].get("order", "asc")
                 if order == "desc":
                     field = "-" + field
-                self.sort_options_data.append({key: dict(fields = [field])})
+                self.sort_options_data.append({key: dict(fields=[field])})
 
     def process_name(self, path, type):
         path_array = (path.split("/"))[3:]

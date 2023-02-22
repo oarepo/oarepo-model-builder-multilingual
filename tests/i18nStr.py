@@ -1,25 +1,32 @@
 import os
 import re
 
-from oarepo_model_builder.entrypoints import load_model, create_builder_from_entrypoints
+import yaml
+from oarepo_model_builder.entrypoints import create_builder_from_entrypoints, load_model
+
 from tests.mock_filesystem import MockFilesystem
 
-import yaml
 
-#todo - validation will be added after model-builder release
+# todo - validation will be added after model-builder release
 def test_generated_schema():
     schema = load_model(
         "test.yaml",
         "test",
-        model_content={"supported-langs": {
-            'cs': {
+        model_content={
+            "supported-langs": {"cs": {}, "en": {}},
+            "model": {
+                "properties": {
+                    "a": {"type": "i18nStr"},
+                    "b": {
+                        "type": "i18nStr",
+                        "oarepo:multilingual": {
+                            "lang-field": "language",
+                            "value-field": "val",
+                        },
+                    },
+                },
             },
-            'en': {
-            }
         },
-                       "model": {"properties": {"a": {"type": "i18nStr"}, "b":{"type": "i18nStr", "oarepo:multilingual":{"lang-field": "language", "value-field": "val"}},},
-
-                                 }},
         isort=False,
         black=False,
     )
@@ -62,27 +69,22 @@ def test_generated_schema_use_i18n():
     schema = load_model(
         "test.yaml",
         "test",
-        model_content={"settings": {"supported-langs": {
-            'cs': {
+        model_content={
+            "settings": {"supported-langs": {"cs": {}, "en": {}}},
+            "model": {
+                "properties": {
+                    "a": {
+                        "oarepo:use": "i18n",
+                        "properties": {
+                            "navic": {
+                                "type": "object",
+                                "properties": {"kxh": {"type": "keyword"}},
+                            }
+                        },
+                    }
+                },
             },
-            'en': {
-            }
-        }},
-            "model": {"properties": {"a": {
-            'oarepo:use': 'i18n',
-            'properties': {
-              'navic': {
-                'type': 'object',
-                'properties': {
-                  'kxh': {
-                    'type': 'keyword'
-                  }
-                }
-              }
-            }
-          } },
-
-                      }},
+        },
         isort=False,
         black=False,
     )
@@ -123,19 +125,19 @@ class TestSchema(ma.Schema, ):
     """,
     )
 
+
 def test_mapping():
     schema = load_model(
         "test.yaml",
         "test",
-        model_content={"settings": {"supported-langs": {
-            'cs': {
-
+        model_content={
+            "settings": {"supported-langs": {"cs": {}, "en": {}}},
+            "model": {
+                "properties": {
+                    "a": {"type": "fulltext", "oarepo:multilingual": {"i18n": True}}
+                }
             },
-            'en': {
-
-            }
-        }},
-                       "model": {"properties": {"a": {"type": "fulltext", "oarepo:multilingual": {'i18n': True}}}}},
+        },
         isort=False,
         black=False,
     )
@@ -145,7 +147,9 @@ def test_mapping():
 
     builder.build(schema, "")
 
-    data = builder.filesystem.open(os.path.join("test", "records", "mappings", "v7", "test", "test-1.0.0.json")).read()
+    data = builder.filesystem.open(
+        os.path.join("test", "records", "mappings", "v7", "test", "test-1.0.0.json")
+    ).read()
     print(data)
     assert re.sub(r"\s", "", data) == re.sub(
         r"\s",

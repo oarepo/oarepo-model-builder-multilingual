@@ -3,7 +3,7 @@
 # and running it
 
 import langcodes
-from marshmallow import Schema, fields, ValidationError, validates
+from marshmallow import Schema, ValidationError, fields, validates
 
 """
 Marshmallow schema for multilingual strings. Consider moving this to a library, not generating
@@ -17,5 +17,5 @@ class MultilingualSchema(Schema):
 
     @validates("lang")
     def validate_lang(self, value):
-        if value != '_' and not langcodes.Language.get(value).is_valid():
+        if value != "_" and not langcodes.Language.get(value).is_valid():
             raise ValidationError("Invalid language code")
