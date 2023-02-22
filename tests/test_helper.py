@@ -4,7 +4,7 @@ def basic_schema():
     return load_model(
         "test.yaml",
         "test",
-        model_content={"oarepo:use": "invenio", "settings": {"supported-langs": {
+        model_content={"use": "invenio", "supported-langs": {
             'cs': {
                 'text': {
                     'analyzer': 'czech',
@@ -24,7 +24,7 @@ def basic_schema():
                     'type': 'icu_collation_keyword'
                 }
             }
-        }},
+        },
                        "model": {"properties": {"a": {"type": "multilingual"}}}},
         isort=False,
         black=False,

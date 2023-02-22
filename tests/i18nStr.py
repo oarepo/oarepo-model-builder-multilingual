@@ -11,12 +11,12 @@ def test_generated_schema():
     schema = load_model(
         "test.yaml",
         "test",
-        model_content={"settings": {"supported-langs": {
+        model_content={"supported-langs": {
             'cs': {
             },
             'en': {
             }
-        }},
+        },
                        "model": {"properties": {"a": {"type": "i18nStr"}, "b":{"type": "i18nStr", "oarepo:multilingual":{"lang-field": "language", "value-field": "val"}},},
 
                                  }},
