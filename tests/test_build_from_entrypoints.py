@@ -22,6 +22,7 @@ def test_json():
     data = builder.filesystem.open(
         os.path.join("test", "records", "jsonschemas", "test-1.0.0.json")
     ).read()
+    print(data)
     assert re.sub(r"\s", "", data) == re.sub(
         r"\s",
         "",
@@ -198,7 +199,6 @@ def test_generated_schema():
     builder.build(schema, "")
 
     data = builder.filesystem.open(os.path.join("test", "services","records", "schema.py")).read()
-    print(">>>>>")
     print(data)
 
     assert re.sub(r"\s", "", data) == re.sub(
