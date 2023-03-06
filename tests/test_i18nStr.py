@@ -7,6 +7,188 @@ from oarepo_model_builder.entrypoints import create_builder_from_entrypoints, lo
 from tests.mock_filesystem import MockFilesystem
 
 
+def test_generated_jsonschema():
+    schema = load_model(
+        "test.yaml",
+        "test",
+        model_content={
+            "settings": {
+                "supported-langs": {"cs": {}, "en": {}},
+            },
+            "model": {
+                "properties": {
+                    "a": {"type": "i18nStr"},
+                    "b": {
+                        "type": "i18nStr",
+                        "multilingual": {
+                            "lang-field": "language",
+                            "value-field": "val",
+                        },
+                    },
+                },
+            },
+        },
+        isort=False,
+        black=False,
+    )
+
+    filesystem = MockFilesystem()
+    builder = create_builder_from_entrypoints(filesystem=filesystem)
+
+    builder.build(schema, "")
+
+    data = builder.filesystem.open(
+        os.path.join("test", "records", "jsonschemas", "test-1.0.0.json")
+    ).read()
+    print(data)
+    assert re.sub(r"\s", "", data) == re.sub(
+        r"\s",
+        "",
+        """
+{
+    "type": "object",
+    "properties": {
+        "a": {
+            "type": "object",
+            "properties": {
+                "lang": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "lang",
+                "value"
+            ]
+        },
+        "b": {
+            "type": "object",
+            "properties": {
+                "language": {
+                    "type": "string"
+                },
+                "val": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "language",
+                "val"
+            ]
+        }
+    }
+}
+
+
+    """,
+    )
+
+def test_generated_mapping():
+    schema = load_model(
+        "test.yaml",
+        "test",
+        model_content={
+            "settings": {
+                "supported-langs": {"cs": {}, "en": {}},
+            },
+            "model": {
+                "properties": {
+                    "a": {"type": "i18nStr"},
+                    "b": {
+                        "type": "i18nStr",
+                        "multilingual": {
+                            "lang-field": "language",
+                            "value-field": "val",
+                        },
+                    },
+                },
+            },
+        },
+        isort=False,
+        black=False,
+    )
+
+    filesystem = MockFilesystem()
+    builder = create_builder_from_entrypoints(filesystem=filesystem)
+
+    builder.build(schema, "")
+
+    data = builder.filesystem.open(
+        os.path.join("test", "records", "mappings", "os-v2", "test", "test-1.0.0.json")
+    ).read()
+    print(data)
+    assert re.sub(r"\s", "", data) == re.sub(
+        r"\s",
+        "",
+        """
+{
+    "mappings": {
+        "properties": {
+            "a": {
+                "type": "object",
+                "properties": {
+                    "lang": {
+                        "type": "keyword"
+                    },
+                    "value": {
+                        "type": "text"
+                    }
+                }
+            },
+            "a_cs": {
+                "type": "text",
+                "fields": {
+                    "keyword": {
+                        "type": "keyword"
+                    }
+                }
+            },
+            "a_en": {
+                "type": "text",
+                "fields": {
+                    "keyword": {
+                        "type": "keyword"
+                    }
+                }
+            },
+            "b": {
+                "type": "object",
+                "properties": {
+                    "language": {
+                        "type": "keyword"
+                    },
+                    "val": {
+                        "type": "text"
+                    }
+                }
+            },
+            "b_cs": {
+                "type": "text",
+                "fields": {
+                    "keyword": {
+                        "type": "keyword"
+                    }
+                }
+            },
+            "b_en": {
+                "type": "text",
+                "fields": {
+                    "keyword": {
+                        "type": "keyword"
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+    """,
+    )
+
+
 # todo - validation will be added after model-builder release
 def test_generated_schema():
     schema = load_model(

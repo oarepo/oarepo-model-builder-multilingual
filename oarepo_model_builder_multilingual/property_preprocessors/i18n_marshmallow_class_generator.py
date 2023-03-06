@@ -11,7 +11,7 @@ class MarshmallowClassGeneratorPreprocessor(PropertyPreprocessor):
 
     @process(
         model_builder=InvenioRecordSchemaBuilder,
-        path="**/properties/*",
+        path="properties/*",
         condition=lambda current, stack: stack.schema_valid,
     )
     def modify_object_marshmallow(self, data, stack: ModelBuilderStack, **kwargs):

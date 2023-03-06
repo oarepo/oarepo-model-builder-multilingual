@@ -65,6 +65,45 @@ class I18nDataType(ObjectDataType):
     marshmallow_field = "ma_fields.Nested"
     model_type = "i18nStr"
 
+    def mapping(self, **extras):
+        alternative = alternative_gen(self.schema.settings["supported-langs"], self.key)
+        definition = self.definition.get("multilingual", {})
+
+        lang = definition.get("lang-field", "lang")
+        value = definition.get("value-field", "value")
+        properties = self.definition.get("properties", {})
+
+        data = {
+            self.key: {
+                "type": "object",
+                "properties": {
+                    lang: {"type": "keyword"},
+                    value: {"type": "fulltext"},
+                    **properties,
+                },
+            }
+        }
+
+        deepmerge(data, alternative)
+
+        raise ReplaceElement(data)
+
+    def json_schema(self, **extras):
+        data = super().json_schema()
+        data["type"] = "object"
+        definition = data.get("multilingual", {})
+
+        lang = definition.get("lang-field", "lang")
+        value = definition.get("value-field", "value")
+        properties = data.get("properties", {})
+
+        data["properties"] = {
+            lang: {"type": "string", "required": True},
+            value: {"type": "string", "required": True},
+            **properties,
+        }
+        return data
+
     #todo multilang facets
     def get_facet(self, stack, parent_path):
         key, field = facet_definiton(self)
