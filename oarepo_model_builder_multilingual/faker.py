@@ -33,7 +33,7 @@ def multilingual_sample_provider(faker, settings, stack, params):
             except:
                 return Faker()
 
-        definition = stack.top.data.get("oarepo:multilingual", {})
+        definition = stack.top.data.get("multilingual", {})
         lang_name = definition.get("lang-field", "lang")
         field_name = definition.get("value-field", "value")
         lang = random.choice(list(settings["supported_langs"].keys()))

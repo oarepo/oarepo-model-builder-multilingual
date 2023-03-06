@@ -7,7 +7,8 @@ it for each project.
 """
 
 
-class {{ python.i18n_schema_class|base_name }}(Schema):
+
+class {{ current_model.i18n_schema_class|base_name }}(Schema):
     lang = fields.String(required=True)
     value = fields.String(required=True)
 

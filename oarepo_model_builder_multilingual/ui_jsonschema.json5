@@ -1,14 +1,14 @@
 {
   "jsonschema-property": {
     "properties": {
-      "oarepo:ui": {
+      "ui": {
 
       }
     }
   },
   "root": {
     "properties": {
-      'oarepo:ui': {
+      'ui': {
 
       }
     }

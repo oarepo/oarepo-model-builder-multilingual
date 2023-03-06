@@ -35,7 +35,7 @@ def alternative_gen(supported_langs, key):
                 {"fields": {"keyword": supported_langs[lan]["keyword"]}},
             )
         deepmerge(
-            alt[key + "_" + lan].setdefault("oarepo:mapping", {}),
+            alt[key + "_" + lan].setdefault("mapping", {}),
             multilang_options,
             [],
         )
@@ -48,14 +48,14 @@ def alternative_gen(supported_langs, key):
 class MultilangPreprocessor(PropertyPreprocessor):
     @process(
         model_builder=MappingBuilder,
-        path="**/properties/*",
+        path="/properties/**",
         condition=lambda current, stack: current.type != "multilingual",
     )
     def modify_single_string_multilingual_opitons(
         self, data, stack: ModelBuilderStack, **kwargs
     ):
         try:
-            mult_definition = data["oarepo:multilingual"]
+            mult_definition = data["multilingual"]
         except:
             mult_definition = None
         if not mult_definition:
@@ -69,9 +69,25 @@ class MultilangPreprocessor(PropertyPreprocessor):
 
             raise ReplaceElement(data)
 
+    """
     @process(
         model_builder=JSONSchemaBuilder,
-        path="**/properties/*",
+        path="/properties/**",
+        condition=lambda current, stack: stack.top.schema_element_type
+        in ("property", "items"),
+    )
+    def modify_jsonschema(self, data, stack: ModelBuilderStack, **kwargs):
+        datatype = datatypes.get_datatype(
+            data, stack.top.key, self.schema.current_model, self.schema, stack
+        )
+        if not datatype:
+            return data
+        self.merge_with_data(data, datatype.model_schema())
+        return datatype.json_schema()
+    """
+    @process(
+        model_builder=JSONSchemaBuilder,
+        path="/properties/**",
         condition=lambda current, stack: current.type == "multilingual",
     )
     def modify_multilang_schema(self, data, stack: ModelBuilderStack, **kwargs):
@@ -84,7 +100,7 @@ class MultilangPreprocessor(PropertyPreprocessor):
 
     @process(
         model_builder=MappingBuilder,
-        path="**/properties/*",
+        path="/properties/**",
         condition=lambda current, stack: current.type == "multilingual",
     )
     def modify_multilang_mapping(self, data, stack: ModelBuilderStack, **kwargs):
@@ -106,15 +122,15 @@ class MultilangPreprocessor(PropertyPreprocessor):
 
     @process(
         model_builder=InvenioRecordSchemaBuilder,
-        path="**/properties/*",
+        path="/properties/**",
         condition=lambda current, stack: current.type == "multilingual",
     )
     def modify_multilang_marshmallow(self, data, stack: ModelBuilderStack, **kwargs):
         data["type"] = "array"
         data["items"] = {
             "type": "object",
-            "oarepo:marshmallow": {
-                "schema-class": self.settings.python.multilingual_schema_class,
+            "marshmallow": {
+                "schema-class": self.schema.current_model.multilingual_schema_class,
                 "generate": False,
             },
         }

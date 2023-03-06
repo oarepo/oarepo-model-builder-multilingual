@@ -3,15 +3,71 @@ import re
 
 import yaml
 from oarepo_model_builder.entrypoints import create_builder_from_entrypoints, load_model
+from oarepo_model_builder.fs import InMemoryFileSystem
 
 from tests.mock_filesystem import MockFilesystem
 from tests.test_helper import basic_schema
+
+DUMMY_YAML = "test.yaml"
+
+
+def test_json():
+    schema = basic_schema()
+
+    filesystem = InMemoryFileSystem()
+    builder = create_builder_from_entrypoints(filesystem=filesystem)
+
+    builder.build(schema, "")
+
+    data = builder.filesystem.open(
+        os.path.join("test", "records", "jsonschemas", "test-1.0.0.json")
+    ).read()
+    assert re.sub(r"\s", "", data) == re.sub(
+        r"\s",
+        "",
+        """
+{
+    "type": "object",
+    "properties": {
+        "a": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "lang": {
+                        "type": "string"
+                    },
+                    "value": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "id": {
+            "type": "string"
+        },
+        "created": {
+            "type": "string",
+            "format": "date"
+        },
+        "updated": {
+            "type": "string",
+            "format": "date"
+        },
+        "$schema": {
+            "type": "string"
+        }
+    }
+}
+
+   """,
+    )
 
 
 def test_mapping():
     schema = basic_schema()
 
-    filesystem = MockFilesystem()
+    filesystem = InMemoryFileSystem()
     builder = create_builder_from_entrypoints(filesystem=filesystem)
 
     builder.build(schema, "")
@@ -19,6 +75,7 @@ def test_mapping():
     data = builder.filesystem.open(
         os.path.join("test", "records", "mappings", "os-v2", "test", "test-1.0.0.json")
     ).read()
+    print(data)
     assert re.sub(r"\s", "", data) == re.sub(
         r"\s",
         "",
@@ -47,7 +104,6 @@ def test_mapping():
         },
         "fields":{
           "keyword":{
-            "test":"test",
             "type":"keyword"
           }
         }
@@ -84,7 +140,7 @@ def test_mapping():
    """,
     )
 
-
+#Multilingual dumper was moved to the oarepo-runtime library
 def test_dumper():
     schema = basic_schema()
 
@@ -93,9 +149,44 @@ def test_dumper():
 
     builder.build(schema, "")
 
-    # data = builder.filesystem.open(os.path.join("test", "records", "multilingual_dumper.py")).read()
-    # print(data)
     data = builder.filesystem.open(os.path.join("test", "records", "api.py")).read()
+    assert re.sub(r"\s", "", data) == re.sub(
+        r"\s",
+        "",
+        """
+from invenio_records.systemfields import ConstantField
+from invenio_records_resources.records.systemfields import IndexField,
+
+from invenio_records_resources.records.systemfields.pid import PIDField, PIDFieldContext
+from invenio_pidstore.providers.recordid_v2 import RecordIdProviderV2
+
+
+from invenio_records_resources.records.api import Record
+
+from test.records.models import TestMetadata
+from test.records.dumper import TestDumper
+from test.records.multilingual_dumper import MultilingualDumper
+
+class TestRecord(Record ):
+    model_cls = TestMetadata
+
+    schema = ConstantField("$schema", "http://localhost/schemas/test-1.0.0.json")
+
+
+    index = IndexField("test-test-1.0.0")
+
+
+    pid = PIDField(
+        create=True,
+        provider=RecordIdProviderV2,
+        context_cls = PIDFieldContext
+    )
+
+    dumper_extensions = [MultilingualDumper()]
+    dumper = TestDumper(extensions=dumper_extensions)
+
+    """,
+    )
 
 
 def test_generated_schema():
@@ -106,7 +197,7 @@ def test_generated_schema():
 
     builder.build(schema, "")
 
-    data = builder.filesystem.open(os.path.join("test", "services", "schema.py")).read()
+    data = builder.filesystem.open(os.path.join("test", "services","records", "schema.py")).read()
     print(">>>>>")
     print(data)
 
@@ -115,33 +206,81 @@ def test_generated_schema():
         "",
         """
 
-from invenio_records_resources.services.records.schema import BaseRecordSchema
-import marshmallow as ma
-import marshmallow.fields as ma_fields
-import marshmallow.validate as ma_valid
-from test.services.multilingual_schema import MultilingualSchema
 from invenio_records_resources.services.records.schema import BaseRecordSchema as InvenioBaseRecordSchema
 from marshmallow import ValidationError
-from marshmallow import validates as ma_validates
+from marshmallow import validate as ma_validate
+import marshmallow as ma
+from marshmallow import fields as ma_fields
+from marshmallow_utils import fields as mu_fields
+from marshmallow_utils import schemas as mu_schemas
 
-class TestSchema(BaseRecordSchema, ):
+
+
+from oarepo_runtime.ui import marshmallow as l10n
+
+
+
+from oarepo_runtime.validation import validate_date
+
+
+
+from test.services.records.multilingual_schema import MultilingualSchema
+
+
+
+
+
+class TestSchema(InvenioBaseRecordSchema):
     \"""TestSchema schema.\"""
-    
     a = ma_fields.List(ma_fields.Nested(lambda: MultilingualSchema()))
-    
-    created = ma_fields.Date(dump_only=True)
-    
-    updated = ma_fields.Date(dump_only=True)
+    created = ma_fields.String(validate=[validate_date('%Y-%m-%d')], dump_only=True)
+    updated = ma_fields.String(validate=[validate_date('%Y-%m-%d')], dump_only=True)
     """,
     )
 
+#TODO validace jazyku do oarepo-runtime
+def test_multilingual_schema():
+    schema = basic_schema()
+
+    filesystem = MockFilesystem()
+    builder = create_builder_from_entrypoints(filesystem=filesystem)
+
+    builder.build(schema, "")
+
+    data = builder.filesystem.open(os.path.join("test", "services","records", "multilingual_schema.py")).read()
+    print(data)
+
+    assert re.sub(r"\s", "", data) == re.sub(
+        r"\s",
+        "",
+        """
+import langcodes
+from marshmallow import Schema, fields, ValidationError, validates
+
+\"""
+Marshmallow schema for multilingual strings. Consider moving this file to a library, not generating
+it for each project.
+\"""
+
+
+class MultilingualSchema(Schema):
+    lang = fields.String(required=True)
+    value = fields.String(required=True)
+
+    @validates("lang")
+    def validate_lang(self, value):
+        if value != '_' and not langcodes.Language.get(value).is_valid():
+            raise ValidationError("Invalid language code")
+
+    """,
+    )
 
 def test_sample_data():
     schema = load_model(
         "test.yaml",
         "test",
         model_content={
-            "oarepo:use": "invenio",
+
             "settings": {
                 "supported-langs": {
                     "cs": {
@@ -157,8 +296,8 @@ def test_sample_data():
                     },
                 }
             },
-            "model": {"properties": {"a": {"type": "multilingual"}}},
-            "oarepo:sample": {"count": 1},
+            "model": {"use": "invenio","sample": {"count": 1}, "properties": {"a": {"type": "multilingual"}}},
+
         },
         isort=False,
         black=False,
@@ -168,119 +307,18 @@ def test_sample_data():
     builder = create_builder_from_entrypoints(filesystem=filesystem)
 
     builder.build(schema, "")
-
-    data = yaml.full_load(
-        builder.filesystem.open(os.path.join("scripts", "sample_data.yaml")).read()
-    )
-
-    assert isinstance(data["a"], list)
-    assert len(data["a"]) == 2
-    assert set(x["lang"] for x in data["a"]) == {"cs", "en"}
-
-
-def test_search_options():
-    schema = load_model(
-        "test.yaml",
-        "test",
-        model_content={
-            "oarepo:use": "invenio",
-            "settings": {
-                "supported-langs": {
-                    "cs": {
-                        "text": {
-                            "analyzer": "czech",
-                        },
-                        "sort": {"type": "icu_collation_keyword"},
-                        "keyword": {"test": "test"},
-                    },
-                    "en": {
-                        "text": {"analyzer": "czech"},
-                        "sort": {"type": "icu_collation_keyword"},
-                    },
-                }
-            },
-            "model": {
-                "properties": {"a": {"type": "multilingual", "oarepo:sortable": {}}}
-            },
-        },
-        isort=False,
-        black=False,
-    )
-
-    filesystem = MockFilesystem()
-    builder = create_builder_from_entrypoints(filesystem=filesystem)
-
-    builder.build(schema, "")
-
-    data = builder.filesystem.open(os.path.join("test", "services", "search.py")).read()
-    print(">>>>>")
-    print(data)
-    assert re.sub(r"\s", "", data) == re.sub(
-        r"\s",
-        "",
-        """
-from invenio_records_resources.services import SearchOptions as InvenioSearchOptions
-from . import facets
-
-def _(x):
-    \"""Identity function for string extraction.\"""
-    return x
+    # file = builder.filesystem.open(os.path.join("data" ,"sample_data.yaml"))
+    data_yaml = builder.filesystem.open(os.path.join("data" ,"sample_data.yaml")).read()
+    import yaml
+    yaml_docs = data_yaml.split('---')
+    for doc in yaml_docs:
+        if doc.strip():
+            data = yaml.safe_load(doc)
+            assert isinstance(data["a"], list)
+            assert len(data["a"]) == 2
+            assert set(x["lang"] for x in data["a"]) == {"cs", "en"}
 
 
 
-class TestSearchOptions(InvenioSearchOptions):
-    \"""TestRecord search options.\"""
-
-    facets = {
 
 
-    'a': facets.a,
-
-
-
-    '_id': facets._id,
-
-
-
-    'created': facets.created,
-
-
-
-    'updated': facets.updated,
-
-
-
-    '_schema': facets._schema,
-
-
-    }
-    sort_options = {
-        
-        **InvenioSearchOptions.sort_options,
-        
-
-
-    'a': {'fields': ['a']},"bestmatch": dict(
-                title=_('Best match'),
-                fields=['_score'],  # ES defaults to desc on `_score` field
-            ),
-            "newest": dict(
-                title=_('Newest'),
-                fields=['-created'],
-            ),
-            "oldest": dict(
-                title=_('Oldest'),
-                fields=['created'],
-            ),
-
-
-    'a_cs': {'fields': ['a_cs']},
-
-
-
-    'a_en': {'fields': ['a_en']},
-
-
-    }
-    """,
-    )

@@ -9,7 +9,7 @@ def getFromDict(dataDict, mapList):
     return reduce(operator.getitem, mapList, dataDict)
 
 class MultilingualDumper(ElasticsearchDumperExt):
-    """{{ python.record_class|base_name }} elasticsearch dumper."""
+    """{{ current_model.record_class|base_name }} elasticsearch dumper."""
     def dump(self, record, data):
         paths = {{ paths }}
         SUPPORTED_LANGS = {{ langs }}

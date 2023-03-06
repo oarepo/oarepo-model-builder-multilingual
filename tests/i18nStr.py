@@ -13,13 +13,15 @@ def test_generated_schema():
         "test.yaml",
         "test",
         model_content={
-            "supported-langs": {"cs": {}, "en": {}},
+            "settings": {
+                "supported-langs": {"cs": {}, "en": {}},
+            },
             "model": {
                 "properties": {
                     "a": {"type": "i18nStr"},
                     "b": {
                         "type": "i18nStr",
-                        "oarepo:multilingual": {
+                        "multilingual": {
                             "lang-field": "language",
                             "value-field": "val",
                         },
@@ -36,7 +38,7 @@ def test_generated_schema():
 
     builder.build(schema, "")
 
-    data = builder.filesystem.open(os.path.join("test", "services", "schema.py")).read()
+    data = builder.filesystem.open(os.path.join("test", "services", "records", "schema.py")).read()
     print(data)
     assert re.sub(r"\s", "", data) == re.sub(
         r"\s",
@@ -74,7 +76,7 @@ def test_generated_schema_use_i18n():
             "model": {
                 "properties": {
                     "a": {
-                        "oarepo:use": "i18n",
+                        "use": "i18n",
                         "properties": {
                             "navic": {
                                 "type": "object",
@@ -134,7 +136,7 @@ def test_mapping():
             "settings": {"supported-langs": {"cs": {}, "en": {}}},
             "model": {
                 "properties": {
-                    "a": {"type": "fulltext", "oarepo:multilingual": {"i18n": True}}
+                    "a": {"type": "fulltext", "multilingual": {"i18n": True}}
                 }
             },
         },
@@ -148,15 +150,15 @@ def test_mapping():
     builder.build(schema, "")
 
     data = builder.filesystem.open(
-        os.path.join("test", "records", "mappings", "v7", "test", "test-1.0.0.json")
+        os.path.join("test", "records", "mappings", "os-v2", "test", "test-1.0.0.json")
     ).read()
     print(data)
     assert re.sub(r"\s", "", data) == re.sub(
         r"\s",
         "",
         """
-'{"mappings":{"properties":{"a":{"type":"text"},
-"a_cs":{"type":"text","fields":{"keyword":{"type":"keyword","ignore_above":50}}},
-"a_en":{"type":"text","fields":{"keyword":{"type":"keyword","ignore_above":50}}}}}}'
+{"mappings":{"properties":{"a":{"type":"text"},
+"a_cs":{"type":"text","fields":{"keyword":{"type":"keyword"}}},
+"a_en":{"type":"text","fields":{"keyword":{"type":"keyword"}}}}}}
     """,
     )

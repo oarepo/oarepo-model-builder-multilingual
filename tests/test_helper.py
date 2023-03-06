@@ -1,27 +1,31 @@
 from oarepo_model_builder.entrypoints import load_model
-
+DUMMY_YAML = "test.yaml"
 
 def basic_schema():
     return load_model(
-        "test.yaml",
+        DUMMY_YAML,
         "test",
         model_content={
-            "use": "invenio",
-            "supported-langs": {
-                "cs": {
-                    "text": {
-                        "analyzer": "czech",
+            "settings": {
+                "supported-langs": {
+                    "cs": {
+                        "text": {
+                            "analyzer": "czech",
+                        },
+                        "sort": {"type": "icu_collation_keyword"},
                     },
-                    "sort": {"type": "icu_collation_keyword"},
-                    "keyword": {"test": "test"},
-                },
-                "en": {
-                    "text": {"analyzer": "en"},
-                    "sort": {"type": "icu_collation_keyword"},
-                },
+                    "en": {
+                        "text": {"analyzer": "en"},
+                        "sort": {"type": "icu_collation_keyword"},
+                    },
+                }
             },
-            "model": {"properties": {"a": {"type": "multilingual"}}},
+            "model": {
+                "use": "invenio",
+                "properties": {"a": {"type": "multilingual"}}
+            },
         },
         isort=False,
         black=False,
     )
+

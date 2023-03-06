@@ -22,11 +22,11 @@ class InvenioRecordMultilingualDumperBuilder(InvenioBaseClassPythonBuilder):
             self.langs.append(lang)
 
         super().finish(langs=self.langs, paths=self.paths)
-        python_path = self.class_to_path(self.settings.python["record-class"])
+        python_path = self.class_to_path(self.current_model["record-class"])
         self.process_template(
             python_path,
             "record-multilingual",
-            current_package_name=package_name(self.settings.python["record-class"]),
+            current_package_name=package_name(self.current_model["record-class"]),
             **extra_kwargs,
         )
 

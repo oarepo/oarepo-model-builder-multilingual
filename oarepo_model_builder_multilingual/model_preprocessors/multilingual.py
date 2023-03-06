@@ -3,18 +3,20 @@ from oarepo_model_builder.model_preprocessors import ModelPreprocessor
 
 class MultilingualModelPreprocessor(ModelPreprocessor):
     def transform(self, schema, settings):
+
+        model = schema.current_model
         self.set(
-            settings.python,
+            model,
             "multilingual-dumper-class",
-            lambda: f"{settings.python.record_records_package}.multilingual_dumper.MultilingualDumper",
+            lambda: f"{model.record_records_package}.multilingual_dumper.MultilingualDumper",
         )
         self.set(
-            settings.python,
+            model,
             "multilingual-schema-class",
-            lambda: f"{settings.python.record_services_package}.multilingual_schema.MultilingualSchema",
+            lambda: f"{model.record_services_package}.multilingual_schema.MultilingualSchema",
         )
         self.set(
-            settings.python,
+            model,
             "i18n-schema-class",
-            lambda: f"{settings.python.record_services_package}.i18nStr_schema.i18nStrSchema",
+            lambda: f"{model.record_services_package}.i18nStr_schema.i18nStrSchema",
         )

@@ -18,7 +18,7 @@ class MarshmallowClassGeneratorPreprocessor(PropertyPreprocessor):
         schema_element_type = stack.top.schema_element_type
 
         try:
-            definition = data["oarepo:multilingual"]
+            definition = data["multilingual"]
         except:
             definition = None
         if definition:
@@ -40,7 +40,7 @@ class MarshmallowClassGeneratorPreprocessor(PropertyPreprocessor):
     def add_class_name(self, stack, key, data):
         if "items" not in data and "properties" not in data:
             return
-        definition = data.setdefault("oarepo:marshmallow", {})
+        definition = data.setdefault("marshmallow", {})
         if "class" in definition:
             return
         definition["class"] = (

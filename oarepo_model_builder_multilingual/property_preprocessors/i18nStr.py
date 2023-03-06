@@ -36,7 +36,7 @@ def alternative_gen(supported_langs, key):
                 {"fields": {"keyword": supported_langs[lan]["keyword"]}},
             )
         deepmerge(
-            alt[key + "_" + lan].setdefault("oarepo:mapping", {}),
+            alt[key + "_" + lan].setdefault("mapping", {}),
             multilang_options,
             [],
         )
@@ -54,7 +54,7 @@ class I18nStrPreprocessor(PropertyPreprocessor):
     )
     def modify_multilang_schema(self, data, stack: ModelBuilderStack, **kwargs):
         data["type"] = "object"
-        definition = data.get("oarepo:multilingual", {})
+        definition = data.get("multilingual", {})
 
         properties = data.get("properties", {})
         lang = definition.get("lang-field", "lang")
@@ -74,7 +74,7 @@ class I18nStrPreprocessor(PropertyPreprocessor):
     )
     def modify_multilang_mapping(self, data, stack: ModelBuilderStack, **kwargs):
         alternative = alternative_gen(self.settings["supported-langs"], stack.top.key)
-        definition = data.get("oarepo:multilingual", {})
+        definition = data.get("multilingual", {})
 
         lang = definition.get("lang-field", "lang")
         value = definition.get("value-field", "value")
@@ -101,7 +101,7 @@ class I18nStrPreprocessor(PropertyPreprocessor):
         condition=lambda current, stack: current.type == "i18nStr",
     )
     def modify_multilang_marshmallow(self, data, stack: ModelBuilderStack, **kwargs):
-        definition = data.get("oarepo:multilingual", {})
+        definition = data.get("multilingual", {})
         use_i18n = False
         if "usei18n" in definition:
             use_i18n = True
@@ -111,8 +111,8 @@ class I18nStrPreprocessor(PropertyPreprocessor):
         if lang == "lang" and value == "value" and not use_i18n:
             data["type"] = "object"
             deepmerge(
-                data.setdefault("oarepo:marshmallow", {}),
-                {"class": self.settings.python.i18n_schema_class, "nested": True},
+                data.setdefault("marshmallow", {}),
+                {"class": self.schema.current_model.i18n_schema_class, "nested": True},
             )
         else:
             data["type"] = "object"
@@ -121,12 +121,12 @@ class I18nStrPreprocessor(PropertyPreprocessor):
                 value: {"type": "string", "required": True},
                 **properties,
             }
-            if "oarepo:marshmallow" in data and "class" in data["oarepo:multilingual"]:
-                class_name = data["oarepo:marshmallow"]["class"]
+            if "marshmallow" in data and "class" in data["multilingual"]:
+                class_name = data["marshmallow"]["class"]
             else:
                 class_name = camel_case(stack.top.key) + "Schema"
             deepmerge(
-                data.setdefault("oarepo:marshmallow", {}),
+                data.setdefault("marshmallow", {}),
                 {
                     "generate": True,
                     "class": class_name,

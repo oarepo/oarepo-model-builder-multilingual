@@ -5,7 +5,7 @@ from oarepo_model_builder.utils.deepmerge import deepmerge
 from oarepo_model_builder.utils.hyphen_munch import HyphenMunch
 from oarepo_model_builder.utils.jinja import package_name
 
-OAREPO_SORTABLE_PROPERTY = "oarepo:sortable"
+OAREPO_SORTABLE_PROPERTY = "sortable"
 
 
 class InvenioRecordSearchOptionsBuilderMultilingual(InvenioBaseClassPythonBuilder):
