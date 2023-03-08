@@ -11,7 +11,7 @@ class I18nStrPreprocessor(PropertyPreprocessor):
 
     @process(
         model_builder=InvenioRecordSchemaBuilder,
-        path="properties/*",
+        path="/properties/**",
         condition=lambda current, stack: current.type == "i18nStr",
     )
     def modify_multilang_marshmallow(self, data, stack: ModelBuilderStack, **kwargs):
@@ -26,13 +26,13 @@ class I18nStrPreprocessor(PropertyPreprocessor):
             data["type"] = "object"
             deepmerge(
                 data.setdefault("marshmallow", {}),
-                {"class": self.schema.current_model.i18n_schema_class, "nested": True},
+                {"schema-class": self.schema.current_model.i18n_schema_class, "generate": False},
             )
         else:
             data["type"] = "object"
             data["properties"] = {
-                lang: {"type": "string", "required": True},
-                value: {"type": "string", "required": True},
+                lang: {"type": "keyword", "required": True},
+                value: {"type": "keyword", "required": True},
                 **properties,
             }
             if "marshmallow" in data and "class" in data["multilingual"]:
@@ -44,7 +44,7 @@ class I18nStrPreprocessor(PropertyPreprocessor):
                 {
                     "generate": True,
                     "class": class_name,
-                    "nested": True,
+                    # "nested": True,
                     "validates": {
                         lang: {
                             "imports": ["import langcodes"],

@@ -11,7 +11,7 @@ class MarshmallowClassGeneratorPreprocessor(PropertyPreprocessor):
 
     @process(
         model_builder=InvenioRecordSchemaBuilder,
-        path="properties/*",
+        path="/properties/**",
         condition=lambda current, stack: stack.schema_valid,
     )
     def modify_object_marshmallow(self, data, stack: ModelBuilderStack, **kwargs):
@@ -26,8 +26,8 @@ class MarshmallowClassGeneratorPreprocessor(PropertyPreprocessor):
             value_filed = definition.get("value-field", "value")
             properties = data.get("properties", {})
             data["properties"] = {
-                lang_filed: {"type": "string"},
-                value_filed: {"type": "string"},
+                lang_filed: {"type": "keyword"},
+                value_filed: {"type": "keyword"},
                 **properties,
             }
         if schema_element_type == "properties":

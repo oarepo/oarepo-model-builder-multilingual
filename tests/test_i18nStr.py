@@ -190,6 +190,7 @@ def test_generated_mapping():
 
 
 # todo - validation will be added after model-builder release
+#todo validace language kde??
 def test_generated_schema():
     schema = load_model(
         "test.yaml",
@@ -226,24 +227,33 @@ def test_generated_schema():
         r"\s",
         "",
         """
-import marshmallow as ma
-import marshmallow.fields as ma_fields
-import marshmallow.validate as ma_valid
-from test.services.i18nStr_schema import i18nStrSchema
 from invenio_records_resources.services.records.schema import BaseRecordSchema as InvenioBaseRecordSchema
-class BSchema(ma.Schema, ):
-    \"""BSchema schema.\"""
-    
-    language = ma_fields.String()
-    
-    val = ma_fields.String()
-class TestSchema(ma.Schema, ):
-    \"""TestSchema schema.\"""
-    
-    a = ma_fields.Nested(lambda: i18nStrSchema())
-    
-    b = ma_fields.Nested(lambda: BSchema())
+from marshmallow import ValidationError
+from marshmallow import validate as ma_validate
+import marshmallow as ma
+from marshmallow import fields as ma_fields
+from marshmallow_utils import fields as mu_fields
+from marshmallow_utils import schemas as mu_schemas
 
+
+
+from test.services.records.i18nStr_schema import i18nStrSchema
+
+
+
+
+
+class BSchema(ma.Schema):
+    \"""BSchema schema.\"""
+    language = ma_fields.String()
+    val = ma_fields.String()
+
+
+
+class TestSchema(ma.Schema):
+    \"""TestSchema schema.\"""
+    a = ma_fields.Nested(lambda: i18nStrSchema())
+    b = ma_fields.Nested(lambda: BSchema())
     """,
     )
 

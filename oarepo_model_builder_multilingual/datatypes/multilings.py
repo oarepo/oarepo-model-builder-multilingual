@@ -17,7 +17,7 @@ class MultilingualDataType(ArrayDataType):
     model_type = "multilingual"
 
     class ModelSchema(DataType.ModelSchema):
-        value = fields.Integer()
+        pass
 
     def mapping(self, **extras):
         alternative = alternative_gen(self.schema.settings["supported-langs"], self.key)
@@ -65,6 +65,9 @@ class I18nDataType(ObjectDataType):
     marshmallow_field = "ma_fields.Nested"
     model_type = "i18nStr"
 
+    class ModelSchema(DataType.ModelSchema):
+        pass
+
     def mapping(self, **extras):
         alternative = alternative_gen(self.schema.settings["supported-langs"], self.key)
         definition = self.definition.get("multilingual", {})
@@ -104,6 +107,15 @@ class I18nDataType(ObjectDataType):
         }
         return data
 
+    # def marshmallow(self, **extras):
+    #     ret = copy.deepcopy(self.definition.get("marshmallow", {}))
+    #     if not 'class' in ret:
+    #         ret.setdefault("field-class", self.marshmallow_field)
+    #     ret.setdefault("validators", []).extend(self.marshmallow_validators())
+    #     for k, v in extras.items():
+    #         if v is not None:
+    #             ret[k] = v
+    #     return ret
     #todo multilang facets
     def get_facet(self, stack, parent_path):
         key, field = facet_definiton(self)
