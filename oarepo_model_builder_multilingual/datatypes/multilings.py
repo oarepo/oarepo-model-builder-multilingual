@@ -6,6 +6,7 @@ from oarepo_model_builder.datatypes.containers import ObjectDataType, ArrayDataT
 from oarepo_model_builder.stack import ReplaceElement
 from oarepo_model_builder.utils.deepmerge import deepmerge
 from oarepo_model_builder.utils.facet_helpers import facet_definiton, facet_name
+from oarepo_model_builder.validation import model_validator
 
 from oarepo_model_builder_multilingual.utils.supported_langs import alternative_gen
 
@@ -60,13 +61,17 @@ class MultilingualDataType(ArrayDataType):
 
 
 class I18nDataType(ObjectDataType):
-    schema_type = "property"
+    schema_type = "property" #todo facety problem
     mapping_type = "i18nStr"
     marshmallow_field = "ma_fields.Nested"
     model_type = "i18nStr"
+    json_schema_type = "object"
+
 
     class ModelSchema(DataType.ModelSchema):
-        pass
+        properties = fields.Nested(
+            lambda: model_validator.validator_class("properties", strict=False)()
+        )
 
     def mapping(self, **extras):
         alternative = alternative_gen(self.schema.settings["supported-langs"], self.key)

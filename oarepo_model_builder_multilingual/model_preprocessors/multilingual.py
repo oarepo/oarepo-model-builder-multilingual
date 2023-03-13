@@ -20,3 +20,13 @@ class MultilingualModelPreprocessor(ModelPreprocessor):
             "i18n-schema-class",
             lambda: f"{model.record_services_package}.i18nStr_schema.i18nStrSchema",
         )
+        self.set(
+            model,
+            "multilingual-ui-schema-class",
+            lambda: f"{model.record_services_package}.multilingual_schema.MultilingualUISchema",
+        )
+        self.set(
+            model,
+            "i18n-ui-schema-class",
+            lambda: f"{model.record_services_package}.i18nStr_schema.i18nStrUISchema",
+        )

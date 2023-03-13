@@ -142,6 +142,7 @@ def test_mapping():
     )
 
 #Multilingual dumper was moved to the oarepo-runtime library
+#todo import dumper!
 def test_dumper():
     schema = basic_schema()
 
@@ -314,6 +315,7 @@ def test_sample_data():
     for doc in yaml_docs:
         if doc.strip():
             data = yaml.safe_load(doc)
+            print(data)
             assert isinstance(data["a"], list)
             assert len(data["a"]) == 2
             assert set(x["lang"] for x in data["a"]) == {"cs", "en"}

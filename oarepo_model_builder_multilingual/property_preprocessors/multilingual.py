@@ -46,7 +46,15 @@ class MultilangPreprocessor(PropertyPreprocessor):
             "marshmallow": {
                 "schema-class": self.schema.current_model.multilingual_schema_class,
                 "generate": False,
+                "nested": True,
             },
+            "ui": {
+                "marshmallow": {
+                    "schema-class": self.schema.current_model.multilingual_ui_schema_class,
+                    "generate": False,
+                    "nested": True,
+                },
+            }
         }
 
         return data

@@ -28,6 +28,10 @@ class I18nStrPreprocessor(PropertyPreprocessor):
                 data.setdefault("marshmallow", {}),
                 {"schema-class": self.schema.current_model.i18n_schema_class, "generate": False},
             )
+            deepmerge(
+                data.setdefault("ui", {}),
+                {"marshmallow": {"schema-class": self.schema.current_model.i18n_ui_schema_class, "generate": False}},
+            )
         else:
             data["type"] = "object"
             data["properties"] = {
@@ -43,8 +47,8 @@ class I18nStrPreprocessor(PropertyPreprocessor):
                 data.setdefault("marshmallow", {}),
                 {
                     "generate": True,
-                    "class": class_name,
-                    # "nested": True,
+                    "schema-class": class_name,
+                    "nested": True,
                     "validates": {
                         lang: {
                             "imports": ["import langcodes"],

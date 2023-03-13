@@ -4,4 +4,6 @@ TEMPLATES = {
     "subschema-multilingual": "templates/invenio_schema_multilingual.py.jinja2",
     "multi-search": "templates/invenio_record_search_multilingual.py.jinja2",
     "subschema-i18n": "templates/invenio_schema_i18n.py.jinja2",
+    "ui-subschema-i18n": "templates/invenio_ui_schema_i18n.py.jinja2",
+    "ui-subschema-multilingual": "templates/invenio_ui_schema_multilingual.py.jinja2",
 }

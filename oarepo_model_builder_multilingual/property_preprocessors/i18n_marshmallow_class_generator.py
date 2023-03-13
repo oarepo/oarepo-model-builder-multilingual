@@ -12,7 +12,7 @@ class MarshmallowClassGeneratorPreprocessor(PropertyPreprocessor):
     @process(
         model_builder=InvenioRecordSchemaBuilder,
         path="/properties/**",
-        condition=lambda current, stack: stack.schema_valid,
+        condition=lambda current, stack: current.type == "i18nStr",
     )
     def modify_object_marshmallow(self, data, stack: ModelBuilderStack, **kwargs):
         schema_element_type = stack.top.schema_element_type
@@ -41,9 +41,9 @@ class MarshmallowClassGeneratorPreprocessor(PropertyPreprocessor):
         if "items" not in data and "properties" not in data:
             return
         definition = data.setdefault("marshmallow", {})
-        if "class" in definition:
+        if "schema-class" in definition:
             return
-        definition["class"] = (
+        definition["schema-class"] = (
             camel_case(key or self.get_property_name(stack)) + "Schema"
         )
 

@@ -38,6 +38,9 @@ class ModelDefaults(ExtendablePartSchema):
     multilingual_schema_class = fields.String(data_key="multilingual-schema-class", required=False)
     i18n_schema_class = fields.String(data_key="i18n-schema-class", required=False)
 
+    i18n_ui_schema_class = fields.String(data_key="i18n-ui-schema-class", required=False)
+    multilingual_ui_schema_class = fields.String(data_key="multilingual-ui-schema-class", required=False)
+
 validators = {"settings": SettingsSchema,
               "model": ModelDefaults,
               "property-multilingual": PropertyMultilingual,
