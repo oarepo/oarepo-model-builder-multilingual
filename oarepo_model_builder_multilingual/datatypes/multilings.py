@@ -49,6 +49,7 @@ class I18nDataType(NestedDataType):
         value = mult_definition.get('value-field', 'value')
         definition['type'] = 'i18nStr'
         def_properties = definition.get('properties', {})
+        definition['sample'] = {'skip' : False}
 
         def_properties[lang] = {'type': 'keyword', 'sample' :{'skip' : True}}
         def_properties[value] = {'type': 'fulltext+keyword', 'sample' :{'skip' : True}}

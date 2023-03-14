@@ -12,10 +12,11 @@ def multilingual_sample_provider(faker, settings, stack, params):
     # d_type = datatypes.get_datatype(
     #     stack.top.data,
     #     stack.top.key,
-    #     # self.schema.current_model,
-    #     # self.schema,
+    #     object.schema.current_model,
+    #     object.schema,
     #     stack,
     # )
+    # print(d_type)
     if stack.top.data.get("type") == "multilingual":
 
         def get_faker(lang):

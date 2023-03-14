@@ -1,3 +1,4 @@
+import json
 import os
 import re
 
@@ -41,41 +42,35 @@ def test_generated_jsonschema():
         os.path.join("test", "records", "jsonschemas", "test-1.0.0.json")
     ).read()
     print(data)
-    assert re.sub(r"\s", "", data) == re.sub(
-        r"\s",
-        "",
-        """
-{
-    "type": "object",
-    "properties": {
-        "a": {
-            "type": "object",
-            "properties": {
-                "lang": {
-                    "type": "string"
-                },
-                "value": {
-                    "type": "string"
+    data = json.loads(data)
+    assert data == {
+        "type": "object",
+        "properties": {
+            "a": {
+                "type": "object",
+                "properties": {
+                    "lang": {
+                        "type": "string"
+                    },
+                    "value": {
+                        "type": "string"
+                    }
                 }
-            }
-        },
-        "b": {
-            "type": "object",
-            "properties": {
-                "language": {
-                    "type": "string"
-                },
-                "val": {
-                    "type": "string"
+            },
+            "b": {
+                "type": "object",
+                "properties": {
+                    "language": {
+                        "type": "string"
+                    },
+                    "val": {
+                        "type": "string"
+                    }
                 }
             }
         }
     }
-}
 
-
-    """,
-    )
 
 def test_generated_mapping():
     schema = load_model(
@@ -111,85 +106,77 @@ def test_generated_mapping():
         os.path.join("test", "records", "mappings", "os-v2", "test", "test-1.0.0.json")
     ).read()
     print(data)
-    assert re.sub(r"\s", "", data) == re.sub(
-        r"\s",
-        "",
-        """
-{
-    "mappings": {
-        "properties": {
-            "a": {
-                "type": "object",
-                "properties": {
-                    "lang": {
-                        "type": "keyword"
-                    },
-                                        "value": {
-                        "type": "text",
-                        "fields": {
-                            "keyword": {
-                                "type": "keyword"
+    data = json.loads(data)
+    assert data == {
+        "mappings": {
+            "properties": {
+                "a": {
+                    "type": "object",
+                    "properties": {
+                        "lang": {
+                            "type": "keyword"
+                        },
+                        "value": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword"
+                                }
                             }
                         }
                     }
-                }
-            },
-            "a_cs": {
-                "type": "text",
-                "fields": {
-                    "keyword": {
-                        "type": "keyword"
+                },
+                "a_cs": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword"
+                        }
                     }
-                }
-            },
-            "a_en": {
-                "type": "text",
-                "fields": {
-                    "keyword": {
-                        "type": "keyword"
+                },
+                "a_en": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword"
+                        }
                     }
-                }
-            },
-            "b": {
-                "type": "object",
-                "properties": {
-                    "language": {
-                        "type": "keyword"
-                    },
-                    "val": {
-                        "type": "text",
-                        "fields": {
-                            "keyword": {
-                                "type": "keyword"
+                },
+                "b": {
+                    "type": "object",
+                    "properties": {
+                        "language": {
+                            "type": "keyword"
+                        },
+                        "val": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword"
+                                }
                             }
                         }
                     }
-                }
-            },
-            "b_cs": {
-                "type": "text",
-                "fields": {
-                    "keyword": {
-                        "type": "keyword"
+                },
+                "b_cs": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword"
+                        }
                     }
-                }
-            },
-            "b_en": {
-                "type": "text",
-                "fields": {
-                    "keyword": {
-                        "type": "keyword"
+                },
+                "b_en": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword"
+                        }
                     }
                 }
             }
         }
     }
-}
-
-
-    """,
-    )
-
 
 
 def test_generated_schema():
@@ -358,12 +345,7 @@ def test_mapping():
         os.path.join("test", "records", "mappings", "os-v2", "test", "test-1.0.0.json")
     ).read()
     print(data)
-    assert re.sub(r"\s", "", data) == re.sub(
-        r"\s",
-        "",
-        """
-{"mappings":{"properties":{"a":{"type":"text"},
-"a_cs":{"type":"text","fields":{"keyword":{"type":"keyword"}}},
-"a_en":{"type":"text","fields":{"keyword":{"type":"keyword"}}}}}}
-    """,
-    )
+    data = json.loads(data)
+    assert data == {"mappings": {"properties": {"a": {"type": "text"},
+                                                "a_cs": {"type": "text", "fields": {"keyword": {"type": "keyword"}}},
+                                                "a_en": {"type": "text", "fields": {"keyword": {"type": "keyword"}}}}}}

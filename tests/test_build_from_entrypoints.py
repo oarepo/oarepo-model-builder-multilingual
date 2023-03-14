@@ -75,11 +75,8 @@ def test_mapping():
         os.path.join("test", "records", "mappings", "os-v2", "test", "test-1.0.0.json")
     ).read()
     print(data)
-    assert re.sub(r"\s", "", data) == re.sub(
-        r"\s",
-        "",
-        """
-{
+    data = json.loads(data)
+    assert data == {
   "mappings":{
     "properties":{
       "a":{
@@ -103,7 +100,7 @@ def test_mapping():
         "analyzer":"czech",
         "sort":{
           "type":"icu_collation_keyword",
-          "index":false,
+          "index":False,
           "language":"cs"
         },
         "fields":{
@@ -117,7 +114,7 @@ def test_mapping():
         "analyzer":"en",
         "sort":{
           "type":"icu_collation_keyword",
-          "index":false,
+          "index":False,
           "language":"en"
         },
         "fields":{
@@ -141,8 +138,6 @@ def test_mapping():
     }
   }
 }
-   """,
-    )
 
 
 # Multilingual dumper was moved to the oarepo-runtime library
