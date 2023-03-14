@@ -26,6 +26,7 @@ class MultilingualDataType(ArrayDataType):
         definition = self.definition
         definition['type'] = 'array'
         definition['items'] = {'type': "i18nStr"}
+
         super().prepare(context)
 
 
@@ -45,14 +46,31 @@ class I18nDataType(NestedDataType):
     def prepare(self, context):
         definition = self.definition
         mult_definition = definition.get('multilingual', {})
+
         lang = mult_definition.get('lang-field', 'lang')
         value = mult_definition.get('value-field', 'value')
         definition['type'] = 'i18nStr'
-        def_properties = definition.get('properties', {})
-        definition['sample'] = {'skip' : False}
 
-        def_properties[lang] = {'type': 'keyword', 'sample' :{'skip' : True}}
-        def_properties[value] = {'type': 'fulltext+keyword', 'sample' :{'skip' : True}}
+
+        if 'lang-field' not in mult_definition and 'value-field' not in mult_definition and 'properties' not in definition:
+            definition_marshmallow = definition.get('marshmallow', {})
+            definition_marshmallow['generate'] = False
+            definition_marshmallow['schema-class'] = 'oarepo_runtime.i18n.schema.MultilingualSchema'
+            definition_marshmallow['imports'] = [{'import': 'oarepo_runtime.i18n.schema.MultilingualSchema'}]
+
+            definition['marshmallow'] = definition_marshmallow
+            definition_ui = definition.get('ui', {})
+            definition_ui['detail'] = 'multilingual'
+            definition_ui['marshmallow'] = {'generate': False,
+                                            'schema-class': 'oarepo_runtime.i18n.schema.MultilingualUISchema',
+                                            'imports': [{'import': 'oarepo_runtime.i18n.schema.MultilingualUISchema'}]}
+
+            definition['ui'] = definition_ui
+        def_properties = definition.get('properties', {})
+        definition['sample'] = {'skip': False}
+
+        def_properties[lang] = {'type': 'keyword', 'sample': {'skip': True}}
+        def_properties[value] = {'type': 'fulltext+keyword', 'sample': {'skip': True}}
         definition['properties'] = def_properties
 
         super().prepare(context)

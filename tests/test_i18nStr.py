@@ -226,12 +226,9 @@ from marshmallow_utils import schemas as mu_schemas
 
 
 
+from oarepo_runtime.i18n.schema import MultilingualSchema
 
 
-class ASchema(ma.Schema):
-    \"""ASchema schema.\"""
-    lang = ma_fields.String()
-    value = ma_fields.String()
 
 
 
@@ -244,7 +241,7 @@ class BSchema(ma.Schema):
 
 class TestSchema(ma.Schema):
     \"""TestSchema schema.\"""
-    a = ma_fields.Nested(lambda: ASchema())
+    a = ma_fields.Nested(lambda: MultilingualSchema())
     b = ma_fields.Nested(lambda: BSchema())
     """,
     )

@@ -216,6 +216,10 @@ from marshmallow_utils import schemas as mu_schemas
 
 
 
+from oarepo_runtime.i18n.schema import MultilingualSchema
+
+
+
 from oarepo_runtime.ui import marshmallow as l10n
 
 
@@ -226,16 +230,9 @@ from oarepo_runtime.validation import validate_date
 
 
 
-class AItemSchema(ma.Schema):
-    \"""AItemSchema schema.\"""
-    lang = ma_fields.String()
-    value = ma_fields.String()
-
-
-
 class TestSchema(InvenioBaseRecordSchema):
     \"""TestSchema schema.\"""
-    a = ma_fields.List(ma_fields.Nested(lambda: AItemSchema()))
+    a = ma_fields.List(ma_fields.Nested(lambda: MultilingualSchema()))
     created = ma_fields.String(validate=[validate_date('%Y-%m-%d')], dump_only=True)
     updated = ma_fields.String(validate=[validate_date('%Y-%m-%d')], dump_only=True)
     """,
