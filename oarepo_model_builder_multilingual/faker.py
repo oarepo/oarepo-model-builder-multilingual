@@ -1,13 +1,21 @@
 import random
 
 from faker import Faker
+from oarepo_model_builder.datatypes import datatypes
 from oarepo_model_builder.invenio.invenio_script_sample_data import SKIP
 
 
-def multilingual_sample_provider(faker, settings, stack, params):
+
+def multilingual_sample_provider(object,faker, settings, stack, params):
     if stack.top.schema_element_type not in ("property", "items"):
         return SKIP
-
+    # d_type = datatypes.get_datatype(
+    #     stack.top.data,
+    #     stack.top.key,
+    #     # self.schema.current_model,
+    #     # self.schema,
+    #     stack,
+    # )
     if stack.top.data.get("type") == "multilingual":
 
         def get_faker(lang):

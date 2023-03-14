@@ -57,11 +57,7 @@ def test_generated_jsonschema():
                 "value": {
                     "type": "string"
                 }
-            },
-            "required": [
-                "lang",
-                "value"
-            ]
+            }
         },
         "b": {
             "type": "object",
@@ -72,11 +68,7 @@ def test_generated_jsonschema():
                 "val": {
                     "type": "string"
                 }
-            },
-            "required": [
-                "language",
-                "val"
-            ]
+            }
         }
     }
 }
@@ -132,8 +124,13 @@ def test_generated_mapping():
                     "lang": {
                         "type": "keyword"
                     },
-                    "value": {
-                        "type": "text"
+                                        "value": {
+                        "type": "text",
+                        "fields": {
+                            "keyword": {
+                                "type": "keyword"
+                            }
+                        }
                     }
                 }
             },
@@ -160,7 +157,12 @@ def test_generated_mapping():
                         "type": "keyword"
                     },
                     "val": {
-                        "type": "text"
+                        "type": "text",
+                        "fields": {
+                            "keyword": {
+                                "type": "keyword"
+                            }
+                        }
                     }
                 }
             },
@@ -189,8 +191,7 @@ def test_generated_mapping():
     )
 
 
-# todo - validation will be added after model-builder release
-#todo validace language kde??
+
 def test_generated_schema():
     schema = load_model(
         "test.yaml",
@@ -238,9 +239,12 @@ from marshmallow_utils import schemas as mu_schemas
 
 
 
-from test.services.records.i18nStr_schema import i18nStrSchema
 
 
+class ASchema(ma.Schema):
+    \"""ASchema schema.\"""
+    lang = ma_fields.String()
+    value = ma_fields.String()
 
 
 
@@ -253,7 +257,7 @@ class BSchema(ma.Schema):
 
 class TestSchema(ma.Schema):
     \"""TestSchema schema.\"""
-    a = ma_fields.Nested(lambda: i18nStrSchema())
+    a = ma_fields.Nested(lambda: ASchema())
     b = ma_fields.Nested(lambda: BSchema())
     """,
     )
@@ -315,9 +319,10 @@ class NavicSchema(ma.Schema):
 
 class ASchema(ma.Schema):
     \"""ASchema schema.\"""
+    navic = ma_fields.Nested(lambda: NavicSchema())
     lang = ma_fields.String()
     value = ma_fields.String()
-    navic = ma_fields.Nested(lambda: NavicSchema())
+    
 
 
 

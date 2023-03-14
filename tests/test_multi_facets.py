@@ -61,7 +61,11 @@ class TestSearchOptions(InvenioSearchOptions):
     facets = {
 
 
-    'a': facets.a,
+    'a_lang': facets.a_lang,
+
+
+
+    'a_value_keyword': facets.a_value_keyword,
 
 
 
@@ -82,9 +86,9 @@ class TestSearchOptions(InvenioSearchOptions):
 
     }
     sort_options = {
-
+        
         **InvenioSearchOptions.sort_options,
-
+        
 
 
     'a': {'fields': ['a']},"bestmatch": dict(
@@ -101,13 +105,7 @@ class TestSearchOptions(InvenioSearchOptions):
             ),
 
 
-    'a_cs': {'fields': ['a_cs']},
-
-
-
-    'a_en': {'fields': ['a_en']},
-
-
     }
+
     """,
     )
