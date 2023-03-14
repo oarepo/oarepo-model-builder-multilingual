@@ -26,7 +26,7 @@ class InvenioRecordSearchOptionsBuilderMultilingual(InvenioBaseClassPythonBuilde
     def finish(self, **extra_kwargs):
         super().finish(sort_definition=self.sort_options_data)
 
-    @process("/model/**", condition=lambda current, stack: stack.schema_valid)
+    @process("/**", condition=lambda current, stack: stack.schema_valid)
     def enter_model_element(self):
         schema_element_type = self.stack.top.schema_element_type
 

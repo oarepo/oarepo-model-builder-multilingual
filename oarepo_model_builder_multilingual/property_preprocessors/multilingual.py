@@ -10,7 +10,6 @@ from oarepo_model_builder_multilingual.utils.supported_langs import alternative_
 
 
 class MultilangPreprocessor(PropertyPreprocessor):
-    #TODO test this
     @process(
         model_builder=MappingBuilder,
         path="/properties/**",
@@ -34,19 +33,27 @@ class MultilangPreprocessor(PropertyPreprocessor):
 
             raise ReplaceElement(data)
 
-    @process(
-        model_builder=InvenioRecordSchemaBuilder,
-        path="/properties/**",
-        condition=lambda current, stack: current.type == "multilingual",
-    )
-    def modify_multilang_marshmallow(self, data, stack: ModelBuilderStack, **kwargs):
-        data["type"] = "array"
-        data["items"] = {
-            "type": "object",
-            "marshmallow": {
-                "schema-class": self.schema.current_model.multilingual_schema_class,
-                "generate": False,
-            },
-        }
-
-        return data
+    # @process(
+    #     model_builder=InvenioRecordSchemaBuilder,
+    #     path="/properties/**",
+    #     condition=lambda current, stack: current.type == "multilingual",
+    # )
+    # def modify_multilang_marshmallow(self, data, stack: ModelBuilderStack, **kwargs):
+    #     data["type"] = "array"
+    #     data["items"] = {
+    #         "type": "object",
+    #         "marshmallow": {
+    #             "schema-class": self.schema.current_model.multilingual_schema_class,
+    #             "generate": False,
+    #             "nested": True,
+    #         },
+    #         "ui": {
+    #             "marshmallow": {
+    #                 "schema-class": self.schema.current_model.multilingual_ui_schema_class,
+    #                 "generate": False,
+    #                 "nested": True,
+    #             },
+    #         }
+    #     }
+    #
+    #     return data
