@@ -55,22 +55,22 @@ class I18nDataType(NestedDataType):
         if 'lang-field' not in mult_definition and 'value-field' not in mult_definition and 'properties' not in definition:
             definition_marshmallow = definition.get('marshmallow', {})
             definition_marshmallow['generate'] = False
-            definition_marshmallow['schema-class'] = 'oarepo_runtime.i18n.schema.MultilingualSchema'
-            definition_marshmallow['imports'] = [{'import': 'oarepo_runtime.i18n.schema.MultilingualSchema'}]
+            definition_marshmallow['schema-class'] = 'oarepo_runtime.i18n.schema.I18nSchema'
+            definition_marshmallow['imports'] = [{'import': 'oarepo_runtime.i18n.schema.I18nSchema'}]
 
             definition['marshmallow'] = definition_marshmallow
             definition_ui = definition.get('ui', {})
             definition_ui['detail'] = 'multilingual'
             definition_ui['marshmallow'] = {'generate': False,
-                                            'schema-class': 'oarepo_runtime.i18n.schema.MultilingualUISchema',
-                                            'imports': [{'import': 'oarepo_runtime.i18n.schema.MultilingualUISchema'}]}
+                                            'schema-class': 'oarepo_runtime.i18n.schema.I18nUISchema',
+                                            'imports': [{'import': 'oarepo_runtime.i18n.schema.I18nUISchema'}]}
 
             definition['ui'] = definition_ui
         def_properties = definition.get('properties', {})
         definition['sample'] = {'skip': False}
 
-        def_properties[lang] = {'type': 'keyword', 'sample': {'skip': True}}
-        def_properties[value] = {'type': 'fulltext+keyword', 'sample': {'skip': True}}
+        def_properties[lang] = {'type': 'keyword'} #, 'sample': {'skip': True}
+        def_properties[value] = {'type': 'fulltext+keyword'} #, 'sample': {'skip': True}
         definition['properties'] = def_properties
 
         super().prepare(context)
