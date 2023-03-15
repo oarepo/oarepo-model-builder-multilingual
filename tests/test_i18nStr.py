@@ -226,7 +226,7 @@ from marshmallow_utils import schemas as mu_schemas
 
 
 
-from oarepo_runtime.i18n.schema import MultilingualSchema
+from oarepo_runtime.i18n.schema import I18nSchema
 
 
 
@@ -241,13 +241,13 @@ class BSchema(ma.Schema):
 
 class TestSchema(ma.Schema):
     \"""TestSchema schema.\"""
-    a = ma_fields.Nested(lambda: MultilingualSchema())
+    a = ma_fields.Nested(lambda: I18nSchema())
     b = ma_fields.Nested(lambda: BSchema())
     """,
     )
 
 
-# todo - validation will be added after model-builder release
+
 def test_generated_schema_use_i18n():
     schema = load_model(
         "test.yaml",
