@@ -6,7 +6,7 @@ from oarepo_model_builder.invenio.invenio_script_sample_data import SKIP
 
 
 
-def multilingual_sample_provider(object, faker, settings, stack, params):
+def multilingual_sample_provider( faker, settings, stack, params):
     if stack.top.schema_element_type not in ("property", "items"):
         return SKIP
 
