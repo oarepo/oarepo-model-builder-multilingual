@@ -1,7 +1,6 @@
 from oarepo_model_builder.utils.deepmerge import deepmerge
 
 
-
 def alternative_gen(supported_langs, key):
     data = {}
     for lan in supported_langs:

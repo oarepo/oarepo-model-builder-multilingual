@@ -3,7 +3,6 @@ from oarepo_model_builder.model_preprocessors import ModelPreprocessor
 
 class MultilingualModelPreprocessor(ModelPreprocessor):
     def transform(self, schema, settings):
-
         model = schema.current_model
         self.set(
             model,

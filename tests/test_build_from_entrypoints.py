@@ -2,7 +2,6 @@ import json
 import os
 import re
 
-import yaml
 from oarepo_model_builder.entrypoints import create_builder_from_entrypoints, load_model
 from oarepo_model_builder.fs import InMemoryFileSystem
 
@@ -12,9 +11,8 @@ from tests.test_helper import basic_schema
 DUMMY_YAML = "test.yaml"
 
 
-# TODO sample
 # TODO special facets
-# TODO validation
+
 
 def test_json():
     schema = basic_schema()
@@ -36,31 +34,17 @@ def test_json():
                 "items": {
                     "type": "object",
                     "properties": {
-                        "lang": {
-                            "type": "string"
-                        },
-                        "value": {
-                            "type": "string"
-                        }
-                    }
+                        "lang": {"type": "string"},
+                        "value": {"type": "string"},
+                    },
                 },
                 "type": "array",
             },
-            "id": {
-                "type": "string"
-            },
-            "created": {
-                "type": "string",
-                "format": "date"
-            },
-            "updated": {
-                "type": "string",
-                "format": "date"
-            },
-            "$schema": {
-                "type": "string"
-            }
-        }
+            "id": {"type": "string"},
+            "created": {"type": "string", "format": "date"},
+            "updated": {"type": "string", "format": "date"},
+            "$schema": {"type": "string"},
+        },
     }
 
 
@@ -83,18 +67,12 @@ def test_mapping():
                 "a": {
                     "type": "object",
                     "properties": {
-                        "lang": {
-                            "type": "keyword"
-                        },
+                        "lang": {"type": "keyword"},
                         "value": {
                             "type": "text",
-                            "fields": {
-                                "keyword": {
-                                    "type": "keyword"
-                                }
-                            }
-                        }
-                    }
+                            "fields": {"keyword": {"type": "keyword"}},
+                        },
+                    },
                 },
                 "a_cs": {
                     "type": "text",
@@ -102,13 +80,9 @@ def test_mapping():
                     "sort": {
                         "type": "icu_collation_keyword",
                         "index": False,
-                        "language": "cs"
+                        "language": "cs",
                     },
-                    "fields": {
-                        "keyword": {
-                            "type": "keyword"
-                        }
-                    }
+                    "fields": {"keyword": {"type": "keyword"}},
                 },
                 "a_en": {
                     "type": "text",
@@ -116,26 +90,14 @@ def test_mapping():
                     "sort": {
                         "type": "icu_collation_keyword",
                         "index": False,
-                        "language": "en"
+                        "language": "en",
                     },
-                    "fields": {
-                        "keyword": {
-                            "type": "keyword"
-                        }
-                    }
+                    "fields": {"keyword": {"type": "keyword"}},
                 },
-                "id": {
-                    "type": "keyword"
-                },
-                "created": {
-                    "type": "date"
-                },
-                "updated": {
-                    "type": "date"
-                },
-                "$schema": {
-                    "type": "keyword"
-                }
+                "id": {"type": "keyword"},
+                "created": {"type": "date"},
+                "updated": {"type": "date"},
+                "$schema": {"type": "keyword"},
             }
         }
     }
@@ -199,7 +161,9 @@ def test_generated_schema():
 
     builder.build(schema, "")
 
-    data = builder.filesystem.open(os.path.join("test", "services", "records", "schema.py")).read()
+    data = builder.filesystem.open(
+        os.path.join("test", "services", "records", "schema.py")
+    ).read()
     print(data)
 
     assert re.sub(r"\s", "", data) == re.sub(
@@ -240,50 +204,11 @@ class TestSchema(InvenioBaseRecordSchema):
     )
 
 
-# # TODO validace jazyku do oarepo-runtime
-# def test_multilingual_schema():
-#     schema = basic_schema()
-#
-#     filesystem = MockFilesystem()
-#     builder = create_builder_from_entrypoints(filesystem=filesystem)
-#
-#     builder.build(schema, "")
-#
-#     data = builder.filesystem.open(os.path.join("test", "services", "records", "multilingual_schema.py")).read()
-#     print(data)
-#
-#     assert re.sub(r"\s", "", data) == re.sub(
-#         r"\s",
-#         "",
-#         """
-# import langcodes
-# from marshmallow import Schema, fields, ValidationError, validates
-#
-# \"""
-# Marshmallow schema for multilingual strings. Consider moving this file to a library, not generating
-# it for each project.
-# \"""
-#
-#
-# class MultilingualSchema(Schema):
-#     lang = fields.String(required=True)
-#     value = fields.String(required=True)
-#
-#     @validates("lang")
-#     def validate_lang(self, value):
-#         if value != '_' and not langcodes.Language.get(value).is_valid():
-#             raise ValidationError("Invalid language code")
-#
-#     """,
-#     )
-
-
 def test_sample_data():
     schema = load_model(
         "test.yaml",
         "test",
         model_content={
-
             "settings": {
                 "supported-langs": {
                     "cs": {
@@ -299,12 +224,18 @@ def test_sample_data():
                     },
                 }
             },
-            "model": {"use": "invenio", "sample": {"count": 1},
-                      "properties": {"a": {"type": "multilingual"}, "b": {"type": "i18nStr"}, "c": {"type": "object",
-                                                                                                    "properties": {
-                                                                                                        "d": "multilingual",
-                                                                                                        "e": "keyword"}}}},
-
+            "model": {
+                "use": "invenio",
+                "sample": {"count": 1},
+                "properties": {
+                    "a": {"type": "multilingual"},
+                    "b": {"type": "i18nStr"},
+                    "c": {
+                        "type": "object",
+                        "properties": {"d": "multilingual", "e": "keyword"},
+                    },
+                },
+            },
         },
         isort=False,
         black=False,
@@ -317,14 +248,15 @@ def test_sample_data():
     # file = builder.filesystem.open(os.path.join("data" ,"sample_data.yaml"))
     data_yaml = builder.filesystem.open(os.path.join("data", "sample_data.yaml")).read()
     import yaml
-    yaml_docs = data_yaml.split('---')
+
+    yaml_docs = data_yaml.split("---")
     for doc in yaml_docs:
         if doc.strip():
             data = yaml.safe_load(doc)
             print(data)
             assert isinstance(data["a"], list)
-            for i18n in data['a']:
-                assert i18n['lang'] in ("cs", "en")
+            for i18n in data["a"]:
+                assert i18n["lang"] in ("cs", "en")
 
             assert isinstance(data["b"], dict)
             assert data["b"]["lang"] in ("cs", "en")

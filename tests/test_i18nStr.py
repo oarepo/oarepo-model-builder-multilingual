@@ -48,27 +48,16 @@ def test_generated_jsonschema():
         "properties": {
             "a": {
                 "type": "object",
-                "properties": {
-                    "lang": {
-                        "type": "string"
-                    },
-                    "value": {
-                        "type": "string"
-                    }
-                }
+                "properties": {"lang": {"type": "string"}, "value": {"type": "string"}},
             },
             "b": {
                 "type": "object",
                 "properties": {
-                    "language": {
-                        "type": "string"
-                    },
-                    "val": {
-                        "type": "string"
-                    }
-                }
-            }
-        }
+                    "language": {"type": "string"},
+                    "val": {"type": "string"},
+                },
+            },
+        },
     }
 
 
@@ -113,67 +102,27 @@ def test_generated_mapping():
                 "a": {
                     "type": "object",
                     "properties": {
-                        "lang": {
-                            "type": "keyword"
-                        },
+                        "lang": {"type": "keyword"},
                         "value": {
                             "type": "text",
-                            "fields": {
-                                "keyword": {
-                                    "type": "keyword"
-                                }
-                            }
-                        }
-                    }
+                            "fields": {"keyword": {"type": "keyword"}},
+                        },
+                    },
                 },
-                "a_cs": {
-                    "type": "text",
-                    "fields": {
-                        "keyword": {
-                            "type": "keyword"
-                        }
-                    }
-                },
-                "a_en": {
-                    "type": "text",
-                    "fields": {
-                        "keyword": {
-                            "type": "keyword"
-                        }
-                    }
-                },
+                "a_cs": {"type": "text", "fields": {"keyword": {"type": "keyword"}}},
+                "a_en": {"type": "text", "fields": {"keyword": {"type": "keyword"}}},
                 "b": {
                     "type": "object",
                     "properties": {
-                        "language": {
-                            "type": "keyword"
-                        },
+                        "language": {"type": "keyword"},
                         "val": {
                             "type": "text",
-                            "fields": {
-                                "keyword": {
-                                    "type": "keyword"
-                                }
-                            }
-                        }
-                    }
+                            "fields": {"keyword": {"type": "keyword"}},
+                        },
+                    },
                 },
-                "b_cs": {
-                    "type": "text",
-                    "fields": {
-                        "keyword": {
-                            "type": "keyword"
-                        }
-                    }
-                },
-                "b_en": {
-                    "type": "text",
-                    "fields": {
-                        "keyword": {
-                            "type": "keyword"
-                        }
-                    }
-                }
+                "b_cs": {"type": "text", "fields": {"keyword": {"type": "keyword"}}},
+                "b_en": {"type": "text", "fields": {"keyword": {"type": "keyword"}}},
             }
         }
     }
@@ -209,7 +158,9 @@ def test_generated_schema():
 
     builder.build(schema, "")
 
-    data = builder.filesystem.open(os.path.join("test", "services", "records", "schema.py")).read()
+    data = builder.filesystem.open(
+        os.path.join("test", "services", "records", "schema.py")
+    ).read()
     print(data)
 
     assert re.sub(r"\s", "", data) == re.sub(
@@ -247,7 +198,6 @@ class TestSchema(ma.Schema):
     )
 
 
-
 def test_generated_schema_use_i18n():
     schema = load_model(
         "test.yaml",
@@ -277,7 +227,9 @@ def test_generated_schema_use_i18n():
 
     builder.build(schema, "")
 
-    data = builder.filesystem.open(os.path.join("test", "services", "records", "schema.py")).read()
+    data = builder.filesystem.open(
+        os.path.join("test", "services", "records", "schema.py")
+    ).read()
     print(data)
     assert re.sub(r"\s", "", data) == re.sub(
         r"\s",
@@ -343,6 +295,12 @@ def test_mapping():
     ).read()
     print(data)
     data = json.loads(data)
-    assert data == {"mappings": {"properties": {"a": {"type": "text"},
-                                                "a_cs": {"type": "text", "fields": {"keyword": {"type": "keyword"}}},
-                                                "a_en": {"type": "text", "fields": {"keyword": {"type": "keyword"}}}}}}
+    assert data == {
+        "mappings": {
+            "properties": {
+                "a": {"type": "text"},
+                "a_cs": {"type": "text", "fields": {"keyword": {"type": "keyword"}}},
+                "a_en": {"type": "text", "fields": {"keyword": {"type": "keyword"}}},
+            }
+        }
+    }

@@ -1,5 +1,7 @@
 from oarepo_model_builder.entrypoints import load_model
+
 DUMMY_YAML = "test.yaml"
+
 
 def basic_schema():
     return load_model(
@@ -20,12 +22,8 @@ def basic_schema():
                     },
                 }
             },
-            "model": {
-                "use": "invenio",
-                "properties": {"a": {"type": "multilingual"}}
-            },
+            "model": {"use": "invenio", "properties": {"a": {"type": "multilingual"}}},
         },
         isort=False,
         black=False,
     )
-

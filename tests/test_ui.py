@@ -8,7 +8,6 @@ def test_validity():
         "test.yaml",
         "test",
         model_content={
-
             "settings": {
                 "supported-langs": {
                     "en": {
@@ -17,7 +16,10 @@ def test_validity():
                     }
                 }
             },
-            "model": {"use": "invenio","properties": {"a": {"type": "multilingual", "ui": {}}}},
+            "model": {
+                "use": "invenio",
+                "properties": {"a": {"type": "multilingual", "ui": {}}},
+            },
         },
         isort=False,
         black=False,
