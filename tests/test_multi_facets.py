@@ -257,11 +257,11 @@ e_g_lang = NestedLabeledFacet(path ="e.g", nested_facet = TermsFacet(field="e.g.
 
 
 
-e.g_cs = TermsFacet(field="e.g_cs")
+e_g_cs = TermsFacet(field="e.g_cs")
 
 
 
-e.g_en = TermsFacet(field="e.g_en")
+e_g_en = TermsFacet(field="e.g_en")
 
 
 
