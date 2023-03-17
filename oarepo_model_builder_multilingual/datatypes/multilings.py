@@ -7,6 +7,7 @@ from oarepo_model_builder.validation.property_marshmallow import (
     ObjectPropertyMarshmallowSchema,
 )
 from oarepo_model_builder.validation.ui import ObjectPropertyUISchema
+from oarepo_model_builder.utils.facet_helpers import facet_name
 
 
 class MultilingualDataType(ArrayDataType):
@@ -132,6 +133,9 @@ class I18nDataType(NestedDataType):
             for lang in self.schema.settings["supported-langs"]:
                 l_path = path + "_" + lang
                 nested_arr.append(
-                    {"facet": f'TermsFacet(field="{l_path}")', "path": l_path}
+                    {
+                        "facet": f'TermsFacet(field="{l_path}")',
+                        "path": facet_name(l_path),
+                    }
                 )
         return nested_arr
