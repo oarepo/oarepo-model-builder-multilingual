@@ -2,9 +2,7 @@
     "type": "object",
     "properties": {
         "a": {
-            "type": "array",
             "items": {
-                "type": "object",
                 "properties": {
                     "lang": {
                         "type": "string"
@@ -12,8 +10,10 @@
                     "value": {
                         "type": "string"
                     }
-                }
-            }
+                },
+                "type": "object"
+            },
+            "type": "array"
         },
         "id": {
             "type": "string"

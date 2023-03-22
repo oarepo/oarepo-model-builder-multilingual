@@ -22,7 +22,6 @@ class ModelServiceConfig(RecordServiceConfig):
     search = ModelSearchOptions
 
     record_cls = ModelRecord
-    # todo should i leave this here?
     service_id = "model"
 
     components = [*RecordServiceConfig.components]
