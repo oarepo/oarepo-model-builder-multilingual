@@ -62,45 +62,67 @@ def test_mapping():
     print(data)
     data = json.loads(data)
     assert data == {
-        "mappings": {
-            "properties": {
-                "a": {
-                    "type": "object",
-                    "properties": {
-                        "lang": {"type": "keyword"},
-                        "value": {
-                            "type": "text",
-                            "fields": {"keyword": {"type": "keyword"}},
-                        },
+    "mappings": {
+        "properties": {
+            "a": {
+                "type": "object",
+                "properties": {
+                    "lang": {
+                        "type": "keyword"
                     },
-                },
-                "a_cs": {
-                    "type": "text",
-                    "analyzer": "czech",
+                    "value": {
+                        "type": "text",
+                        "fields": {
+                            "keyword": {
+                                "type": "keyword"
+                            }
+                        }
+                    }
+                }
+            },
+            "a_cs": {
+                "type": "text",
+                "analyzer": "czech",
+                "fields": {
                     "sort": {
                         "type": "icu_collation_keyword",
                         "index": False,
-                        "language": "cs",
+                        "language": "cs"
                     },
-                    "fields": {"keyword": {"type": "keyword"}},
-                },
-                "a_en": {
-                    "type": "text",
-                    "analyzer": "en",
+                    "keyword": {
+                        "type": "keyword"
+                    }
+                }
+            },
+            "a_en": {
+                "type": "text",
+                "analyzer": "en",
+                "fields": {
                     "sort": {
                         "type": "icu_collation_keyword",
                         "index": False,
-                        "language": "en",
+                        "language": "en"
                     },
-                    "fields": {"keyword": {"type": "keyword"}},
-                },
-                "id": {"type": "keyword"},
-                "created": {"type": "date"},
-                "updated": {"type": "date"},
-                "$schema": {"type": "keyword"},
+                    "keyword": {
+                        "type": "keyword"
+                    }
+                }
+            },
+            "id": {
+                "type": "keyword"
+            },
+            "created": {
+                "type": "date"
+            },
+            "updated": {
+                "type": "date"
+            },
+            "$schema": {
+                "type": "keyword"
             }
         }
     }
+}
 
 
 # Multilingual dumper was moved to the oarepo-runtime library
