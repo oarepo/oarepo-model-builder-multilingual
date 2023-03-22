@@ -1,13 +1,30 @@
 {
-  settings: {
-    package: 'record_test',
+  "settings": {
+    "supported-langs": {
+      "cs": {
+        "text": {
+          "analyzer": "czech",
+        },
+        "sort": {
+          "type": "icu_collation_keyword"
+        },
+      },
+      "en": {
+        "text": {
+          "analyzer": "en"
+        },
+        "sort": {
+          "type": "icu_collation_keyword"
+        },
+      },
+    }
   },
-  model: {
-    properties: {
-      a: {
-        type: 'fulltext',
-        minLength: 5
+  "model": {
+    "use": "invenio",
+    "properties": {
+      "a": {
+        "type": "multilingual"
       }
-    },
-  }
+    }
+  },
 }

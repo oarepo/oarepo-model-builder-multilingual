@@ -1,0 +1,62 @@
+{
+    "mappings": {
+        "properties": {
+            "a": {
+                "type": "object",
+                "properties": {
+                    "lang": {
+                        "type": "keyword"
+                    },
+                    "value": {
+                        "type": "text",
+                        "fields": {
+                            "keyword": {
+                                "type": "keyword"
+                            }
+                        }
+                    }
+                }
+            },
+            "a_cs": {
+                "type": "text",
+                "analyzer": "czech",
+                "fields": {
+                    "sort": {
+                        "type": "icu_collation_keyword",
+                        "index": false,
+                        "language": "cs"
+                    },
+                    "keyword": {
+                        "type": "keyword"
+                    }
+                }
+            },
+            "a_en": {
+                "type": "text",
+                "analyzer": "en",
+                "fields": {
+                    "sort": {
+                        "type": "icu_collation_keyword",
+                        "index": false,
+                        "language": "en"
+                    },
+                    "keyword": {
+                        "type": "keyword"
+                    }
+                }
+            },
+            "id": {
+                "type": "keyword"
+            },
+            "created": {
+                "type": "date"
+            },
+            "updated": {
+                "type": "date"
+            },
+            "$schema": {
+                "type": "keyword"
+            }
+        }
+    }
+}
