@@ -12,11 +12,11 @@ python3 -m venv .venv
 BUILDER=.venv/bin/oarepo-compile-model
 
 
-#if true ; then
-#    test -d tests/test_app && rm -rf tests/test_app
-#    ${BUILDER} tests/model.json5 --output-directory tests/test_app -vvv
-#fi
-
+if true ; then
+    test -d tests/test_app && rm -rf tests/test_app
+    ${BUILDER} tests/model.json5 --output-directory tests/test_app -vvv
+fi
+rm -rf tests/test_app/tests
 python3 -m venv .venv-tests
 source .venv-tests/bin/activate
 
@@ -26,4 +26,4 @@ pip install -e tests/test_app
 pip install pytest-invenio
 pip install oarepo-model-builder
 
-pytest tests -vv
+pytest tests -vvv

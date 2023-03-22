@@ -3,6 +3,7 @@
     "properties": {
         "a": {
             "items": {
+                "type": "object",
                 "properties": {
                     "lang": {
                         "type": "string"
@@ -10,8 +11,7 @@
                     "value": {
                         "type": "string"
                     }
-                },
-                "type": "object"
+                }
             },
             "type": "array"
         },
