@@ -177,96 +177,21 @@ from marshmallow_utils import schemas as mu_schemas
 
 
 
-from oarepo_runtime.i18n.schema import I18nSchema
+from oarepo_runtime.i18n.schema import I18nStrField
 
 
-
-
-
-class BSchema(ma.Schema):
-    \"""BSchema schema.\"""
-    language = ma_fields.String()
-    val = ma_fields.String()
 
 
 
 class TestSchema(ma.Schema):
     \"""TestSchema schema.\"""
-    a = ma_fields.Nested(lambda: I18nSchema())
-    b = ma_fields.Nested(lambda: BSchema())
+    a = I18nStrField()
+    b = I18nStrField(lang_field=language, value_field=val)
+
     """,
     )
 
 
-def test_generated_schema_use_i18n():
-    schema = load_model(
-        "test.yaml",
-        "test",
-        model_content={
-            "settings": {"supported-langs": {"cs": {}, "en": {}}},
-            "model": {
-                "properties": {
-                    "a": {
-                        "use": "i18n",
-                        "properties": {
-                            "navic": {
-                                "type": "object",
-                                "properties": {"kxh": {"type": "keyword"}},
-                            }
-                        },
-                    }
-                },
-            },
-        },
-        isort=False,
-        black=False,
-    )
-
-    filesystem = MockFilesystem()
-    builder = create_builder_from_entrypoints(filesystem=filesystem)
-
-    builder.build(schema, "")
-
-    data = builder.filesystem.open(
-        os.path.join("test", "services", "records", "schema.py")
-    ).read()
-    print(data)
-    assert re.sub(r"\s", "", data) == re.sub(
-        r"\s",
-        "",
-        """
-from invenio_records_resources.services.records.schema import BaseRecordSchema as InvenioBaseRecordSchema
-from marshmallow import ValidationError
-from marshmallow import validate as ma_validate
-import marshmallow as ma
-from marshmallow import fields as ma_fields
-from marshmallow_utils import fields as mu_fields
-from marshmallow_utils import schemas as mu_schemas
-
-
-
-
-
-class NavicSchema(ma.Schema):
-    \"""NavicSchema schema.\"""
-    kxh = ma_fields.String()
-
-
-
-class ASchema(ma.Schema):
-    \"""ASchema schema.\"""
-    navic = ma_fields.Nested(lambda: NavicSchema())
-    lang = ma_fields.String()
-    value = ma_fields.String()
-    
-
-
-
-class TestSchema(ma.Schema):
-    \"""TestSchema schema.\"""
-    a = ma_fields.Nested(lambda: ASchema())
-    """,
-    )
 
 
 def test_mapping():

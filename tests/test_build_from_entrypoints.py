@@ -11,7 +11,6 @@ from tests.test_helper import basic_schema
 DUMMY_YAML = "test.yaml"
 
 
-# TODO special facets
 
 
 def test_json():
@@ -137,6 +136,74 @@ def test_dumper():
     data = builder.filesystem.open(os.path.join("test", "records", "api.py")).read()
     assert "dumper_extensions = [MultilingualDumper()]" in data
 
+def test_generated_schema2():
+    schema = load_model(
+        "test.yaml",
+        "test",
+        model_content={
+            "settings": {
+                "supported-langs": {"cs": {}, "en": {}},
+            },
+            "model": {
+                "properties": {
+                    "a": {"type": "i18nStr", "marshmallow" : {"imports" : [{"import" :"test"}], "field-class": "FieldClassa", "arguments": ["test=cosi"]}},
+                    "b": {
+                        "type": "i18nStr",
+                        "marshmallow": {"arguments": ["test=cosi"]},
+                        "multilingual": {
+                            "lang-field": "language",
+                            "value-field": "val",
+                        },
+                    },
+                },
+            },
+        },
+        isort=False,
+        black=False,
+    )
+
+    filesystem = MockFilesystem()
+    builder = create_builder_from_entrypoints(filesystem=filesystem)
+
+    builder.build(schema, "")
+
+    data = builder.filesystem.open(
+        os.path.join("test", "services", "records", "schema.py")
+    ).read()
+    print(data)
+
+    assert re.sub(r"\s", "", data) == re.sub(
+        r"\s",
+        "",
+        """
+
+from invenio_records_resources.services.records.schema import BaseRecordSchema as InvenioBaseRecordSchema
+from marshmallow import ValidationError
+from marshmallow import validate as ma_validate
+import marshmallow as ma
+from marshmallow import fields as ma_fields
+from marshmallow_utils import fields as mu_fields
+from marshmallow_utils import schemas as mu_schemas
+
+
+
+from oarepo_runtime.i18n.schema import I18nStrField
+
+
+
+from test import test
+
+
+
+
+
+class TestSchema(ma.Schema):
+    \"""TestSchema schema.\"""
+    a = FieldClassa(test=cosi)
+    b = I18nStrField(test=cosi, lang_field=language, value_field=val)
+    """,
+    )
+
 
 def test_generated_schema():
     schema = basic_schema()
@@ -166,7 +233,11 @@ from marshmallow_utils import schemas as mu_schemas
 
 
 
-from oarepo_runtime.i18n.schema import I18nSchema
+from oarepo_runtime.i18n.schema import I18nStrField
+
+
+
+from oarepo_runtime.i18n.schema import MultilingualField
 
 
 
@@ -182,7 +253,7 @@ from oarepo_runtime.validation import validate_date
 
 class TestSchema(InvenioBaseRecordSchema):
     \"""TestSchema schema.\"""
-    a = ma_fields.List(ma_fields.Nested(lambda: I18nSchema()))
+    a = MultilingualField(I18nStrField())
     created = ma_fields.String(validate=[validate_date('%Y-%m-%d')], dump_only=True)
     updated = ma_fields.String(validate=[validate_date('%Y-%m-%d')], dump_only=True)
     """,

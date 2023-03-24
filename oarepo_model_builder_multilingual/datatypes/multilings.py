@@ -23,6 +23,35 @@ class MultilingualDataType(ArrayDataType):
         definition = self.definition
         definition["type"] = "array"
         definition["items"] = {"type": "i18nStr"}
+        definition_marsh = definition.get("marshmallow", {})
+        if 'field-class' not in definition_marsh:
+            definition_marsh['field-class'] = 'MultilingualField'
+        if 'imports' not in definition_marsh:
+            definition_marsh['imports'] = [
+                {"import": "oarepo_runtime.i18n.schema.MultilingualField"}
+            ]
+        else:
+            definition_marsh['imports'].append({"import": "oarepo_runtime.i18n.schema.MultilingualField"})
+
+        deepmerge(definition, {"marshmallow": definition_marsh})
+
+        definition_ui = definition.get("ui", {})
+        definition_ui_marsh = definition_ui.get("marshmallow", {})
+
+
+
+        if 'field-class' not in definition_ui_marsh:
+            definition_ui_marsh['field-class'] = 'MultilingualUIField'
+        if 'imports' not in definition_ui_marsh:
+            definition_ui_marsh['imports'] = [
+            {"import": "oarepo_runtime.i18n.ui_schema.MultilingualUIField"}
+            ]
+        else:
+            definition_ui_marsh['imports'].append({"import": "oarepo_runtime.i18n.ui_schema.MultilingualUIField"})
+
+        deepmerge(definition_ui, {"marshmallow" : definition_ui_marsh})
+        deepmerge(definition, {"ui": definition_ui})
+
 
         super().prepare(context)
 
@@ -49,30 +78,65 @@ class I18nDataType(NestedDataType):
         value = mult_definition.get("value-field", "value")
         definition["type"] = "i18nStr"
 
-        if (
-            "lang-field" not in mult_definition
-            and "value-field" not in mult_definition
-            and "properties" not in definition
-        ):
-            definition_marshmallow = definition.get("marshmallow", {})
-            definition_marshmallow["generate"] = False
-            definition_marshmallow[
-                "schema-class"
-            ] = "oarepo_runtime.i18n.schema.I18nSchema"
-            definition_marshmallow["imports"] = [
-                {"import": "oarepo_runtime.i18n.schema.I18nSchema"}
+        """marshmallow"""
+
+        definition_marsh = definition.get("marshmallow", {})
+        if 'schema-class' not in definition_marsh:
+            definition_marsh['schema-class'] = None
+        if 'field-class' not in definition_marsh:
+            definition_marsh['field-class'] = 'I18nStrField'
+
+        if 'imports' not in definition_marsh:
+            definition_marsh['imports'] = [
+                {"import": "oarepo_runtime.i18n.schema.I18nStrField"}
             ]
+        else:
+            definition_marsh['imports'].append({"import": "oarepo_runtime.i18n.schema.I18nStrField"})
+        if 'generate' not in definition_marsh:
+            definition_marsh['generate'] = False
 
-            definition["marshmallow"] = definition_marshmallow
-            definition_ui = definition.get("ui", {})
-            definition_ui["detail"] = "multilingual"
-            definition_ui["marshmallow"] = {
-                "generate": False,
-                "schema-class": "oarepo_runtime.i18n.schema.I18nUISchema",
-                "imports": [{"import": "oarepo_runtime.i18n.schema.I18nUISchema"}],
-            }
+        if 'lang-field' in mult_definition:
+            if 'arguments' not in definition_marsh:
+                definition_marsh['arguments'] = [f'lang_field={mult_definition["lang-field"]}']
+            else:
+                definition_marsh['arguments'].append(f'lang_field={mult_definition["lang-field"]}')
+        if 'value-field' in mult_definition:
+            if 'arguments' not in definition_marsh:
+                definition_marsh['arguments'] = [f'value_field={mult_definition["value-field"]}']
+            else:
+                definition_marsh['arguments'].append(f'value_field={mult_definition["value-field"]}')
+        deepmerge(definition, {"marshmallow" : definition_marsh})
 
-            definition["ui"] = definition_ui
+        """marshmallow ui"""
+
+        definition_ui = definition.get("ui", {})
+        definition_ui_marsh = definition_ui.get("marshmallow", {})
+
+        if 'schema-class' not in definition_ui_marsh:
+            definition_ui_marsh['schema-class'] = None
+        if 'field-class' not in definition_ui_marsh:
+            definition_ui_marsh['field-class'] = 'I18nStrUIField'
+        if 'imports' not in definition_ui_marsh:
+            definition_ui_marsh['imports'] = [
+                    {"import": "oarepo_runtime.i18n.ui_schema.I18nStrUIField"}
+            ]
+        else:
+                definition_ui_marsh['imports'].append({"import": "oarepo_runtime.i18n.ui_schema.I18nStrUIField"})
+        if 'lang-field' in mult_definition:
+            if 'arguments' not in definition_ui_marsh:
+                definition_ui_marsh['arguments'] = [f'lang_field={mult_definition["lang-field"]}']
+            else:
+                definition_ui_marsh['arguments'].append(f'lang_field={mult_definition["lang-field"]}')
+        if 'value-field' in mult_definition:
+            if 'arguments' not in definition_ui_marsh:
+                definition_ui_marsh['arguments'] = [f'value_field={mult_definition["value-field"]}']
+            else:
+                definition_ui_marsh['arguments'].append(f'value_field={mult_definition["value-field"]}')
+
+        deepmerge(definition_ui, {"marshmallow": definition_ui_marsh})
+        deepmerge(definition, {"ui": definition_ui})
+
+
         def_properties = definition.get("properties", {})
         definition["sample"] = {"skip": False}
 
@@ -82,28 +146,6 @@ class I18nDataType(NestedDataType):
 
         super().prepare(context)
 
-    def marshmallow(self, **extras):
-        ret = copy.deepcopy(self.definition.get("marshmallow", {}))
-        if not "class" in ret:
-            ret.setdefault("field-class", self.marshmallow_field)
-        ret.setdefault("validators", []).extend(self.marshmallow_validators())
-        deepmerge(
-            ret.setdefault("validates", {}),
-            {
-                "validates": {
-                    "lang": {
-                        "imports": ["import langcodes"],
-                        "definition": """def validate_lang(self, value):
-                                        if value != "_" and not langcodes.Language.get(value).is_valid():
-                                            raise ma_ValidationError("Invalid language code")""",
-                    }
-                }
-            },
-        )
-        for k, v in extras.items():
-            if v is not None:
-                ret[k] = v
-        return ret
 
     def get_facet(self, stack, parent_path):
         if not stack:
