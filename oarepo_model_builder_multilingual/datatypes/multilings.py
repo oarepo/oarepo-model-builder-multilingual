@@ -37,7 +37,8 @@ class MultilingualDataType(ArrayDataType):
 
         definition_ui = definition.get("ui", {})
         definition_ui_marsh = definition_ui.get("marshmallow", {})
-
+        if 'detail' not in definition_ui_marsh:
+            definition_ui_marsh['detail'] = 'multilingual'
 
 
         if 'field-class' not in definition_ui_marsh:
@@ -111,7 +112,8 @@ class I18nDataType(NestedDataType):
 
         definition_ui = definition.get("ui", {})
         definition_ui_marsh = definition_ui.get("marshmallow", {})
-
+        if 'detail' not in definition_ui_marsh:
+            definition_ui_marsh['detail'] = 'multilingual'
         if 'schema-class' not in definition_ui_marsh:
             definition_ui_marsh['schema-class'] = None
         if 'field-class' not in definition_ui_marsh:
