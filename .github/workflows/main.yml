@@ -41,7 +41,7 @@ jobs:
 
       - name: Test with pytest
         run: |
-          sh run_tests.sh
+          ./run_tests.sh
 
       - name: Build package to publish
         run: |
