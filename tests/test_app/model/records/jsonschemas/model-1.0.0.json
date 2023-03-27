@@ -2,12 +2,9 @@
     "type": "object",
     "properties": {
         "metadata": {
-            "type": "object",
             "properties": {
                 "a": {
-                    "type": "array",
                     "items": {
-                        "type": "object",
                         "properties": {
                             "lang": {
                                 "type": "string"
@@ -15,10 +12,13 @@
                             "value": {
                                 "type": "string"
                             }
-                        }
-                    }
+                        },
+                        "type": "object"
+                    },
+                    "type": "array"
                 }
-            }
+            },
+            "type": "object"
         },
         "id": {
             "type": "string"
