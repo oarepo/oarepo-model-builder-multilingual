@@ -12,10 +12,10 @@ class ModelSearchOptions(InvenioSearchOptions):
     """ModelRecord search options."""
 
     facets = {
-        "a_lang": facets.a_lang,
-        "a_cs": facets.a_cs,
-        "a_en": facets.a_en,
-        "a_value_keyword": facets.a_value_keyword,
+        "metadata_a_lang": facets.metadata_a_lang,
+        "metadata_a_cs_keyword": facets.metadata_a_cs_keyword,
+        "metadata_a_en_keyword": facets.metadata_a_en_keyword,
+        "metadata_a_value_keyword": facets.metadata_a_value_keyword,
         "_id": facets._id,
         "created": facets.created,
         "updated": facets.updated,

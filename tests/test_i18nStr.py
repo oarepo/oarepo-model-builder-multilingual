@@ -100,7 +100,7 @@ def test_generated_mapping():
         "mappings": {
             "properties": {
                 "a": {
-                    "type": "object",
+                    "type": "nested",
                     "properties": {
                         "lang": {"type": "keyword"},
                         "value": {
@@ -112,7 +112,7 @@ def test_generated_mapping():
                 "a_cs": {"type": "text", "fields": {"keyword": {"type": "keyword"}}},
                 "a_en": {"type": "text", "fields": {"keyword": {"type": "keyword"}}},
                 "b": {
-                    "type": "object",
+                    "type": "nested",
                     "properties": {
                         "language": {"type": "keyword"},
                         "val": {

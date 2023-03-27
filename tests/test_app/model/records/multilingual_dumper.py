@@ -14,7 +14,7 @@ class MultilingualDumper(SearchDumperExt):
     """ModelRecord search dumper."""
 
     def dump(self, record, data):
-        paths = []
+        paths = ["/metadata/a"]
         SUPPORTED_LANGS = ["cs", "en"]
 
         for path in paths:
@@ -44,7 +44,7 @@ class MultilingualDumper(SearchDumperExt):
         return data
 
     def load(self, record, data):
-        paths = []
+        paths = ["/metadata/a"]
         SUPPORTED_LANGS = ["cs", "en"]
         for path in paths:
             record2 = record

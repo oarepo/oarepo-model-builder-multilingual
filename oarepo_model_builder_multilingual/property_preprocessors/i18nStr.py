@@ -22,7 +22,7 @@ def create_mapping(object, data, key):
 
     data = {
         key: {
-            "type": "object",
+            "type": "nested",
             "properties": {
                 lang: {"type": "keyword"},
                 value: {"type": "fulltext+keyword"},

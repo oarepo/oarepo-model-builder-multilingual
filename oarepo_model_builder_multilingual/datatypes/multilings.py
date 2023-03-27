@@ -175,7 +175,7 @@ class I18nDataType(NestedDataType):
             )
         if self.stack.top.key == lang_name:
             for lang in self.schema.settings["supported-langs"]:
-                l_path = path + "_" + lang
+                l_path = path + "_" + lang + '.keyword'
                 nested_arr.append(
                     {
                         "facet": f'TermsFacet(field="{l_path}")',

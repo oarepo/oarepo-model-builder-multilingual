@@ -68,11 +68,11 @@ class TestSearchOptions(InvenioSearchOptions):
 
 
 
-    'a_cs': facets.a_cs,
+    'a_cs_keyword': facets.a_cs_keyword,
 
 
 
-    'a_en': facets.a_en,
+    'a_en_keyword': facets.a_en_keyword,
 
 
 
@@ -97,9 +97,9 @@ class TestSearchOptions(InvenioSearchOptions):
 
     }
     sort_options = {
-        
+
         **InvenioSearchOptions.sort_options,
-        
+
 
 
     'a': {'fields': ['a']},"bestmatch": dict(
@@ -201,11 +201,11 @@ d_lang = NestedLabeledFacet(path ="d", nested_facet = TermsFacet(field="d.lang")
 
 
 
-d_cs = TermsFacet(field="d_cs")
+d_cs_keyword = TermsFacet(field="d_cs.keyword")
 
 
 
-d_en = TermsFacet(field="d_en")
+d_en_keyword = TermsFacet(field="d_en.keyword")
 
 
 
@@ -221,11 +221,11 @@ c_language = NestedLabeledFacet(path ="c", nested_facet = TermsFacet(field="c.la
 
 
 
-c_cs = TermsFacet(field="c_cs")
+c_cs_keyword = TermsFacet(field="c_cs.keyword")
 
 
 
-c_en = TermsFacet(field="c_en")
+c_en_keyword = TermsFacet(field="c_en.keyword")
 
 
 
@@ -237,11 +237,11 @@ a_lang = NestedLabeledFacet(path ="a", nested_facet = TermsFacet(field="a.lang")
 
 
 
-a_cs = TermsFacet(field="a_cs")
+a_cs_keyword = TermsFacet(field="a_cs.keyword")
 
 
 
-a_en = TermsFacet(field="a_en")
+a_en_keyword = TermsFacet(field="a_en.keyword")
 
 
 
@@ -257,11 +257,11 @@ e_g_lang = NestedLabeledFacet(path ="e.g", nested_facet = TermsFacet(field="e.g.
 
 
 
-e_g_cs = TermsFacet(field="e.g_cs")
+e_g_cs_keyword = TermsFacet(field="e.g_cs.keyword")
 
 
 
-e_g_en = TermsFacet(field="e.g_en")
+e_g_en_keyword = TermsFacet(field="e.g_en.keyword")
 
 
 

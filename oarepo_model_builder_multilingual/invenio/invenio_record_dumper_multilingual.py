@@ -30,16 +30,29 @@ class InvenioRecordMultilingualDumperBuilder(InvenioBaseClassPythonBuilder):
             **extra_kwargs,
         )
 
-    @process("/model/**", condition=lambda current, stack: stack.schema_valid)
+    @process("/**", condition=lambda current, stack: stack.schema_valid)
     def enter_model_element(self):
         definition = None
         recurse = True
 
+
         if recurse:
             # process children
             self.build_children()
-        data = self.stack.top.data
-        if isinstance(data, dict):
-            if "type" in data and "multilingual" in data["type"]:
-                path = self.stack.path.replace("/model/properties", "")
+        try:
+            type = self.stack[-3].json_schema_type
+        except:
+            type = None
+        path_stack = []
+        if type == "i18nStr":
+            for s in self.stack:
+                type = s.schema_element_type
+                if type and type == "property": #skip items
+                    path_stack.append(s.key)
+
+            path_stack.pop()
+            path = ""
+            for p in path_stack:
+                path += '/'+ p
+            if path not in self.paths:
                 self.paths.append(path)

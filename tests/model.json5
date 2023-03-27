@@ -2,28 +2,20 @@
   "settings": {
     "supported-langs": {
       "cs": {
-        "text": {
-          "analyzer": "czech",
-        },
-        "sort": {
-          "type": "icu_collation_keyword"
-        },
       },
       "en": {
-        "text": {
-          "analyzer": "en"
-        },
-        "sort": {
-          "type": "icu_collation_keyword"
-        },
       },
     }
   },
   "model": {
     "use": "invenio",
     "properties": {
-      "a": {
-        "type": "multilingual"
+      "metadata": {
+        "properties": {
+          "a": {
+            "type": "multilingual"
+          }
+        }
       }
     }
   },

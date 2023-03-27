@@ -1,19 +1,24 @@
 {
     "type": "object",
     "properties": {
-        "a": {
-            "items": {
-                "type": "object",
-                "properties": {
-                    "lang": {
-                        "type": "string"
-                    },
-                    "value": {
-                        "type": "string"
+        "metadata": {
+            "type": "object",
+            "properties": {
+                "a": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "lang": {
+                                "type": "string"
+                            },
+                            "value": {
+                                "type": "string"
+                            }
+                        }
                     }
                 }
-            },
-            "type": "array"
+            }
         },
         "id": {
             "type": "string"

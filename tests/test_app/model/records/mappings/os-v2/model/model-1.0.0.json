@@ -1,47 +1,40 @@
 {
     "mappings": {
         "properties": {
-            "a": {
+            "metadata": {
                 "type": "object",
                 "properties": {
-                    "lang": {
-                        "type": "keyword"
+                    "a": {
+                        "type": "nested",
+                        "properties": {
+                            "lang": {
+                                "type": "keyword"
+                            },
+                            "value": {
+                                "type": "text",
+                                "fields": {
+                                    "keyword": {
+                                        "type": "keyword"
+                                    }
+                                }
+                            }
+                        }
                     },
-                    "value": {
+                    "a_cs": {
                         "type": "text",
                         "fields": {
                             "keyword": {
                                 "type": "keyword"
                             }
                         }
-                    }
-                }
-            },
-            "a_cs": {
-                "type": "text",
-                "analyzer": "czech",
-                "fields": {
-                    "sort": {
-                        "type": "icu_collation_keyword",
-                        "index": false,
-                        "language": "cs"
                     },
-                    "keyword": {
-                        "type": "keyword"
-                    }
-                }
-            },
-            "a_en": {
-                "type": "text",
-                "analyzer": "en",
-                "fields": {
-                    "sort": {
-                        "type": "icu_collation_keyword",
-                        "index": false,
-                        "language": "en"
-                    },
-                    "keyword": {
-                        "type": "keyword"
+                    "a_en": {
+                        "type": "text",
+                        "fields": {
+                            "keyword": {
+                                "type": "keyword"
+                            }
+                        }
                     }
                 }
             },

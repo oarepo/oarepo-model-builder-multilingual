@@ -64,7 +64,7 @@ def test_mapping():
     "mappings": {
         "properties": {
             "a": {
-                "type": "object",
+                "type": "nested",
                 "properties": {
                     "lang": {
                         "type": "keyword"
@@ -135,6 +135,110 @@ def test_dumper():
 
     data = builder.filesystem.open(os.path.join("test", "records", "api.py")).read()
     assert "dumper_extensions = [MultilingualDumper()]" in data
+def test_dumper_file():
+    schema = load_model(
+        "test.yaml",
+        "test",
+        model_content={
+            "settings": {
+                "supported-langs": {"cs": {}, "en": {}},
+            },
+            "model": {
+                "properties": {
+                    "h" : "keyword",
+                    "a": {"type": "i18nStr"},
+                    "b": {
+                        "type": "multilingual"
+
+                    },
+                    "c": {"type": "object", "properties": {"d": {"type": "array", "items": {"type": "multilingual"}},
+                                                           "f": {"type": "array",
+                                                                 "items": {"type": "i18nStr"}}}}
+                },
+            },
+        },
+        isort=False,
+        black=False,
+    )
+
+    filesystem = MockFilesystem()
+    builder = create_builder_from_entrypoints(filesystem=filesystem)
+
+    builder.build(schema, "")
+
+    data = builder.filesystem.open(os.path.join("test", "records", "multilingual_dumper.py")).read()
+    assert re.sub(r"\s", "", data) == re.sub(
+        r"\s",
+        "",
+        """
+
+from invenio_records.dumpers import SearchDumperExt
+from functools import reduce
+import operator
+from copy import deepcopy
+from deepmerge import always_merger
+
+
+def getFromDict(dataDict, mapList):
+    return reduce(operator.getitem, mapList, dataDict)
+
+class MultilingualDumper(SearchDumperExt):
+    \"""TestRecord search dumper.\"""
+    def dump(self, record, data):
+        paths = ['/a', '/b', '/c/d', '/c/f']
+        SUPPORTED_LANGS = ['cs', 'en']
+
+        for path in paths:
+            new_elements = {}
+            record2 = record
+            path_array = path.split('/')
+            path_array2 = []
+
+            for x in path_array:
+                path_array2.append(x)
+
+            path_array2.pop(0)
+            path_array2 = path_array2[:-1]
+
+            for x in path_array2:
+                record2 = record2[x]
+            path_array.pop(0)
+            multilingual_element = getFromDict(record, path_array)
+
+            for rec in multilingual_element:
+                if rec['lang'] in SUPPORTED_LANGS:
+                    el_name = path_array[-1]  + "_" + rec['lang']
+                    always_merger.merge(new_elements, {el_name: rec['value']})
+
+            always_merger.merge(record2, new_elements)
+        data.update(deepcopy(dict(record)))
+        return data
+
+    def load(self, record, data):
+        paths = ['/a', '/b', '/c/d', '/c/f']
+        SUPPORTED_LANGS = ['cs', 'en']
+        for path in paths:
+            record2 = record
+            path_array = path.split('/')
+            path_array2 = []
+            for x in path_array:
+                path_array2.append(x)
+
+            path_array2.pop(0)
+            path_array2 = path_array2[:-1]
+
+            for x in path_array2:
+                record2 = record2[x]
+
+            path_array.pop(0)
+            multilingual_element = getFromDict(record, path_array)
+            for rec in multilingual_element:
+                if rec['lang'] in SUPPORTED_LANGS:
+                    el_name = path_array[-1]  + "_" + rec['lang']
+                    del record2[el_name]
+        return data
+    """,
+    )
 
 def test_generated_schema2():
     schema = load_model(
@@ -206,7 +310,29 @@ class TestSchema(ma.Schema):
 
 
 def test_generated_schema():
-    schema = basic_schema()
+    schema = load_model(
+        DUMMY_YAML,
+        "test",
+        model_content={
+            "settings": {
+                "supported-langs": {
+                    "cs": {
+                        "text": {
+                            "analyzer": "czech",
+                        },
+                        "sort": {"type": "icu_collation_keyword"},
+                    },
+                    "en": {
+                        "text": {"analyzer": "en"},
+                        "sort": {"type": "icu_collation_keyword"},
+                    },
+                }
+            },
+            "model": {"properties": {"a": {"type": "multilingual"}}},
+        },
+        isort=False,
+        black=False,
+    )
 
     filesystem = MockFilesystem()
     builder = create_builder_from_entrypoints(filesystem=filesystem)
@@ -241,21 +367,11 @@ from oarepo_runtime.i18n.schema import MultilingualField
 
 
 
-from oarepo_runtime.ui import marshmallow as l10n
 
 
-
-from oarepo_runtime.validation import validate_date
-
-
-
-
-
-class TestSchema(InvenioBaseRecordSchema):
+class TestSchema(ma.Schema):
     \"""TestSchema schema.\"""
     a = MultilingualField(I18nStrField())
-    created = ma_fields.String(validate=[validate_date('%Y-%m-%d')], dump_only=True)
-    updated = ma_fields.String(validate=[validate_date('%Y-%m-%d')], dump_only=True)
     """,
     )
 

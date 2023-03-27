@@ -4,17 +4,19 @@ from invenio_records_resources.services.records.facets import TermsFacet
 from invenio_search.engine import dsl
 from oarepo_runtime.facets.nested_facet import NestedLabeledFacet
 
-a_lang = NestedLabeledFacet(path="a", nested_facet=TermsFacet(field="a.lang"))
+metadata_a_lang = NestedLabeledFacet(
+    path="metadata.a", nested_facet=TermsFacet(field="metadata.a.lang")
+)
 
 
-a_cs = TermsFacet(field="a_cs")
+metadata_a_cs_keyword = TermsFacet(field="metadata.a_cs.keyword")
 
 
-a_en = TermsFacet(field="a_en")
+metadata_a_en_keyword = TermsFacet(field="metadata.a_en.keyword")
 
 
-a_value_keyword = NestedLabeledFacet(
-    path="a", nested_facet=TermsFacet(field="a.value.keyword")
+metadata_a_value_keyword = NestedLabeledFacet(
+    path="metadata.a", nested_facet=TermsFacet(field="metadata.a.value.keyword")
 )
 
 
