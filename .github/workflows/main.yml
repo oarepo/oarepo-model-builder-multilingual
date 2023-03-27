@@ -42,6 +42,7 @@ jobs:
       - name: Test with pytest
         run: |
           ls -la
+          ./run-tests.sh
 
       - name: Build package to publish
         run: |
@@ -49,7 +50,7 @@ jobs:
           python setup.py sdist bdist_wheel
 
       - name: Archive production artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: dist
           path: dist
