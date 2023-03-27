@@ -9,9 +9,9 @@ jobs:
       matrix:
         python-version: [ "3.9", "3.10" ]
         search-service: [ opensearch2 ]
-          include:
-            - search-service: opensearch2
-              SEARCH_EXTRAS: "opensearch2"
+        include:
+          - search-service: opensearch2
+            SEARCH_EXTRAS: "opensearch2"
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python ${{ matrix.python-version }}
@@ -35,7 +35,7 @@ jobs:
           sudo sysctl -w vm.swappiness=1
           sudo sysctl -w fs.file-max=262144
           sudo sysctl -w vm.max_map_count=262144
-          
+
       - name: Runs Opensearch
         uses: ankane/setup-opensearch@v1
 
@@ -45,6 +45,7 @@ jobs:
 
       - name: Build package to publish
         run: |
+          pip install -U setuptools pip wheel
           python setup.py sdist bdist_wheel
 
       - name: Archive production artifacts
