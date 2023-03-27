@@ -8,14 +8,18 @@ jobs:
     strategy:
       matrix:
         python-version: [ "3.9", "3.10" ]
+        search-service: [opensearch2]
+        include:
+          - search-service: opensearch2
+            SEARCH_EXTRAS: "opensearch2"
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
         with:
           python-version: ${{ matrix.python-version }}
       - name: Cache pip
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           # This path is specific to Ubuntu
           path: ~/.cache/pip
@@ -24,30 +28,24 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
             ${{ runner.os }}-
-
       - name: Configure sysctl limits
         run: |
           sudo swapoff -a
           sudo sysctl -w vm.swappiness=1
           sudo sysctl -w fs.file-max=262144
           sudo sysctl -w vm.max_map_count=262144
+      - name: Runs Opensearch
+        uses: ankane/setup-opensearch@v1
 
-      - name: Install dependencies
+      - name: Test the package
         run: |
-          python -m pip install --upgrade pip wheel setuptools
-          pip install -e ".[tests]"
-          pip list
-
-      - name: Test with pytest
-        run: |
-          sh run_tests.sh
-
+          ./run-tests.sh
       - name: Build package to publish
         run: |
+          pip install -U setuptools pip wheel
           python setup.py sdist bdist_wheel
-
       - name: Archive production artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: dist
           path: dist
@@ -57,7 +55,7 @@ jobs:
     needs: build
     steps:
       - name: Use built artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: dist
           path: dist
@@ -66,7 +64,6 @@ jobs:
         run: |
           ls -la
           ls -la dist
-
       - name: Publish package
         if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
         uses: pypa/gh-action-pypi-publish@release/v1
