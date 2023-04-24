@@ -50,11 +50,8 @@ def test_search_options():
         "",
         """
 from invenio_records_resources.services import SearchOptions as InvenioSearchOptions
+from flask_babelex import lazy_gettext as _
 from . import facets
-
-def _(x):
-    \"""Identity function for string extraction.\"""
-    return x
 
 
 
@@ -97,9 +94,9 @@ class TestSearchOptions(InvenioSearchOptions):
 
     }
     sort_options = {
-
+        
         **InvenioSearchOptions.sort_options,
-
+        
 
 
     'a': {'fields': ['a']},"bestmatch": dict(
@@ -186,18 +183,31 @@ def test_facets():
         """
 \"""Facet definitions.\"""
 
-from invenio_records_resources.services.records.facets import TermsFacet
 from invenio_search.engine import dsl
+from flask_babelex import lazy_gettext as _
+
+
+
+from invenio_records_resources.services.records.facets import TermsFacet
+
+
+
+from oarepo_runtime.facets.date import DateTimeFacet
+
+
+
 from oarepo_runtime.facets.nested_facet import NestedLabeledFacet
 
 
 
 
-d_navic_kxh = NestedLabeledFacet(path ="d", nested_facet = TermsFacet(field="d.navic.kxh"))
+
+
+d_navic_kxh = NestedLabeledFacet(path ="d", nested_facet = TermsFacet(field="d.navic.kxh", label=_("d/navic/kxh.label")))
 
 
 
-d_lang = NestedLabeledFacet(path ="d", nested_facet = TermsFacet(field="d.lang"))
+d_lang = NestedLabeledFacet(path ="d", nested_facet = TermsFacet(field="d.lang", label=_("d/lang.label")))
 
 
 
@@ -209,15 +219,15 @@ d_en_keyword = TermsFacet(field="d_en.keyword")
 
 
 
-d_value_keyword = NestedLabeledFacet(path ="d", nested_facet = TermsFacet(field="d.value.keyword"))
+d_value_keyword = NestedLabeledFacet(path ="d", nested_facet = TermsFacet(field="d.value.keyword", label=_("d/value/keyword.label")))
 
 
 
-b = TermsFacet(field="b")
+b = TermsFacet(field="b", label=_("b.label"))
 
 
 
-c_language = NestedLabeledFacet(path ="c", nested_facet = TermsFacet(field="c.language"))
+c_language = NestedLabeledFacet(path ="c", nested_facet = TermsFacet(field="c.language", label=_("c/language.label")))
 
 
 
@@ -229,11 +239,11 @@ c_en_keyword = TermsFacet(field="c_en.keyword")
 
 
 
-c_value_keyword = NestedLabeledFacet(path ="c", nested_facet = TermsFacet(field="c.value.keyword"))
+c_value_keyword = NestedLabeledFacet(path ="c", nested_facet = TermsFacet(field="c.value.keyword", label=_("c/value/keyword.label")))
 
 
 
-a_lang = NestedLabeledFacet(path ="a", nested_facet = TermsFacet(field="a.lang"))
+a_lang = NestedLabeledFacet(path ="a", nested_facet = TermsFacet(field="a.lang", label=_("a/lang.label")))
 
 
 
@@ -245,15 +255,15 @@ a_en_keyword = TermsFacet(field="a_en.keyword")
 
 
 
-a_value_keyword = NestedLabeledFacet(path ="a", nested_facet = TermsFacet(field="a.value.keyword"))
+a_value_keyword = NestedLabeledFacet(path ="a", nested_facet = TermsFacet(field="a.value.keyword", label=_("a/value/keyword.label")))
 
 
 
-e_f = TermsFacet(field="e.f")
+e_f = TermsFacet(field="e.f", label=_("e/f.label"))
 
 
 
-e_g_lang = NestedLabeledFacet(path ="e.g", nested_facet = TermsFacet(field="e.g.lang"))
+e_g_lang = NestedLabeledFacet(path ="e.g", nested_facet = TermsFacet(field="e.g.lang", label=_("e/g/lang.label")))
 
 
 
@@ -265,23 +275,23 @@ e_g_en_keyword = TermsFacet(field="e.g_en.keyword")
 
 
 
-e_g_value_keyword = NestedLabeledFacet(path ="e.g", nested_facet = TermsFacet(field="e.g.value.keyword"))
+e_g_value_keyword = NestedLabeledFacet(path ="e.g", nested_facet = TermsFacet(field="e.g.value.keyword", label=_("e/g/value/keyword.label")))
 
 
 
-_id = TermsFacet(field="id")
+_id = TermsFacet(field="id", label=_("id.label"))
 
 
 
-created = TermsFacet(field="created")
+created = DateTimeFacet(field="created", label=_("created.label"))
 
 
 
-updated = TermsFacet(field="updated")
+updated = DateTimeFacet(field="updated", label=_("updated.label"))
 
 
 
-_schema = TermsFacet(field="$schema")
+_schema = TermsFacet(field="$schema", label=_("$schema.label"))
 
     """,
     )

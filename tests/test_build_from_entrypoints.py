@@ -40,8 +40,8 @@ def test_json():
                 "type": "array",
             },
             "id": {"type": "string"},
-            "created": {"type": "string", "format": "date"},
-            "updated": {"type": "string", "format": "date"},
+            "created": {"type": "string", "format": "date-time"},
+            "updated": {"type": "string", "format": "date-time"},
             "$schema": {"type": "string"},
         },
     }
