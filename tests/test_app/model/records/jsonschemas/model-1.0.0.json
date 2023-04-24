@@ -2,9 +2,11 @@
     "type": "object",
     "properties": {
         "metadata": {
+            "type": "object",
             "properties": {
                 "a": {
                     "items": {
+                        "type": "object",
                         "properties": {
                             "lang": {
                                 "type": "string"
@@ -12,24 +14,22 @@
                             "value": {
                                 "type": "string"
                             }
-                        },
-                        "type": "object"
+                        }
                     },
                     "type": "array"
                 }
-            },
-            "type": "object"
+            }
         },
         "id": {
             "type": "string"
         },
         "created": {
             "type": "string",
-            "format": "date"
+            "format": "date-time"
         },
         "updated": {
             "type": "string",
-            "format": "date"
+            "format": "date-time"
         },
         "$schema": {
             "type": "string"

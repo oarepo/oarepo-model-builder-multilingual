@@ -1,89 +1,119 @@
 {
     "model": {
         "type": "object",
-        "invenio-record-object-schema-extra-code": "",
-        "proxies-current-service": "model.proxies.current_service",
-        "package-base": "model",
-        "invenio-ext-extra-code": "",
-        "config-package": "model.config",
-        "record-bases": [
-            "invenio_records_resources.records.api.Record"
-        ],
-        "record-metadata-bases": [
-            "invenio_records.models.RecordMetadataBase"
-        ],
+        "collection-url": "/model/",
+        "record-services-package": "model.services.records",
+        "oarepo-models-setup-cfg": "model",
+        "record-prefix": "Model",
+        "record-resource-config-class": "model.resources.records.config.ModelResourceConfig",
+        "schema-server": "local://",
+        "pid-field-cls": "PIDField",
+        "record-dumper-extensions": [],
         "record-prefix-snake": "model",
+        "record-search-options-class": "model.services.records.search.ModelSearchOptions",
+        "pid-field-context": "PIDFieldContext",
+        "multilingual-ui-schema-class": "model.services.records.multilingual_schema.MultilingualUISchema",
+        "saved-model-file": "model/models/model.json",
+        "config-resource-class-key": "MODEL_RESOURCE_CLASS_MODEL",
+        "generate-record-pid-field": true,
+        "record-api-blueprints-setup-cfg": "model",
+        "extension-suffix": "model",
+        "multilingual-dumper-class": "model.records.multilingual_dumper.MultilingualDumper",
         "record-service-config-bases": [
             "invenio_records_resources.services.RecordServiceConfig"
         ],
-        "service-id": "model",
-        "config-resource-register-blueprint-key": "MODEL_REGISTER_BLUEPRINT",
         "multilingual-schema-class": "model.services.records.multilingual_schema.MultilingualSchema",
-        "record-mapping-setup-cfg": "model",
-        "record-facets-class": "model.services.records.facets.Test",
-        "record-search-options-class": "model.services.records.search.ModelSearchOptions",
-        "record-service-bases": [
-            "invenio_records_resources.services.RecordService"
+        "schema-name": "model-1.0.0.json",
+        "proxies-current-resource": "model.proxies.current_resource",
+        "pid-type": "model",
+        "i18n-schema-class": "model.services.records.i18nStr_schema.i18nStrSchema",
+        "invenio-version-extra-code": "",
+        "record-bases": [
+            "invenio_records_resources.records.api.Record"
         ],
-        "schema-file": "model/records/jsonschemas/model-1.0.0.json",
-        "jsonschemas-package": "model.records.jsonschemas",
-        "invenio-record-extra-code": "",
-        "record-ui-schema-class": "model.services.records.ui_schema.ModelUISchema",
         "package": "model",
-        "record-dumper-extensions": [],
-        "config-resource-class-key": "MODEL_RESOURCE_CLASS_MODEL",
-        "record-prefix": "Model",
-        "record-resource-blueprint-name": "Model",
+        "flask-extension-name": "model",
+        "invenio-record-resource-extra-code": "",
+        "invenio-record-facets-extra-code": "",
+        "mapping-package": "model.records.mappings",
+        "config-resource-config-key": "MODEL_RESOURCE_CONFIG_MODEL",
+        "record-schema-metadata-setup-cfg": "model",
         "properties": {
             "metadata": {
                 "marshmallow": {
-                    "validators": [],
-                    "generate": true,
+                    "schema-class": "model.services.records.schema.ModelMetadataSchema",
+                    "field-class": "ma_fields.Nested",
                     "base-classes": [
                         "ma.Schema"
                     ],
-                    "schema-class": "model.services.records.schema.ModelMetadataSchema",
-                    "field-class": "ma_fields.Nested",
+                    "generate": true,
+                    "validators": [],
                     "imports": []
                 },
+                "ui": {
+                    "marshmallow": {
+                        "schema-class": "model.services.records.ui_schema.ModelMetadataUISchema",
+                        "field-class": "ma_fields.Nested",
+                        "base-classes": [
+                            "ma.Schema"
+                        ],
+                        "generate": true
+                    }
+                },
+                "type": "object",
                 "properties": {
                     "a": {
                         "marshmallow": {
-                            "validators": [],
+                            "field-class": "MultilingualField",
                             "imports": [
                                 {
                                     "import": "oarepo_runtime.i18n.schema.MultilingualField"
                                 }
                             ],
-                            "field-class": "MultilingualField"
+                            "validators": []
                         },
                         "ui": {
                             "marshmallow": {
+                                "field-class": "MultilingualUIField",
                                 "imports": [
                                     {
                                         "import": "oarepo_runtime.i18n.ui_schema.MultilingualUIField"
                                     }
-                                ],
-                                "field-class": "MultilingualUIField"
+                                ]
                             }
                         },
                         "items": {
                             "marshmallow": {
-                                "validators": [],
+                                "schema-class": null,
+                                "field-class": "I18nStrField",
                                 "generate": false,
                                 "imports": [
                                     {
                                         "import": "oarepo_runtime.i18n.schema.I18nStrField"
                                     }
                                 ],
-                                "schema-class": null,
-                                "field-class": "I18nStrField"
+                                "validators": []
+                            },
+                            "ui": {
+                                "marshmallow": {
+                                    "schema-class": null,
+                                    "field-class": "I18nStrUIField",
+                                    "imports": [
+                                        {
+                                            "import": "oarepo_runtime.i18n.ui_schema.I18nStrUIField"
+                                        }
+                                    ]
+                                }
+                            },
+                            "type": "i18nStr",
+                            "sample": {
+                                "skip": false
                             },
                             "properties": {
                                 "lang": {
                                     "marshmallow": {
-                                        "validators": [],
                                         "field-class": "ma_fields.String",
+                                        "validators": [],
                                         "imports": []
                                     },
                                     "ui": {
@@ -95,8 +125,8 @@
                                 },
                                 "value": {
                                     "marshmallow": {
-                                        "validators": [],
                                         "field-class": "ma_fields.String",
+                                        "validators": [],
                                         "imports": []
                                     },
                                     "ui": {
@@ -106,77 +136,53 @@
                                     },
                                     "type": "fulltext+keyword"
                                 }
-                            },
-                            "ui": {
-                                "marshmallow": {
-                                    "imports": [
-                                        {
-                                            "import": "oarepo_runtime.i18n.ui_schema.I18nStrUIField"
-                                        }
-                                    ],
-                                    "schema-class": null,
-                                    "field-class": "I18nStrUIField"
-                                }
-                            },
-                            "sample": {
-                                "skip": false
-                            },
-                            "type": "i18nStr"
+                            }
                         },
                         "type": "array"
                     }
-                },
-                "ui": {
-                    "marshmallow": {
-                        "generate": true,
-                        "base-classes": [
-                            "ma.Schema"
-                        ],
-                        "schema-class": "model.services.records.ui_schema.ModelMetadataUISchema",
-                        "field-class": "ma_fields.Nested"
-                    }
-                },
-                "type": "object"
+                }
             },
             "id": {
                 "marshmallow": {
-                    "validators": [],
                     "field-class": "ma_fields.String",
                     "read": false,
                     "write": false,
+                    "validators": [],
                     "imports": []
+                },
+                "ui": {
+                    "marshmallow": {
+                        "field-class": "ma_fields.String",
+                        "read": false,
+                        "write": false
+                    }
                 },
                 "facets": {
                     "searchable": true
                 },
+                "type": "keyword",
                 "sample": {
                     "skip": true
-                },
-                "ui": {
-                    "marshmallow": {
-                        "field-class": "ma_fields.String"
-                    }
-                },
-                "type": "keyword"
+                }
             },
             "created": {
                 "marshmallow": {
-                    "validators": [
-                        "validate_date('%Y-%m-%d')"
-                    ],
                     "field-class": "ma_fields.String",
                     "read": false,
                     "write": false,
+                    "validators": [
+                        "validate_datetime"
+                    ],
                     "imports": [
                         {
-                            "import": "oarepo_runtime.validation.validate_date"
+                            "import": "oarepo_runtime.validation.validate_datetime"
                         },
                         {
                             "import": "oarepo_runtime.ui.marshmallow",
                             "alias": "l10n"
                         },
                         {
-                            "import": "oarepo_runtime.validation.validate_date"
+                            "import": "oarepo_runtime.validation.validate_datetime"
                         },
                         {
                             "import": "oarepo_runtime.ui.marshmallow",
@@ -184,37 +190,39 @@
                         }
                     ]
                 },
+                "ui": {
+                    "marshmallow": {
+                        "field-class": "l10n.LocalizedDateTime",
+                        "read": false,
+                        "write": false
+                    }
+                },
                 "facets": {
                     "searchable": true
                 },
+                "type": "datetime",
                 "sample": {
                     "skip": true
-                },
-                "ui": {
-                    "marshmallow": {
-                        "field-class": "l10n.LocalizedDate"
-                    }
-                },
-                "type": "date"
+                }
             },
             "updated": {
                 "marshmallow": {
-                    "validators": [
-                        "validate_date('%Y-%m-%d')"
-                    ],
                     "field-class": "ma_fields.String",
                     "read": false,
                     "write": false,
+                    "validators": [
+                        "validate_datetime"
+                    ],
                     "imports": [
                         {
-                            "import": "oarepo_runtime.validation.validate_date"
+                            "import": "oarepo_runtime.validation.validate_datetime"
                         },
                         {
                             "import": "oarepo_runtime.ui.marshmallow",
                             "alias": "l10n"
                         },
                         {
-                            "import": "oarepo_runtime.validation.validate_date"
+                            "import": "oarepo_runtime.validation.validate_datetime"
                         },
                         {
                             "import": "oarepo_runtime.ui.marshmallow",
@@ -222,140 +230,79 @@
                         }
                     ]
                 },
+                "ui": {
+                    "marshmallow": {
+                        "field-class": "l10n.LocalizedDateTime",
+                        "read": false,
+                        "write": false
+                    }
+                },
                 "facets": {
                     "searchable": true
                 },
+                "type": "datetime",
                 "sample": {
                     "skip": true
-                },
-                "ui": {
-                    "marshmallow": {
-                        "field-class": "l10n.LocalizedDate"
-                    }
-                },
-                "type": "date"
+                }
             },
             "$schema": {
                 "marshmallow": {
-                    "validators": [],
                     "field-class": "ma_fields.String",
                     "read": false,
                     "write": false,
+                    "validators": [],
                     "imports": []
+                },
+                "ui": {
+                    "marshmallow": {
+                        "field-class": "ma_fields.String",
+                        "read": false,
+                        "write": false
+                    }
                 },
                 "facets": {
                     "searchable": true
                 },
+                "type": "keyword",
                 "sample": {
                     "skip": true
-                },
-                "ui": {
-                    "marshmallow": {
-                        "field-class": "ma_fields.String"
-                    }
-                },
-                "type": "keyword"
+                }
             }
         },
-        "cli-function": "model.cli.group",
-        "record-class": "model.records.api.ModelRecord",
-        "invenio-config-extra-code": "",
-        "extension-suffix": "model",
-        "saved-model-file": "model/models/model.json",
-        "profile-package": "records",
-        "invenio-record-schema-extra-code": "",
+        "record-metadata-table-name": "model_metadata",
+        "invenio-record-service-config-extra-code": "",
         "invenio-record-permissions-extra-code": "",
-        "collection-url": "/model/",
-        "mapping-package": "model.records.mappings",
+        "record-resource-blueprint-name": "Model",
+        "config-service-config-key": "MODEL_SERVICE_CONFIG_MODEL",
+        "script-import-sample-data": "data/sample_data.yaml",
+        "record-permissions-class": "model.services.records.permissions.ModelPermissionPolicy",
+        "pid-field-provider": "RecordIdProviderV2",
+        "record-pid-provider-bases": [
+            "invenio_pidstore.providers.recordid_v2.RecordIdProviderV2"
+        ],
+        "permissions": {
+            "presets": []
+        },
         "ui": {
             "marshmallow": {
+                "schema-class": "model.services.records.ui_schema.ModelUISchema",
+                "base-classes": [
+                    "InvenioUISchema"
+                ],
                 "generate": true,
                 "imports": [
                     {
                         "import": "oarepo_runtime.ui.marshmallow.InvenioUISchema"
                     }
-                ],
-                "base-classes": [
-                    "InvenioUISchema"
-                ],
-                "schema-class": "model.services.records.ui_schema.ModelUISchema"
+                ]
             }
         },
-        "marshmallow": {
-            "generate": true,
-            "base-classes": [
-                "InvenioBaseRecordSchema"
-            ],
-            "schema-class": "model.services.records.schema.ModelSchema"
-        },
-        "invenio-record-metadata-extra-code": "",
-        "record-resource-config-bases": [
-            "invenio_records_resources.resources.RecordResourceConfig"
-        ],
-        "record-ui-schema-metadata-class": "model.services.records.ui_schema.ModelMetadataUISchema",
-        "record-resource-config-class": "model.resources.records.config.ModelResourceConfig",
-        "i18n-ui-schema-class": "model.services.records.i18nStr_schema.i18nStrUISchema",
-        "record-resources-package": "model.resources.records",
-        "invenio-proxies-extra-code": "",
-        "invenio-record-service-extra-code": "",
-        "flask-extension-name": "model",
-        "invenio-record-facets-extra-code": "",
-        "invenio-views-extra-code": "",
-        "record-jsonschemas-setup-cfg": "model",
-        "config-service-config-key": "MODEL_SERVICE_CONFIG_MODEL",
-        "record-service-config-class": "model.services.records.config.ModelServiceConfig",
-        "record-api-blueprints-setup-cfg": "model",
-        "package-path": "model",
-        "record-resource-bases": [
-            "invenio_records_resources.resources.RecordResource"
-        ],
-        "script-import-sample-data": "data/sample_data.yaml",
-        "index-name": "model-model-1.0.0",
-        "invenio-record-search-options-extra-code": "",
-        "pid-field-context": "PIDFieldContext",
         "flask-commands-setup-cfg": "model",
-        "package-base-upper": "MODEL",
-        "i18n-schema-class": "model.services.records.i18nStr_schema.i18nStrSchema",
-        "permissions": {
-            "presets": []
-        },
-        "record-schema-class": "model.services.records.schema.ModelSchema",
-        "schema-version": "1.0.0",
+        "schema-file": "model/records/jsonschemas/model-1.0.0.json",
+        "record-ui-schema-metadata-class": "model.services.records.ui_schema.ModelMetadataUISchema",
         "kebap-package": "model",
-        "create-blueprint-from-app": "model.views.create_blueprint_from_app_model",
-        "invenio-record-resource-extra-code": "",
-        "config-service-class-key": "MODEL_SERVICE_CLASS_MODEL",
-        "record-metadata-table-name": "model_metadata",
         "record-blueprints-setup-cfg": "model",
-        "ext-class": "model.ext.ModelExt",
-        "record-service-config-generate-links": true,
-        "record-schema-metadata-setup-cfg": "model",
-        "schema-server": "http://localhost/schemas/",
-        "record-services-package": "model.services.records",
-        "proxies-current-resource": "model.proxies.current_resource",
-        "record-dumper-class": "model.records.dumper.ModelDumper",
-        "oarepo-models-setup-cfg": "model",
-        "record-schema-metadata-class": "model.services.records.schema.ModelMetadataSchema",
-        "pid-field-provider": "RecordIdProviderV2",
-        "record-service-class": "model.services.records.service.ModelService",
-        "schema-name": "model-1.0.0.json",
-        "pid-field-args": [
-            "create=True"
-        ],
-        "invenio-version-extra-code": "",
-        "invenio-record-dumper-extra-code": "",
-        "config-resource-config-key": "MODEL_RESOURCE_CONFIG_MODEL",
-        "record-permissions-class": "model.services.records.permissions.ModelPermissionPolicy",
-        "record-ui-serializer-class": "model.resources.records.ui.ModelUIJSONSerializer",
-        "multilingual-dumper-class": "model.records.multilingual_dumper.MultilingualDumper",
-        "record-resource-class": "model.resources.records.resource.ModelResource",
-        "invenio-record-service-config-extra-code": "",
-        "invenio-record-resource-config-extra-code": "",
-        "pid-field-cls": "PIDField",
-        "record-metadata-class": "model.records.models.ModelMetadata",
-        "generate-record-pid-field": true,
-        "record-records-package": "model.records",
-        "multilingual-ui-schema-class": "model.services.records.multilingual_schema.MultilingualUISchema",
+        "record-pid-provider-class": "model.records.api.ModelIdProvider",
         "pid-field-imports": [
             {
                 "import": "invenio_records_resources.records.systemfields.pid.PIDField"
@@ -367,9 +314,78 @@
                 "import": "invenio_pidstore.providers.recordid_v2.RecordIdProviderV2"
             }
         ],
+        "record-resource-class": "model.resources.records.resource.ModelResource",
+        "invenio-record-service-extra-code": "",
+        "record-metadata-bases": [
+            "invenio_records.models.RecordMetadataBase"
+        ],
+        "proxies-current-service": "model.proxies.current_service",
+        "create-blueprint-from-app": "model.views.create_blueprint_from_app_model",
+        "service-id": "model",
+        "package-base-upper": "MODEL",
+        "invenio-record-extra-code": "",
+        "record-ui-serializer-class": "model.resources.records.ui.ModelUIJSONSerializer",
+        "record-service-config-generate-links": true,
+        "record-schema-metadata-alembic": "model",
+        "invenio-record-schema-extra-code": "",
+        "pid-field-args": [
+            "create=True"
+        ],
+        "jsonschemas-package": "model.records.jsonschemas",
+        "schema-version": "1.0.0",
+        "record-dumper-class": "model.records.dumper.ModelDumper",
+        "config-package": "model.config",
+        "invenio-record-resource-config-extra-code": "",
+        "record-service-config-class": "model.services.records.config.ModelServiceConfig",
         "mapping-file": "model/records/mappings/os-v2/model/model-1.0.0.json",
+        "record-records-package": "model.records",
+        "ext-class": "model.ext.ModelExt",
+        "record-service-config-components": [
+            "oarepo_runtime.relations.components.CachingRelationsComponent"
+        ],
+        "marshmallow": {
+            "schema-class": "model.services.records.schema.ModelSchema",
+            "base-classes": [
+                "InvenioBaseRecordSchema"
+            ],
+            "generate": true
+        },
+        "record-service-bases": [
+            "invenio_records_resources.services.RecordService"
+        ],
+        "record-schema-metadata-class": "model.services.records.schema.ModelMetadataSchema",
+        "invenio-proxies-extra-code": "",
+        "record-metadata-class": "model.records.models.ModelMetadata",
+        "i18n-ui-schema-class": "model.services.records.i18nStr_schema.i18nStrUISchema",
+        "record-class": "model.records.api.ModelRecord",
+        "index-name": "model-model-1.0.0",
+        "record-schema-class": "model.services.records.schema.ModelSchema",
+        "invenio-views-extra-code": "",
+        "invenio-config-extra-code": "",
         "model-name": "model",
+        "invenio-ext-extra-code": "",
+        "cli-function": "model.cli.group",
+        "record-resource-config-bases": [
+            "invenio_records_resources.resources.RecordResourceConfig"
+        ],
+        "record-facets-class": "model.services.records.facets.Test",
+        "invenio-record-metadata-extra-code": "",
         "config-dummy-class": "model.config.DummyClass",
-        "record-schema-metadata-alembic": "model"
+        "package-base": "model",
+        "invenio-record-search-options-extra-code": "",
+        "record-jsonschemas-setup-cfg": "model",
+        "profile-package": "records",
+        "package-path": "model",
+        "record-ui-schema-class": "model.services.records.ui_schema.ModelUISchema",
+        "record-service-class": "model.services.records.service.ModelService",
+        "invenio-record-dumper-extra-code": "",
+        "invenio-record-object-schema-extra-code": "",
+        "record-mapping-setup-cfg": "model",
+        "record-resources-package": "model.resources.records",
+        "record-resource-bases": [
+            "invenio_records_resources.resources.RecordResource"
+        ],
+        "config-resource-register-blueprint-key": "MODEL_REGISTER_BLUEPRINT",
+        "config-service-class-key": "MODEL_SERVICE_CLASS_MODEL"
     }
 }

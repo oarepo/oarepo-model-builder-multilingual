@@ -2,6 +2,7 @@
     "mappings": {
         "properties": {
             "metadata": {
+                "type": "object",
                 "properties": {
                     "a": {
                         "type": "nested",
@@ -35,8 +36,7 @@
                             }
                         }
                     }
-                },
-                "type": "object"
+                }
             },
             "id": {
                 "type": "keyword"

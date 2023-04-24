@@ -167,77 +167,26 @@ def test_dumper_file():
     builder.build(schema, "")
 
     data = builder.filesystem.open(os.path.join("test", "records", "multilingual_dumper.py")).read()
+    print(data)
     assert re.sub(r"\s", "", data) == re.sub(
         r"\s",
         "",
         """
 
-from invenio_records.dumpers import SearchDumperExt
-from functools import reduce
-import operator
-from copy import deepcopy
-from deepmerge import always_merger
+from oarepo_runtime.i18n.dumper import MultilingualDumper
 
-
-def getFromDict(dataDict, mapList):
-    return reduce(operator.getitem, mapList, dataDict)
-
-class MultilingualDumper(SearchDumperExt):
+class MultilingualSearchDumper(MultilingualDumper):
     \"""TestRecord search dumper.\"""
+
+    paths = ['/a', '/b', '/c/d', '/c/f']
+    SUPPORTED_LANGS = ['cs', 'en']
+
     def dump(self, record, data):
-        paths = ['/a', '/b', '/c/d', '/c/f']
-        SUPPORTED_LANGS = ['cs', 'en']
-
-        for path in paths:
-            new_elements = {}
-            record2 = record
-            path_array = path.split('/')
-            path_array2 = []
-
-            for x in path_array:
-                path_array2.append(x)
-
-            path_array2.pop(0)
-            path_array2 = path_array2[:-1]
-
-            for x in path_array2:
-                record2 = record2[x]
-            path_array.pop(0)
-            multilingual_element = getFromDict(record, path_array)
-
-            for rec in multilingual_element:
-                if rec['lang'] in SUPPORTED_LANGS:
-                    el_name = path_array[-1]  + "_" + rec['lang']
-                    always_merger.merge(new_elements, {el_name: rec['value']})
-
-            always_merger.merge(record2, new_elements)
-        data.update(deepcopy(dict(record)))
-        return data
+        super().dump(record, data)
 
     def load(self, record, data):
-        paths = ['/a', '/b', '/c/d', '/c/f']
-        SUPPORTED_LANGS = ['cs', 'en']
-        for path in paths:
-            record2 = record
-            path_array = path.split('/')
-            path_array2 = []
-            for x in path_array:
-                path_array2.append(x)
-
-            path_array2.pop(0)
-            path_array2 = path_array2[:-1]
-
-            for x in path_array2:
-                record2 = record2[x]
-
-            path_array.pop(0)
-            multilingual_element = getFromDict(record, path_array)
-            for rec in multilingual_element:
-                if rec['lang'] in SUPPORTED_LANGS:
-                    el_name = path_array[-1]  + "_" + rec['lang']
-                    del record2[el_name]
-        return data
-    """,
+        super().load(record, data)
+""",
     )
 
 def test_generated_schema2():
