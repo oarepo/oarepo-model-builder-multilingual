@@ -134,7 +134,7 @@ def test_dumper():
     builder.build(schema, "")
 
     data = builder.filesystem.open(os.path.join("test", "records", "api.py")).read()
-    assert "dumper_extensions = [MultilingualDumper()]" in data
+    assert "dumper_extensions = [MultilingualSearchDumper()]" in data
 def test_dumper_file():
     schema = load_model(
         "test.yaml",
