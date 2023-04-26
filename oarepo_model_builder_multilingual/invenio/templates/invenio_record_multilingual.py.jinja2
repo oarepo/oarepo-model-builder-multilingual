@@ -1,4 +1,4 @@
-from {{ current_model.multilingual_dumper_class|package_name }} import MultilingualDumper
+from {{ current_model.multilingual_dumper_class|package_name }} import MultilingualSearchDumper
 
 
 {% for b in current_model.record_bases %}
@@ -7,6 +7,6 @@ from {{ b|package_name }} import {{ b|base_name }}
 
 class {{ current_model.record_class|base_name }}({% for b in current_model.record_bases %}{{ b|base_name }}, {% endfor %}InvenioBaseRecord):
     dumper_extensions = [
-    MultilingualDumper()
+    MultilingualSearchDumper()
     ]
 
