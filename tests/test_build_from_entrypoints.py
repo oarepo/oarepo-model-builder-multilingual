@@ -120,8 +120,7 @@ def test_mapping2():
             "record": {
                 "module": {"qualified": "test"},
                 "properties": {
-                    "a": {"type": "i18nStr"},
-                    "b": {"properties": {"c": "multilingual"}},
+                    "b[]": {"properties": {"c": "multilingual"}},
                 },
             },
         },
@@ -139,6 +138,11 @@ def test_mapping2():
         os.path.join("test", "records", "mappings", "os-v2", "test", "test-1.0.0.json")
     ).read()
     print(data)
+    # data = builder.filesystem.open(
+    #     os.path.join("test", "services", "records", "facets.py")
+    # ).read()
+    #
+    # print(data)
 
 
 def test_dumper():
