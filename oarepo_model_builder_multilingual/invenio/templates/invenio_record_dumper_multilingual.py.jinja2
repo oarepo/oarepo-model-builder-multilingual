@@ -1,7 +1,8 @@
-from oarepo_runtime.i18n.dumper import MultilingualDumper
+{{ vars.multilingual_dumper.imports|generate_import }}
 
-class MultilingualSearchDumper(MultilingualDumper):
-    """{{ current_model.record_class|base_name }} search dumper."""
+
+class {{ vars.multilingual_dumper|class_header }}:
+    """Multilingual search dumper."""
 
     paths = {{ paths }}
     SUPPORTED_LANGS = {{ langs }}

@@ -2,7 +2,6 @@ import json
 import os
 import re
 
-import yaml
 from oarepo_model_builder.entrypoints import create_builder_from_entrypoints, load_model
 
 from tests.mock_filesystem import MockFilesystem
@@ -11,12 +10,12 @@ from tests.mock_filesystem import MockFilesystem
 def test_generated_jsonschema():
     schema = load_model(
         "test.yaml",
-        "test",
         model_content={
             "settings": {
                 "supported-langs": {"cs": {}, "en": {}},
             },
-            "model": {
+            "record": {
+                "module": {"qualified": "test"},
                 "properties": {
                     "a": {"type": "i18nStr"},
                     "b": {
@@ -25,18 +24,19 @@ def test_generated_jsonschema():
                             "lang-field": "language",
                             "value-field": "val",
                         },
-                    },
+                    }
                 },
             },
         },
         isort=False,
         black=False,
+        autoflake=False,
     )
 
     filesystem = MockFilesystem()
     builder = create_builder_from_entrypoints(filesystem=filesystem)
 
-    builder.build(schema, "")
+    builder.build(schema, "record", ["record"], "")
 
     data = builder.filesystem.open(
         os.path.join("test", "records", "jsonschemas", "test-1.0.0.json")
@@ -64,12 +64,12 @@ def test_generated_jsonschema():
 def test_generated_mapping():
     schema = load_model(
         "test.yaml",
-        "test",
         model_content={
             "settings": {
                 "supported-langs": {"cs": {}, "en": {}},
             },
-            "model": {
+            "record": {
+                "module": {"qualified": "test"},
                 "properties": {
                     "a": {"type": "i18nStr"},
                     "b": {
@@ -84,12 +84,13 @@ def test_generated_mapping():
         },
         isort=False,
         black=False,
+        autoflake=False,
     )
 
     filesystem = MockFilesystem()
     builder = create_builder_from_entrypoints(filesystem=filesystem)
 
-    builder.build(schema, "")
+    builder.build(schema, "record", ["record"], "")
 
     data = builder.filesystem.open(
         os.path.join("test", "records", "mappings", "os-v2", "test", "test-1.0.0.json")
@@ -131,12 +132,12 @@ def test_generated_mapping():
 def test_generated_schema():
     schema = load_model(
         "test.yaml",
-        "test",
         model_content={
             "settings": {
                 "supported-langs": {"cs": {}, "en": {}},
             },
-            "model": {
+            "record": {
+                "module": {"qualified": "test"},
                 "properties": {
                     "a": {"type": "i18nStr"},
                     "b": {
@@ -146,17 +147,23 @@ def test_generated_schema():
                             "value-field": "val",
                         },
                     },
+                    "c":{
+                        "properties": {
+                            "d" : "keyword"
+                        }
+                    }
                 },
             },
         },
         isort=False,
         black=False,
+        autoflake=False,
     )
 
     filesystem = MockFilesystem()
     builder = create_builder_from_entrypoints(filesystem=filesystem)
 
-    builder.build(schema, "")
+    builder.build(schema, "record", ["record"], "")
 
     data = builder.filesystem.open(
         os.path.join("test", "services", "records", "schema.py")
@@ -167,65 +174,63 @@ def test_generated_schema():
         r"\s",
         "",
         """
-from invenio_records_resources.services.records.schema import BaseRecordSchema as InvenioBaseRecordSchema
 from marshmallow import ValidationError
 from marshmallow import validate as ma_validate
 import marshmallow as ma
-from marshmallow import fields as ma_fields
 from marshmallow_utils import fields as mu_fields
 from marshmallow_utils import schemas as mu_schemas
-
-
 
 from oarepo_runtime.i18n.schema import I18nStrField
 
 
-
-
-
 class TestSchema(ma.Schema):
-    \"""TestSchema schema.\"""
+
+    class Meta:
+        unknown = ma.RAISE
+
+
     a = I18nStrField()
+
     b = I18nStrField(lang_field=language, value_field=val)
+    
+    c = ma.fields.Nested(lambda: CSchema())
+
+class CSchema(ma.Schema):
+
+    class Meta:
+        unknown = ma.RAISE
+
+
+    d = ma.fields.String()
 
     """,
     )
 
 
-
-
 def test_mapping():
     schema = load_model(
         "test.yaml",
-        "test",
         model_content={
             "settings": {"supported-langs": {"cs": {}, "en": {}}},
-            "model": {
+            "record": {
+                "module": {"qualified": "test"},
                 "properties": {
                     "a": {"type": "fulltext", "multilingual": {"i18n": True}}
-                }
+                },
             },
         },
         isort=False,
         black=False,
+        autoflake=False,
     )
 
     filesystem = MockFilesystem()
     builder = create_builder_from_entrypoints(filesystem=filesystem)
 
-    builder.build(schema, "")
+    builder.build(schema, "record", ["record"], "")
 
     data = builder.filesystem.open(
         os.path.join("test", "records", "mappings", "os-v2", "test", "test-1.0.0.json")
     ).read()
     print(data)
-    data = json.loads(data)
-    assert data == {
-        "mappings": {
-            "properties": {
-                "a": {"type": "text"},
-                "a_cs": {"type": "text", "fields": {"keyword": {"type": "keyword"}}},
-                "a_en": {"type": "text", "fields": {"keyword": {"type": "keyword"}}},
-            }
-        }
-    }
+

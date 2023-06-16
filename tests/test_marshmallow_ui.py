@@ -9,32 +9,48 @@ from tests.mock_filesystem import MockFilesystem
 def test_generated_schema_ui():
     schema = load_model(
         "test.yaml",
-        "test",
         model_content={
             "settings": {
                 "supported-langs": {"cs": {}, "en": {}},
             },
-            "model": {
+            "record": {
+                "module": {"qualified": "test"},
                 "properties": {
-                    "a": {"type": "multilingual", "ui": {
-                        "marshmallow": {"imports": [{"import": "test"}], "field-class": "FieldClassa",
-                                        "arguments": ["test=cosi"]}}},
-                    "b": {"type": "i18nStr", "ui": {
-                        "marshmallow": {"imports": [{"import": "test"}],
-                                        "arguments": ["test=cosi"]}},
-                          "multilingual": {"lang-field": "language", "value-field": "hodnota"}},
-
+                    "a": {
+                        "type": "multilingual",
+                        "ui": {
+                            "marshmallow": {
+                                "imports": [{"import": "test"}],
+                                "field-class": "FieldClassa",
+                                "arguments": ["test=cosi"],
+                            }
+                        },
+                    },
+                    "b": {
+                        "type": "i18nStr",
+                        "ui": {
+                            "marshmallow": {
+                                "imports": [{"import": "test"}],
+                                "arguments": ["test=cosi"],
+                            }
+                        },
+                        "multilingual": {
+                            "lang-field": "language",
+                            "value-field": "hodnota",
+                        },
+                    },
                 },
             },
         },
         isort=False,
         black=False,
+        autoflake=False,
     )
 
     filesystem = MockFilesystem()
     builder = create_builder_from_entrypoints(filesystem=filesystem)
 
-    builder.build(schema, "")
+    builder.build(schema, "record", ["record"], "")
 
     data = builder.filesystem.open(
         os.path.join("test", "services", "records", "ui_schema.py")
@@ -46,34 +62,28 @@ def test_generated_schema_ui():
         "",
         """
 
-from invenio_records_resources.services.records.schema import BaseRecordSchema as InvenioBaseRecordSchema
 from marshmallow import ValidationError
 from marshmallow import validate as ma_validate
 import marshmallow as ma
-from marshmallow import fields as ma_fields
 from marshmallow_utils import fields as mu_fields
 from marshmallow_utils import schemas as mu_schemas
 
-
-
 from oarepo_runtime.i18n.ui_schema import I18nStrUIField
-
-
-
 from oarepo_runtime.i18n.ui_schema import MultilingualUIField
-
-
 from oarepo_runtime.ui.marshmallow import InvenioUISchema
-
-from test import test
-
+import test
 
 
 
 
-class TestUISchema(ma.Schema):
-    \"""TestUISchema schema.\"""
-    a = FieldClassa(I18nStrUIField())
+
+class TestUISchema(InvenioUISchema):
+    
+     class Meta:
+        unknown = ma.RAISE
+        
+        
+    a = FieldClassa(I18nStrUIField(), test=cosi)
     b = I18nStrUIField(test=cosi, lang_field=language, value_field=hodnota)
     """,
     )

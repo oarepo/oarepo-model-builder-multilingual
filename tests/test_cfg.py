@@ -14,12 +14,8 @@ def test_json():
     filesystem = InMemoryFileSystem()
     builder = create_builder_from_entrypoints(filesystem=filesystem)
 
-    builder.build(schema, "")
+    builder.build(schema, "record", ["record"], "")
 
-
-    data = builder.filesystem.open(
-        os.path.join( "setup.cfg")
-    ).read()
-
+    data = builder.filesystem.open(os.path.join("setup.cfg")).read()
 
     assert "deepmerge>=1.1.0" in data

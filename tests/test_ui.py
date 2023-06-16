@@ -6,7 +6,6 @@ from tests.mock_filesystem import MockFilesystem
 def test_validity():
     schema = load_model(
         "test.yaml",
-        "test",
         model_content={
             "settings": {
                 "supported-langs": {
@@ -16,16 +15,17 @@ def test_validity():
                     }
                 }
             },
-            "model": {
+            "record": {
                 "use": "invenio",
                 "properties": {"a": {"type": "multilingual", "ui": {}}},
             },
         },
         isort=False,
         black=False,
+        autoflake=False,
     )
 
     filesystem = MockFilesystem()
     builder = create_builder_from_entrypoints(filesystem=filesystem)
 
-    builder.build(schema, "")
+    builder.build(schema, "record", ["record"], "")
