@@ -211,11 +211,31 @@ def test_mapping():
     schema = load_model(
         "test.yaml",
         model_content={
-            "settings": {"supported-langs": {"cs": {}, "en": {}}},
+            "settings": {
+                "supported-langs": {"cs": {}, "en": {}},
+            },
             "record": {
                 "module": {"qualified": "test"},
                 "properties": {
-                    "a": {"type": "fulltext", "multilingual": {"i18n": True}}
+                    # "h": "keyword",
+                    # "a": {"type": "i18nStr"},
+                    # "b": {"type": "multilingual"},
+                    # "jej": {
+                    #     "type": "array",
+                    #     "items": {
+                    #         "type": "object",
+                    #         "properties": {"kch": {"type": "multilingual"}},
+                    #     },
+                    # },
+                    "c": {
+                        "type": "object",
+                        "properties": {
+                            "f": {"type": "array", "items": {"type": "i18nStr"}},
+                            "d": {"type": "array", "items": {"type": "multilingual"}},
+
+                        },
+
+                    },
                 },
             },
         },
