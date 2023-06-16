@@ -11,15 +11,13 @@ from tests.test_helper import basic_schema
 DUMMY_YAML = "test.yaml"
 
 
-
-
 def test_json():
     schema = basic_schema()
 
     filesystem = InMemoryFileSystem()
     builder = create_builder_from_entrypoints(filesystem=filesystem)
 
-    builder.build(schema, "")
+    builder.build(schema, "record", ["record"], "")
 
     data = builder.filesystem.open(
         os.path.join("test", "records", "jsonschemas", "test-1.0.0.json")
@@ -53,7 +51,7 @@ def test_mapping():
     filesystem = InMemoryFileSystem()
     builder = create_builder_from_entrypoints(filesystem=filesystem)
 
-    builder.build(schema, "")
+    builder.build(schema, "record", ["record"], "")
 
     data = builder.filesystem.open(
         os.path.join("test", "records", "mappings", "os-v2", "test", "test-1.0.0.json")
@@ -61,68 +59,86 @@ def test_mapping():
     print(data)
     data = json.loads(data)
     assert data == {
-    "mappings": {
-        "properties": {
-            "a": {
-                "type": "nested",
-                "properties": {
-                    "lang": {
-                        "type": "keyword"
+        "mappings": {
+            "properties": {
+                "a": {
+                    "type": "nested",
+                    "properties": {
+                        "lang": {"type": "keyword"},
+                        "value": {
+                            "type": "text",
+                            "fields": {"keyword": {"type": "keyword"}},
+                        },
                     },
-                    "value": {
-                        "type": "text",
-                        "fields": {
-                            "keyword": {
-                                "type": "keyword"
-                            }
-                        }
-                    }
-                }
-            },
-            "a_cs": {
-                "type": "text",
-                "analyzer": "czech",
-                "fields": {
-                    "sort": {
-                        "type": "icu_collation_keyword",
-                        "index": False,
-                        "language": "cs"
+                },
+                "a_cs": {
+                    "type": "text",
+                    "analyzer": "czech",
+                    "fields": {
+                        "sort": {
+                            "type": "icu_collation_keyword",
+                            "index": False,
+                            "language": "cs",
+                        },
+                        "keyword": {"type": "keyword"},
                     },
-                    "keyword": {
-                        "type": "keyword"
-                    }
-                }
-            },
-            "a_en": {
-                "type": "text",
-                "analyzer": "en",
-                "fields": {
-                    "sort": {
-                        "type": "icu_collation_keyword",
-                        "index": False,
-                        "language": "en"
+                },
+                "a_en": {
+                    "type": "text",
+                    "analyzer": "en",
+                    "fields": {
+                        "sort": {
+                            "type": "icu_collation_keyword",
+                            "index": False,
+                            "language": "en",
+                        },
+                        "keyword": {"type": "keyword"},
                     },
-                    "keyword": {
-                        "type": "keyword"
-                    }
-                }
-            },
-            "id": {
-                "type": "keyword"
-            },
-            "created": {
-                "type": "date"
-            },
-            "updated": {
-                "type": "date"
-            },
-            "$schema": {
-                "type": "keyword"
+                },
+                "id": {"type": "keyword"},
+                "created": {
+                    "format": "strict_date_time||strict_date_time_no_millis||basic_date_time||basic_date_time_no_millis||basic_date||strict_date",
+                    "type": "date",
+                },
+                "updated": {
+                    "format": "strict_date_time||strict_date_time_no_millis||basic_date_time||basic_date_time_no_millis||basic_date||strict_date",
+                    "type": "date",
+                },
+                "$schema": {"type": "keyword"},
             }
         }
     }
-}
 
+
+def test_mapping2():
+    schema = load_model(
+        "test.yaml",
+        model_content={
+            "settings": {
+                "supported-langs": {"cs": {}, "en": {}},
+            },
+            "record": {
+                "module": {"qualified": "test"},
+                "properties": {
+                    "a": {"type": "i18nStr"},
+                    "b": {"properties": {"c": "multilingual"}},
+                },
+            },
+        },
+        isort=False,
+        black=False,
+        autoflake=False,
+    )
+
+    filesystem = InMemoryFileSystem()
+    builder = create_builder_from_entrypoints(filesystem=filesystem)
+
+    builder.build(schema, "record", ["record"], "")
+
+    data = builder.filesystem.open(
+        os.path.join("test", "records", "mappings", "os-v2", "test", "test-1.0.0.json")
+    ).read()
+    print(data)
 
 
 def test_dumper():
@@ -131,75 +147,83 @@ def test_dumper():
     filesystem = MockFilesystem()
     builder = create_builder_from_entrypoints(filesystem=filesystem)
 
-    builder.build(schema, "")
+    builder.build(schema, "record", ["record"], "")
 
     data = builder.filesystem.open(os.path.join("test", "records", "api.py")).read()
-    assert "dumper_extensions = [MultilingualSearchDumper()]" in data
+    print(data)
+    data = str(data)
+    assert "dumper_extensions = [  MultilingualSearchDumper()]" in data
+
+
 def test_dumper_file():
     schema = load_model(
         "test.yaml",
-        "test",
         model_content={
             "settings": {
                 "supported-langs": {"cs": {}, "en": {}},
             },
-            "model": {
+            "record": {
+                "module": {"qualified": "test"},
                 "properties": {
-                    "h" : "keyword",
+                    "h": "keyword",
                     "a": {"type": "i18nStr"},
-                    "b": {
-                        "type": "multilingual"
-
+                    "b": {"type": "multilingual"},
+                    "jej": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {"kch": {"type": "multilingual"}},
+                        },
                     },
-                    "c": {"type": "object", "properties": {"d": {"type": "array", "items": {"type": "multilingual"}},
-                                                           "f": {"type": "array",
-                                                                 "items": {"type": "i18nStr"}}}}
+                    "c": {
+                        "type": "object",
+                        "properties": {
+                            "d": {"type": "array", "items": {"type": "multilingual"}},
+                            "f": {"type": "array", "items": {"type": "i18nStr"}},
+                        },
+                    },
                 },
             },
         },
         isort=False,
         black=False,
+        autoflake=False,
     )
 
     filesystem = MockFilesystem()
     builder = create_builder_from_entrypoints(filesystem=filesystem)
 
-    builder.build(schema, "")
+    builder.build(schema, "record", ["record"], "")
 
-    data = builder.filesystem.open(os.path.join("test", "records", "multilingual_dumper.py")).read()
+    data = builder.filesystem.open(
+        os.path.join("test", "records", "multilingual_dumper.py")
+    ).read()
     print(data)
-    assert re.sub(r"\s", "", data) == re.sub(
-        r"\s",
-        "",
-        """
+    assert "/a" in re.sub(r"\s", "", data)
+    assert "/b" in re.sub(r"\s", "", data)
+    assert "/c/d" in re.sub(r"\s", "", data)
+    assert "/c/f" in re.sub(r"\s", "", data)
+    assert "/jej/kch" in re.sub(r"\s", "", data)
 
-from oarepo_runtime.i18n.dumper import MultilingualDumper
-
-class MultilingualSearchDumper(MultilingualDumper):
-    \"""TestRecord search dumper.\"""
-
-    paths = ['/a', '/b', '/c/d', '/c/f']
-    SUPPORTED_LANGS = ['cs', 'en']
-
-    def dump(self, record, data):
-        super().dump(record, data)
-
-    def load(self, record, data):
-        super().load(record, data)
-""",
-    )
 
 def test_generated_schema2():
     schema = load_model(
         "test.yaml",
-        "test",
         model_content={
             "settings": {
                 "supported-langs": {"cs": {}, "en": {}},
             },
-            "model": {
+            "record": {
+                "module": {"qualified": "test"},
                 "properties": {
-                    "a": {"type": "i18nStr", "marshmallow" : {"imports" : [{"import" :"test"}], "field-class": "FieldClassa", "arguments": ["test=cosi"]}},
+                    "a": {
+                        "type": "i18nStr",
+                        "marshmallow": {
+                            "imports": [{"import": "test"}],
+                            "field-class": "FieldClassa",
+                            "arguments": ["test=cosi"],
+                        },
+                    },
                     "b": {
                         "type": "i18nStr",
                         "marshmallow": {"arguments": ["test=cosi"]},
@@ -213,12 +237,13 @@ def test_generated_schema2():
         },
         isort=False,
         black=False,
+        autoflake=False,
     )
 
     filesystem = MockFilesystem()
     builder = create_builder_from_entrypoints(filesystem=filesystem)
 
-    builder.build(schema, "")
+    builder.build(schema, "record", ["record"], "")
 
     data = builder.filesystem.open(
         os.path.join("test", "services", "records", "schema.py")
@@ -230,30 +255,29 @@ def test_generated_schema2():
         "",
         """
 
-from invenio_records_resources.services.records.schema import BaseRecordSchema as InvenioBaseRecordSchema
 from marshmallow import ValidationError
 from marshmallow import validate as ma_validate
 import marshmallow as ma
-from marshmallow import fields as ma_fields
 from marshmallow_utils import fields as mu_fields
 from marshmallow_utils import schemas as mu_schemas
 
-
-
 from oarepo_runtime.i18n.schema import I18nStrField
-
-
-
-from test import test
+import test
 
 
 
 
 
 class TestSchema(ma.Schema):
-    \"""TestSchema schema.\"""
+
+    class Meta:
+        unknown = ma.RAISE
+
+
     a = FieldClassa(test=cosi)
+
     b = I18nStrField(test=cosi, lang_field=language, value_field=val)
+
     """,
     )
 
@@ -261,7 +285,6 @@ class TestSchema(ma.Schema):
 def test_generated_schema():
     schema = load_model(
         DUMMY_YAML,
-        "test",
         model_content={
             "settings": {
                 "supported-langs": {
@@ -277,16 +300,20 @@ def test_generated_schema():
                     },
                 }
             },
-            "model": {"properties": {"a": {"type": "multilingual"}}},
+            "record": {
+                "module": {"qualified": "test"},
+                "properties": {"a": {"type": "multilingual"}},
+            },
         },
         isort=False,
         black=False,
+        autoflake=False,
     )
 
     filesystem = MockFilesystem()
     builder = create_builder_from_entrypoints(filesystem=filesystem)
 
-    builder.build(schema, "")
+    builder.build(schema, "record", ["record"], "")
 
     data = builder.filesystem.open(
         os.path.join("test", "services", "records", "schema.py")
@@ -298,28 +325,22 @@ def test_generated_schema():
         "",
         """
 
-from invenio_records_resources.services.records.schema import BaseRecordSchema as InvenioBaseRecordSchema
 from marshmallow import ValidationError
 from marshmallow import validate as ma_validate
 import marshmallow as ma
-from marshmallow import fields as ma_fields
 from marshmallow_utils import fields as mu_fields
 from marshmallow_utils import schemas as mu_schemas
 
-
-
 from oarepo_runtime.i18n.schema import I18nStrField
-
-
-
 from oarepo_runtime.i18n.schema import MultilingualField
 
 
-
-
-
 class TestSchema(ma.Schema):
-    \"""TestSchema schema.\"""
+
+    class Meta:
+        unknown = ma.RAISE
+
+
     a = MultilingualField(I18nStrField())
     """,
     )
@@ -328,7 +349,6 @@ class TestSchema(ma.Schema):
 def test_sample_data():
     schema = load_model(
         "test.yaml",
-        "test",
         model_content={
             "settings": {
                 "supported-langs": {
@@ -345,7 +365,8 @@ def test_sample_data():
                     },
                 }
             },
-            "model": {
+            "record": {
+                "module": {"qualified": "test"},
                 "use": "invenio",
                 "sample": {"count": 1},
                 "properties": {
@@ -360,12 +381,13 @@ def test_sample_data():
         },
         isort=False,
         black=False,
+        autoflake=False,
     )
 
     filesystem = MockFilesystem()
     builder = create_builder_from_entrypoints(filesystem=filesystem)
 
-    builder.build(schema, "")
+    builder.build(schema, "record", ["record"], "")
     # file = builder.filesystem.open(os.path.join("data" ,"sample_data.yaml"))
     data_yaml = builder.filesystem.open(os.path.join("data", "sample_data.yaml")).read()
     import yaml

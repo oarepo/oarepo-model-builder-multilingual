@@ -8,7 +8,7 @@ def alternative_gen(supported_langs, key):
             key
             + "_"
             + lan: {
-                "type": "fulltext+keyword",
+                "type": "text",
             }
         }
         multilang_options = {}
@@ -22,19 +22,16 @@ def alternative_gen(supported_langs, key):
             )
             deepmerge(fields_dict, {"sort": sort})
 
-        if "keyword" in supported_langs[lan]:
-            deepmerge(
-                fields_dict,
-                {"keyword": supported_langs[lan]["keyword"]},
-            )
+        deepmerge(fields_dict, {"keyword": {"type": "keyword"}})
         if fields_dict != {}:
             deepmerge(multilang_options, {"fields": fields_dict})
-        deepmerge(
-            alt[key + "_" + lan].setdefault("mapping", {}),
+
+        option = deepmerge(
+            {"type": "text"},
             multilang_options,
             [],
         )
 
-        data = deepmerge(data, alt)
+        data = deepmerge(data, {str(key + "_" + lan): option})
 
     return data

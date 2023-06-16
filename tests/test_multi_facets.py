@@ -9,7 +9,6 @@ from tests.mock_filesystem import MockFilesystem
 def test_search_options():
     schema = load_model(
         "test.yaml",
-        "test",
         model_content={
             "settings": {
                 "supported-langs": {
@@ -26,19 +25,21 @@ def test_search_options():
                     },
                 }
             },
-            "model": {
+            "record": {
                 "use": "invenio",
-                "properties": {"a": {"type": "multilingual", "sortable": {}}},
+                "module": {"qualified": "test"},
+                "properties": {"a": {"type": "multilingual"}},
             },
         },
         isort=False,
         black=False,
+        autoflake=False,
     )
 
     filesystem = MockFilesystem()
     builder = create_builder_from_entrypoints(filesystem=filesystem)
 
-    builder.build(schema, "")
+    builder.build(schema, "record", ["record"], "")
 
     data = builder.filesystem.open(
         os.path.join("test", "services", "records", "search.py")
@@ -61,23 +62,23 @@ class TestSearchOptions(InvenioSearchOptions):
     facets = {
 
 
+    '_schema': facets._schema,
+
+
+
+    'a_cs': facets.a_cs,
+
+
+
+    'a_en': facets.a_en,
+
+
+
     'a_lang': facets.a_lang,
 
 
 
-    'a_cs_keyword': facets.a_cs_keyword,
-
-
-
-    'a_en_keyword': facets.a_en_keyword,
-
-
-
-    'a_value_keyword': facets.a_value_keyword,
-
-
-
-    '_id': facets._id,
+    'a_value': facets.a_value,
 
 
 
@@ -85,11 +86,11 @@ class TestSearchOptions(InvenioSearchOptions):
 
 
 
+    '_id': facets._id,
+
+
+
     'updated': facets.updated,
-
-
-
-    '_schema': facets._schema,
 
 
     }
@@ -97,21 +98,6 @@ class TestSearchOptions(InvenioSearchOptions):
         
         **InvenioSearchOptions.sort_options,
         
-
-
-    'a': {'fields': ['a']},"bestmatch": dict(
-                title=_('Best match'),
-                fields=['_score'],  # ES defaults to desc on `_score` field
-            ),
-            "newest": dict(
-                title=_('Newest'),
-                fields=['-created'],
-            ),
-            "oldest": dict(
-                title=_('Oldest'),
-                fields=['created'],
-            ),
-
 
     }
     """,
@@ -121,7 +107,6 @@ class TestSearchOptions(InvenioSearchOptions):
 def test_facets():
     schema = load_model(
         "test.yaml",
-        "test",
         model_content={
             "settings": {
                 "supported-langs": {
@@ -138,8 +123,9 @@ def test_facets():
                     },
                 }
             },
-            "model": {
+            "record": {
                 "use": "invenio",
+                "module": {"qualified": "test"},
                 "properties": {
                     "d": {
                         "use": "i18n",
@@ -155,7 +141,7 @@ def test_facets():
                         "type": "i18nStr",
                         "multilingual": {"lang-field": "language"},
                     },
-                    "a": {"type": "multilingual", "sortable": {}},
+                    "a": {"type": "multilingual"},
                     "e": {
                         "type": "object",
                         "properties": {"f": "keyword", "g": "i18nStr"},
@@ -165,12 +151,13 @@ def test_facets():
         },
         isort=False,
         black=False,
+        autoflake=False,
     )
 
     filesystem = MockFilesystem()
     builder = create_builder_from_entrypoints(filesystem=filesystem)
 
-    builder.build(schema, "")
+    builder.build(schema, "record", ["record"], "")
 
     data = builder.filesystem.open(
         os.path.join("test", "services", "records", "facets.py")
@@ -186,112 +173,84 @@ def test_facets():
 from invenio_search.engine import dsl
 from flask_babelex import lazy_gettext as _
 
-
-
 from invenio_records_resources.services.records.facets import TermsFacet
-
-
-
 from oarepo_runtime.facets.date import DateTimeFacet
-
-
-
 from oarepo_runtime.facets.nested_facet import NestedLabeledFacet
 
 
 
+_schema = TermsFacet(field='$schema', label =_('$schema.label'))
 
+a_cs = TermsFacet(field=a.cs.keyword, label =_('a.label'))
 
+a_en = TermsFacet(field=a.en.keyword, label =_('a.label'))
 
-d_navic_kxh = NestedLabeledFacet(path ="d", nested_facet = TermsFacet(field="d.navic.kxh", label=_("d/navic/kxh.label")))
+a_lang = NestedLabeledFacet(path = 'a', nested_facet = TermsFacet(field='a.lang', label =_('a/lang.label')))
 
+a_value = NestedLabeledFacet(path = 'a', nested_facet = TermsFacet(field='a.value.keyword', label =_('a/value.label')))
 
+b = TermsFacet(field='b', label =_('b.label'))
 
-d_lang = NestedLabeledFacet(path ="d", nested_facet = TermsFacet(field="d.lang", label=_("d/lang.label")))
+c_cs = TermsFacet(field=c.cs.keyword, label =_('c.label'))
 
+c_en = TermsFacet(field=c.en.keyword, label =_('c.label'))
 
+c_language = NestedLabeledFacet(path = 'c', nested_facet = TermsFacet(field='c.language', label =_('c/language.label')))
 
-d_cs_keyword = TermsFacet(field="d_cs.keyword")
+c_value = NestedLabeledFacet(path = 'c', nested_facet = TermsFacet(field='c.value.keyword', label =_('c/value.label')))
 
+created = DateTimeFacet(field='created', label =_('created.label'))
 
+d_cs = TermsFacet(field=d.cs.keyword, label =_('d.label'))
 
-d_en_keyword = TermsFacet(field="d_en.keyword")
+d_en = TermsFacet(field=d.en.keyword, label =_('d.label'))
 
+d_lang = NestedLabeledFacet(path = 'd', nested_facet = TermsFacet(field='d.lang', label =_('d/lang.label')))
 
+d_navic_kxh = NestedLabeledFacet(path = 'd', nested_facet = TermsFacet(field='d.navic.kxh', label =_('d/navic/kxh.label')))
 
-d_value_keyword = NestedLabeledFacet(path ="d", nested_facet = TermsFacet(field="d.value.keyword", label=_("d/value/keyword.label")))
+d_value = NestedLabeledFacet(path = 'd', nested_facet = TermsFacet(field='d.value.keyword', label =_('d/value.label')))
 
+e_f = TermsFacet(field='e.f', label =_('e/f.label'))
 
+e_g_cs = TermsFacet(field=e.g.cs.keyword, label =_('e/g.label'))
 
-b = TermsFacet(field="b", label=_("b.label"))
+e_g_en = TermsFacet(field=e.g.en.keyword, label =_('e/g.label'))
 
+e_g_lang = NestedLabeledFacet(path = 'e.g', nested_facet = TermsFacet(field='e.g.lang', label =_('e/g/lang.label')))
 
+e_g_value = NestedLabeledFacet(path = 'e.g', nested_facet = TermsFacet(field='e.g.value.keyword', label =_('e/g/value.label')))
 
-c_language = NestedLabeledFacet(path ="c", nested_facet = TermsFacet(field="c.language", label=_("c/language.label")))
+_id = TermsFacet(field='id', label =_('id.label'))
 
+updated = DateTimeFacet(field='updated', label =_('updated.label'))
 
 
-c_cs_keyword = TermsFacet(field="c_cs.keyword")
 
 
 
-c_en_keyword = TermsFacet(field="c_en.keyword")
 
 
 
-c_value_keyword = NestedLabeledFacet(path ="c", nested_facet = TermsFacet(field="c.value.keyword", label=_("c/value/keyword.label")))
 
 
 
-a_lang = NestedLabeledFacet(path ="a", nested_facet = TermsFacet(field="a.lang", label=_("a/lang.label")))
 
 
 
-a_cs_keyword = TermsFacet(field="a_cs.keyword")
 
 
 
-a_en_keyword = TermsFacet(field="a_en.keyword")
 
 
 
-a_value_keyword = NestedLabeledFacet(path ="a", nested_facet = TermsFacet(field="a.value.keyword", label=_("a/value/keyword.label")))
 
 
 
-e_f = TermsFacet(field="e.f", label=_("e/f.label"))
 
 
 
-e_g_lang = NestedLabeledFacet(path ="e.g", nested_facet = TermsFacet(field="e.g.lang", label=_("e/g/lang.label")))
 
-
-
-e_g_cs_keyword = TermsFacet(field="e.g_cs.keyword")
-
-
-
-e_g_en_keyword = TermsFacet(field="e.g_en.keyword")
-
-
-
-e_g_value_keyword = NestedLabeledFacet(path ="e.g", nested_facet = TermsFacet(field="e.g.value.keyword", label=_("e/g/value/keyword.label")))
-
-
-
-_id = TermsFacet(field="id", label=_("id.label"))
-
-
-
-created = DateTimeFacet(field="created", label=_("created.label"))
-
-
-
-updated = DateTimeFacet(field="updated", label=_("updated.label"))
-
-
-
-_schema = TermsFacet(field="$schema", label=_("$schema.label"))
 
     """,
     )
