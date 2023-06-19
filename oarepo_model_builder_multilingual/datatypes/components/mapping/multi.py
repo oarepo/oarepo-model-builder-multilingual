@@ -21,6 +21,7 @@ class FieldMultilingualMappingComponent(RegularMultilingualMappingComponent):
     def create_alternative_mapping(self, datatype, *, context, **kwargs):
 
         if hasattr(datatype.parent, 'mapping_type') and datatype.parent.mapping_type == 'multilingual':
+
             return #alternative mapping already added by parent
 
         if not datatype.key:
@@ -34,7 +35,7 @@ class FieldMultilingualMappingComponent(RegularMultilingualMappingComponent):
             datatype.schema.settings["supported_langs"], key
         )
 
-        if "properties" in datatype.parent.section_mapping.config:
+        if "properties" in node.section_mapping.config:
             deepmerge(node.section_mapping.config["properties"], alternative)
         else:
             node.section_mapping.config["properties"] = alternative

@@ -115,12 +115,20 @@ def test_mapping2():
         "test.yaml",
         model_content={
             "settings": {
-                "supported-langs": {"cs": {}, "en": {}},
+                "supported-langs": {"cs": {"keyword":
+                                               {"type": "keyword"},
+                                           "text":
+                                               {"analyzer": "czech"}}, "en": {}},
             },
             "record": {
                 "module": {"qualified": "test"},
                 "properties": {
                     "b[]": {"properties": {"c": "multilingual"}},
+                    "notes[]": "fulltext",
+                    "keywords[]": "multilingual",
+                    "abstract": 'multilingual',
+                    "methods": 'multilingual',
+                    "technicalInfo": 'multilingual',
                 },
             },
         },
