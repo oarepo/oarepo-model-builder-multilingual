@@ -1,9 +1,6 @@
-
-
 from oarepo_model_builder.datatypes import DataType
 from oarepo_model_builder.datatypes.containers import ArrayDataType, NestedDataType
 from oarepo_model_builder.utils.deepmerge import deepmerge
-
 from oarepo_model_builder.utils.facet_helpers import facet_name
 
 
@@ -15,7 +12,6 @@ class MultilingualDataType(ArrayDataType):
 
     class ModelSchema(DataType.ModelSchema):
         pass
-
 
     def prepare(self, context):
         definition = self.definition
@@ -165,4 +161,3 @@ class I18nDataType(NestedDataType):
         definition["properties"] = def_properties
 
         super().prepare(context)
-

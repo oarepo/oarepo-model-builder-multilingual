@@ -14,13 +14,10 @@ class SupportedLangs(ExtendablePartSchema):
                 raise ValidationError("Invalid language code")
 
 
-
 class LanguagesSettingsSchema(ExtendablePartSchema):
-
     supported_langs = fields.Raw(data_key="supported-langs", required=False)
 
 
 validators = {
     "settings": LanguagesSettingsSchema,
-
 }

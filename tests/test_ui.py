@@ -1,3 +1,6 @@
+import json
+import os
+
 from oarepo_model_builder.entrypoints import create_builder_from_entrypoints, load_model
 
 from tests.mock_filesystem import MockFilesystem
@@ -17,6 +20,7 @@ def test_validity():
             },
             "record": {
                 "use": "invenio",
+                "module": {"qualified": "test"},
                 "properties": {"a": {"type": "multilingual", "ui": {}}},
             },
         },
@@ -29,3 +33,5 @@ def test_validity():
     builder = create_builder_from_entrypoints(filesystem=filesystem)
 
     builder.build(schema, "record", ["record"], "")
+
+
