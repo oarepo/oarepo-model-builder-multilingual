@@ -181,9 +181,9 @@ from oarepo_runtime.facets.nested_facet import NestedLabeledFacet
 
 _schema = TermsFacet(field='$schema', label =_('$schema.label'))
 
-a_cs = TermsFacet(field=a.cs.keyword, label =_('a.label'))
+a_cs = TermsFacet(field='a.cs.keyword', label =_('a.label'))
 
-a_en = TermsFacet(field=a.en.keyword, label =_('a.label'))
+a_en = TermsFacet(field='a.en.keyword', label =_('a.label'))
 
 a_lang = NestedLabeledFacet(path = 'a', nested_facet = TermsFacet(field='a.lang', label =_('a/lang.label')))
 
@@ -191,9 +191,9 @@ a_value = NestedLabeledFacet(path = 'a', nested_facet = TermsFacet(field='a.valu
 
 b = TermsFacet(field='b', label =_('b.label'))
 
-c_cs = TermsFacet(field=c.cs.keyword, label =_('c.label'))
+c_cs = TermsFacet(field='c.cs.keyword', label =_('c.label'))
 
-c_en = TermsFacet(field=c.en.keyword, label =_('c.label'))
+c_en = TermsFacet(field='c.en.keyword', label =_('c.label'))
 
 c_language = NestedLabeledFacet(path = 'c', nested_facet = TermsFacet(field='c.language', label =_('c/language.label')))
 
@@ -201,9 +201,9 @@ c_value = NestedLabeledFacet(path = 'c', nested_facet = TermsFacet(field='c.valu
 
 created = DateTimeFacet(field='created', label =_('created.label'))
 
-d_cs = TermsFacet(field=d.cs.keyword, label =_('d.label'))
+d_cs = TermsFacet(field='d.cs.keyword', label =_('d.label'))
 
-d_en = TermsFacet(field=d.en.keyword, label =_('d.label'))
+d_en = TermsFacet(field='d.en.keyword', label =_('d.label'))
 
 d_lang = NestedLabeledFacet(path = 'd', nested_facet = TermsFacet(field='d.lang', label =_('d/lang.label')))
 
@@ -213,9 +213,9 @@ d_value = NestedLabeledFacet(path = 'd', nested_facet = TermsFacet(field='d.valu
 
 e_f = TermsFacet(field='e.f', label =_('e/f.label'))
 
-e_g_cs = TermsFacet(field=e.g.cs.keyword, label =_('e/g.label'))
+e_g_cs = TermsFacet(field='e.g.cs.keyword', label =_('e/g.label'))
 
-e_g_en = TermsFacet(field=e.g.en.keyword, label =_('e/g.label'))
+e_g_en = TermsFacet(field='e.g.en.keyword', label =_('e/g.label'))
 
 e_g_lang = NestedLabeledFacet(path = 'e.g', nested_facet = TermsFacet(field='e.g.lang', label =_('e/g/lang.label')))
 
