@@ -34,7 +34,7 @@ class I18nStrFacetsComponent(NestedFacetsComponent, RegularFacetsComponent):
             facet_definition.set_field(
                 facet_section,
                 arguments=[
-                    f"field={path + '.' + l+ '.keyword'}",
+                    f"field={repr(path + '.' + l+ '.keyword')}",
                     f"label =_({repr(label)})",
                     *facet_section.get("args", []),
                 ],

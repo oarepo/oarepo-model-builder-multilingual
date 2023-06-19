@@ -217,16 +217,16 @@ def test_mapping():
             "record": {
                 "module": {"qualified": "test"},
                 "properties": {
-                    # "h": "keyword",
-                    # "a": {"type": "i18nStr"},
-                    # "b": {"type": "multilingual"},
-                    # "jej": {
-                    #     "type": "array",
-                    #     "items": {
-                    #         "type": "object",
-                    #         "properties": {"kch": {"type": "multilingual"}},
-                    #     },
-                    # },
+                    "h": "keyword",
+                    "a": {"type": "i18nStr"},
+                    "b": {"type": "multilingual"},
+                    "jej": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {"kch": {"type": "multilingual"}},
+                        },
+                    },
                     "c": {
                         "type": "object",
                         "properties": {
