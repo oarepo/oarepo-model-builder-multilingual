@@ -10,6 +10,7 @@ using `type: multilingual` or `type: i18nstr`.
 Values containing language tags must be in IETF [format](https://www.w3.org/International/articles/language-tags/).
 The structure of both data types can be changed using the `multilingual` field
 
+
 ## i18nStr
 
 An object that contains the language of the item and the actual value of the item.

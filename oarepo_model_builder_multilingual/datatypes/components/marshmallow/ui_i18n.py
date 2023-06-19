@@ -5,18 +5,12 @@ from oarepo_model_builder.datatypes.components import (
     UIMarshmallowComponent,
     UIObjectMarshmallowComponent,
 )
-from oarepo_model_builder.datatypes.components.marshmallow import (
-    MarshmallowField,
-)
+from oarepo_model_builder.datatypes.components.marshmallow import MarshmallowField
 from oarepo_model_builder.datatypes.components.marshmallow.graph import MarshmallowClass
 from oarepo_model_builder.utils.absolute_class import convert_to_absolute_class_name
-from oarepo_model_builder.utils.python_name import (
-    qualified_name,
-)
+from oarepo_model_builder.utils.python_name import qualified_name
 
-from oarepo_model_builder_multilingual.datatypes import (
-    I18nDataType,
-)
+from oarepo_model_builder_multilingual.datatypes import I18nDataType
 
 
 class I18nMarshmallowMixin:

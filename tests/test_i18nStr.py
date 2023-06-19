@@ -24,7 +24,7 @@ def test_generated_jsonschema():
                             "lang-field": "language",
                             "value-field": "val",
                         },
-                    }
+                    },
                 },
             },
         },
@@ -147,11 +147,7 @@ def test_generated_schema():
                             "value-field": "val",
                         },
                     },
-                    "c":{
-                        "properties": {
-                            "d" : "keyword"
-                        }
-                    }
+                    "c": {"properties": {"d": "keyword"}},
                 },
             },
         },
@@ -232,9 +228,7 @@ def test_mapping():
                         "properties": {
                             "f": {"type": "array", "items": {"type": "i18nStr"}},
                             "d": {"type": "array", "items": {"type": "multilingual"}},
-
                         },
-
                     },
                 },
             },
@@ -253,4 +247,3 @@ def test_mapping():
         os.path.join("test", "records", "mappings", "os-v2", "test", "test-1.0.0.json")
     ).read()
     print(data)
-

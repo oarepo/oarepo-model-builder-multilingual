@@ -115,10 +115,13 @@ def test_mapping2():
         "test.yaml",
         model_content={
             "settings": {
-                "supported-langs": {"cs": {"keyword":
-                                               {"type": "keyword"},
-                                           "text":
-                                               {"analyzer": "czech"}}, "en": {}},
+                "supported-langs": {
+                    "cs": {
+                        "keyword": {"type": "keyword"},
+                        "text": {"analyzer": "czech"},
+                    },
+                    "en": {},
+                },
             },
             "record": {
                 "module": {"qualified": "test"},
@@ -126,9 +129,9 @@ def test_mapping2():
                     "b[]": {"properties": {"c": "multilingual"}},
                     "notes[]": "fulltext",
                     "keywords[]": "multilingual",
-                    "abstract": 'multilingual',
-                    "methods": 'multilingual',
-                    "technicalInfo": 'multilingual',
+                    "abstract": "multilingual",
+                    "methods": "multilingual",
+                    "technicalInfo": "multilingual",
                 },
             },
         },
@@ -415,3 +418,102 @@ def test_sample_data():
 
             assert isinstance(data["b"], dict)
             assert data["b"]["lang"] in ("cs", "en")
+
+
+def test_non_i18n_mapping():
+    schema = load_model(
+        "test.yaml",
+        model_content={
+            "settings": {"supported-langs": {"cs": {}, "en": {}}},
+            "record": {
+                "module": {"qualified": "test"},
+                "properties": {
+                    "a": {"type": "fulltext", "multilingual": {"i18n": True}},
+                    "b[]": {"type": "keyword", "multilingual": {"i18n": True}},
+                    "c":{"properties":{"d": {"type":"keyword", "multilingual": {"i18n": True} }  } }
+                },
+            },
+        },
+        isort=False,
+        black=False,
+        autoflake=False,
+    )
+
+    filesystem = MockFilesystem()
+    builder = create_builder_from_entrypoints(filesystem=filesystem)
+
+    builder.build(schema, "record", ["record"], "")
+
+    data = builder.filesystem.open(
+        os.path.join("test", "records", "mappings", "os-v2", "test", "test-1.0.0.json")
+    ).read()
+    print(data)
+    data = json.loads(data)
+    assert data == {
+    "mappings": {
+        "properties": {
+            "a_cs": {
+                "type": "text",
+                "fields": {
+                    "keyword": {
+                        "type": "keyword"
+                    }
+                }
+            },
+            "a_en": {
+                "type": "text",
+                "fields": {
+                    "keyword": {
+                        "type": "keyword"
+                    }
+                }
+            },
+            "b_cs": {
+                "type": "text",
+                "fields": {
+                    "keyword": {
+                        "type": "keyword"
+                    }
+                }
+            },
+            "b_en": {
+                "type": "text",
+                "fields": {
+                    "keyword": {
+                        "type": "keyword"
+                    }
+                }
+            },
+            "a": {
+                "type": "text"
+            },
+            "b": {
+                "type": "keyword"
+            },
+            "c": {
+                "type": "object",
+                "properties": {
+                    "d_cs": {
+                        "type": "text",
+                        "fields": {
+                            "keyword": {
+                                "type": "keyword"
+                            }
+                        }
+                    },
+                    "d_en": {
+                        "type": "text",
+                        "fields": {
+                            "keyword": {
+                                "type": "keyword"
+                            }
+                        }
+                    },
+                    "d": {
+                        "type": "keyword"
+                    }
+                }
+            }
+        }
+    }
+}
