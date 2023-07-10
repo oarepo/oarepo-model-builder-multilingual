@@ -1,0 +1,4 @@
+include oarepo_model_builder_multilingual/**/*.yaml
+include oarepo_model_builder_multilingual/**/*.json
+exclude tests/*
+exclude built_tests/*
