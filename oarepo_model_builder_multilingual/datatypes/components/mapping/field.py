@@ -11,7 +11,7 @@ def generate_alternative(datatype):
     else:
         key = datatype.key
         node = datatype.parent
-    alternative = alternative_gen(datatype.schema.settings["supported_langs"], key)
+    alternative = alternative_gen(datatype.schema.settings["supported-langs"], key)
     if "properties" in node.section_mapping.config:
         deepmerge(node.section_mapping.config["properties"], alternative)
     else:

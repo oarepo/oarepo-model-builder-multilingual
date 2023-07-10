@@ -9,7 +9,7 @@ class InvenioRecordMultilingualDumperBuilder(InvenioBaseClassPythonBuilder):
 
     def finish(self, **extra_kwargs):
         langs = []
-        for lang in self.settings["supported_langs"]:
+        for lang in self.settings["supported-langs"]:
             langs.append(lang)
 
         self.get_paths(self.current_model.children)

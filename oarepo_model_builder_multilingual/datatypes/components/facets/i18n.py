@@ -15,7 +15,7 @@ class I18nStrFacetsComponent(NestedFacetsComponent, RegularFacetsComponent):
     def process_facets(self, datatype, section, **__kwargs):
         facet_section = section.config
         facets = []
-        for l in datatype.schema.settings["supported_langs"]:
+        for l in datatype.schema.settings["supported-langs"]:
             path = self.facet_path(datatype, facet_section)
             facet_definition = FacetDefinition(
                 path=facet_name(datatype.path + "_" + l),
