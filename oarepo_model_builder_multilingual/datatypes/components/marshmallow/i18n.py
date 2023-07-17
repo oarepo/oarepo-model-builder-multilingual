@@ -81,9 +81,11 @@ class I18nMarshmallowComponent(I18nMarshmallowMixin, ObjectMarshmallowComponent)
         f = []
 
         RegularMarshmallowComponent.marshmallow_field(self, datatype=datatype, fields=f)
+        if not f:
+            # the marshmallow field was not generated (read=False & write=False)
+            return
 
         fld: MarshmallowField = f[0]
-
         fields.append(fld)
 
     def marshmallow_build_class(self, *, datatype, classes, **kwargs):

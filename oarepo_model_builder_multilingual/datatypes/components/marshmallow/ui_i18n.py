@@ -80,6 +80,8 @@ class UII18nMarshmallowComponent(I18nMarshmallowMixin, UIObjectMarshmallowCompon
     ):
         f = []
         UIMarshmallowComponent.ui_marshmallow_field(self, datatype=datatype, fields=f)
+        if not f:
+            return
         fld: MarshmallowField = f[0]
         fields.append(fld)
 
