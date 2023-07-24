@@ -91,6 +91,8 @@ class TestSearchOptions(InvenioSearchOptions):
 
 
     'updated': facets.updated,
+    
+    **getattr(InvenioSearchOptions, 'facets', {})
 
 
     }
