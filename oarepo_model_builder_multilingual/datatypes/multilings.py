@@ -156,7 +156,7 @@ class I18nDataType(NestedDataType):
         def_properties = definition.get("properties", {})
         definition["sample"] = {"skip": False}
 
-        def_properties[lang] = {"type": "keyword"}
+        def_properties[lang] = {"type": "keyword", "mapping": {"ignore_above": 256}}
         def_properties[value] = {"type": "fulltext+keyword"}
         definition["properties"] = def_properties
 
