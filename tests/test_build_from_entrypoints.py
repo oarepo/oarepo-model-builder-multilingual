@@ -64,10 +64,10 @@ def test_mapping():
                 "a": {
                     "type": "nested",
                     "properties": {
-                        "lang": {"type": "keyword"},
+                        "lang": {"type": "keyword", "ignore_above": 256},
                         "value": {
                             "type": "text",
-                            "fields": {"keyword": {"type": "keyword"}},
+                            "fields": {"keyword": {"type": "keyword", "ignore_above": 256}},
                         },
                     },
                 },
@@ -80,7 +80,7 @@ def test_mapping():
                             "index": False,
                             "language": "cs",
                         },
-                        "keyword": {"type": "keyword"},
+                        "keyword": {"type": "keyword", "ignore_above": 256},
                     },
                 },
                 "a_en": {
@@ -92,10 +92,10 @@ def test_mapping():
                             "index": False,
                             "language": "en",
                         },
-                        "keyword": {"type": "keyword"},
+                        "keyword": {"type": "keyword", "ignore_above": 256},
                     },
                 },
-                "id": {"type": "keyword"},
+                "id": {"type": "keyword", "ignore_above": 1024},
                 "created": {
                     "format": "strict_date_time||strict_date_time_no_millis||basic_date_time||basic_date_time_no_millis||basic_date||strict_date||strict_date_hour_minute_second||strict_date_hour_minute_second_fraction",
                     "type": "date",
@@ -104,7 +104,7 @@ def test_mapping():
                     "format": "strict_date_time||strict_date_time_no_millis||basic_date_time||basic_date_time_no_millis||basic_date||strict_date||strict_date_hour_minute_second||strict_date_hour_minute_second_fraction",
                     "type": "date",
                 },
-                "$schema": {"type": "keyword"},
+                "$schema": {"type": "keyword", "ignore_above": 1024},
             }
         }
     }
@@ -117,7 +117,7 @@ def test_mapping2():
             "settings": {
                 "supported-langs": {
                     "cs": {
-                        "keyword": {"type": "keyword"},
+                        "keyword": {"type": "keyword", "ignore_above": 256},
                         "text": {"analyzer": "czech"},
                     },
                     "en": {},
@@ -456,7 +456,7 @@ def test_non_i18n_mapping():
                 "type": "text",
                 "fields": {
                     "keyword": {
-                        "type": "keyword"
+                        "type": "keyword", "ignore_above": 256
                     }
                 }
             },
@@ -464,7 +464,7 @@ def test_non_i18n_mapping():
                 "type": "text",
                 "fields": {
                     "keyword": {
-                        "type": "keyword"
+                        "type": "keyword", "ignore_above": 256
                     }
                 }
             },
@@ -472,7 +472,7 @@ def test_non_i18n_mapping():
                 "type": "text",
                 "fields": {
                     "keyword": {
-                        "type": "keyword"
+                        "type": "keyword", "ignore_above": 256
                     }
                 }
             },
@@ -480,7 +480,7 @@ def test_non_i18n_mapping():
                 "type": "text",
                 "fields": {
                     "keyword": {
-                        "type": "keyword"
+                        "type": "keyword", "ignore_above": 256
                     }
                 }
             },
@@ -488,7 +488,7 @@ def test_non_i18n_mapping():
                 "type": "text"
             },
             "b": {
-                "type": "keyword"
+                "type": "keyword", "ignore_above": 1024
             },
             "c": {
                 "type": "object",
@@ -497,7 +497,7 @@ def test_non_i18n_mapping():
                         "type": "text",
                         "fields": {
                             "keyword": {
-                                "type": "keyword"
+                                "type": "keyword", "ignore_above": 256
                             }
                         }
                     },
@@ -505,12 +505,12 @@ def test_non_i18n_mapping():
                         "type": "text",
                         "fields": {
                             "keyword": {
-                                "type": "keyword"
+                                "type": "keyword", "ignore_above": 256
                             }
                         }
                     },
                     "d": {
-                        "type": "keyword"
+                        "type": "keyword", "ignore_above": 1024
                     }
                 }
             }
