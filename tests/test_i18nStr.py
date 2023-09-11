@@ -103,27 +103,27 @@ def test_generated_mapping():
                 "a": {
                     "type": "nested",
                     "properties": {
-                        "lang": {"type": "keyword"},
+                        "lang": {"type": "keyword", "ignore_above": 256},
                         "value": {
                             "type": "text",
-                            "fields": {"keyword": {"type": "keyword"}},
+                            "fields": {"keyword": {"type": "keyword", "ignore_above": 256}},
                         },
                     },
                 },
-                "a_cs": {"type": "text", "fields": {"keyword": {"type": "keyword"}}},
-                "a_en": {"type": "text", "fields": {"keyword": {"type": "keyword"}}},
+                "a_cs": {"type": "text", "fields": {"keyword": {"type": "keyword", "ignore_above": 256}}},
+                "a_en": {"type": "text", "fields": {"keyword": {"type": "keyword", "ignore_above": 256}}},
                 "b": {
                     "type": "nested",
                     "properties": {
-                        "language": {"type": "keyword"},
+                        "language": {"type": "keyword", "ignore_above": 256},
                         "val": {
                             "type": "text",
-                            "fields": {"keyword": {"type": "keyword"}},
+                            "fields": {"keyword": {"type": "keyword", "ignore_above": 256}},
                         },
                     },
                 },
-                "b_cs": {"type": "text", "fields": {"keyword": {"type": "keyword"}}},
-                "b_en": {"type": "text", "fields": {"keyword": {"type": "keyword"}}},
+                "b_cs": {"type": "text", "fields": {"keyword": {"type": "keyword", "ignore_above": 256}}},
+                "b_en": {"type": "text", "fields": {"keyword": {"type": "keyword", "ignore_above": 256}}},
             }
         }
     }

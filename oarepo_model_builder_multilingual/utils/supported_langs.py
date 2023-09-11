@@ -22,7 +22,7 @@ def alternative_gen(supported_langs, key):
             )
             deepmerge(fields_dict, {"sort": sort})
 
-        deepmerge(fields_dict, {"keyword": {"type": "keyword"}})
+        deepmerge(fields_dict, {"keyword": {"type": "keyword", "ignore_above": 256}})
         if fields_dict != {}:
             deepmerge(multilang_options, {"fields": fields_dict})
 
