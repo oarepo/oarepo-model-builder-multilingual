@@ -1,6 +1,2 @@
 {{ vars.multilingual_dumper | generate_import }}
-class {{ vars.record|class_header }}:
-    dumper_extensions = [
-    MultilingualSearchDumper()
-    ]
 

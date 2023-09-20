@@ -41,10 +41,10 @@ class MultilingualDumperClassSchema(ma.Schema):
 
 class MultilingualDumperModelComponent(DataTypeComponent):
     eligible_datatypes = [ModelDataType]
-    depends_on = [DefaultsModelComponent, RecordModelComponent]
+    depends_on = [RecordModelComponent]
 
     class ModelSchema(ma.Schema):
-        record_dumper = ma.fields.Nested(
+        multilingual_record_dumper = ma.fields.Nested(
             MultilingualDumperClassSchema,
             attribute="multilingual-dumper",
             data_key="multilingual-dumper",
@@ -52,18 +52,26 @@ class MultilingualDumperModelComponent(DataTypeComponent):
         )
 
     def before_model_prepare(self, datatype, *, context, **kwargs):
-        record_module = parent_module(datatype.definition["record"]["module"])
+        multilingual_record_module = parent_module(datatype.definition["record"]["module"])
 
-        dumper = set_default(datatype, "multilingual-dumper", {})
-        dumper.setdefault("generate", True)
+        multilingual_dumper = set_default(datatype, "multilingual-dumper", {})
+        multilingual_dumper.setdefault("generate", True)
 
-        dumper_module = dumper.setdefault(
-            "module", f"{record_module}.multilingual_dumper"
+        multilingual_dumper_module = multilingual_dumper.setdefault(
+            "module", f"{multilingual_record_module}.multilingual_dumper"
         )
-        dumper.setdefault("class", f"{dumper_module}.MultilingualSearchDumper")
-        dumper.setdefault("base-classes", ["MultilingualDumper"])
-        dumper.setdefault("extra-code", "")
-        dumper.setdefault("extensions", [])
-        dumper.setdefault(
+        multilingual_dumper.setdefault("class", f"{multilingual_dumper_module}.MultilingualSearchDumper")
+        multilingual_dumper.setdefault("base-classes", ["MultilingualDumper"])
+        multilingual_dumper.setdefault("extra-code", "")
+        multilingual_dumper.setdefault("extensions", [])
+        multilingual_dumper.setdefault(
             "imports", [{"import": "oarepo_runtime.i18n.dumper.MultilingualDumper"}]
         )
+
+
+        dumper = set_default(datatype, "record-dumper", {})
+        dumper.setdefault("generate", True)
+        extensions = dumper.setdefault("extensions", [])
+        extensions.append("MultilingualSearchDumper()")
+
+
