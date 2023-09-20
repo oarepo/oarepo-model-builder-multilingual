@@ -167,7 +167,7 @@ def test_dumper():
     data = builder.filesystem.open(os.path.join("test", "records", "api.py")).read()
     print(data)
     data = str(data)
-    assert "dumper_extensions =  [ MultilingualSearchDumper() ]" in data
+    assert "MultilingualSearchDumper()" in data
 
 
 def test_dumper_file():

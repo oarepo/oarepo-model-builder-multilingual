@@ -1,8 +1,7 @@
 import marshmallow as ma
 from oarepo_model_builder.datatypes import DataTypeComponent, ModelDataType
 from oarepo_model_builder.datatypes.components import (
-    DefaultsModelComponent,
-    RecordModelComponent,
+    RecordDumperModelComponent
 )
 from oarepo_model_builder.datatypes.components.model.utils import set_default
 from oarepo_model_builder.utils.python_name import parent_module
@@ -41,7 +40,7 @@ class MultilingualDumperClassSchema(ma.Schema):
 
 class MultilingualDumperModelComponent(DataTypeComponent):
     eligible_datatypes = [ModelDataType]
-    depends_on = [RecordModelComponent]
+    depends_on = [RecordDumperModelComponent]
 
     class ModelSchema(ma.Schema):
         multilingual_record_dumper = ma.fields.Nested(
