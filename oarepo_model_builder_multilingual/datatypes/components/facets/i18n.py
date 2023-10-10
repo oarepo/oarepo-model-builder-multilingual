@@ -26,6 +26,8 @@ class I18nStrFacetsComponent(NestedFacetsComponent, RegularFacetsComponent):
                         "import": "invenio_records_resources.services.records.facets.TermsFacet"
                     }
                 ],
+                facet=facet_section.get("facet", None),
+                facet_groups=facet_section.get("facet-groups", ["default"])
             )
             label = facet_section.get(
                 "label", f'{datatype.path.replace(".", "/")}.label'

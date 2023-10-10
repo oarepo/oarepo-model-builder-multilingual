@@ -59,6 +59,10 @@ from . import facets
 class TestSearchOptions(InvenioSearchOptions):
     \"""TestRecord search options.\"""
 
+    facet_groups ={
+        
+    }
+
     facets = {
 
 
@@ -91,9 +95,10 @@ class TestSearchOptions(InvenioSearchOptions):
 
 
     'updated': facets.updated,
-    
-    **getattr(InvenioSearchOptions, 'facets', {})
 
+
+
+    **getattr(InvenioSearchOptions, 'facets', {})
 
     }
     sort_options = {
