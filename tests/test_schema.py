@@ -8,7 +8,7 @@
 
 from __future__ import absolute_import, print_function
 
-import langcodes
+
 import marshmallow
 import pytest
 from marshmallow import ValidationError
@@ -18,7 +18,6 @@ from . import multilingual_schema
 
 
 def test_withoutApp():
-    print(langcodes.Language.get("ava").is_valid())
 
     class MD(marshmallow.Schema):
         title = List(Nested(multilingual_schema.MultilingualSchema()))
