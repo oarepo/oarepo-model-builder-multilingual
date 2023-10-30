@@ -16,15 +16,6 @@ pip install -U setuptools pip wheel
 pip install -e .
 
 
-
-BUILDER=.venv/bin/oarepo-compile-model
-
-
-if true ; then
-    test -d tests/test_app && rm -rf tests/test_app
-    ${BUILDER} tests/model.json5 --output-directory tests/test_app -vvv
-fi
-rm -rf tests/test_app/tests
 python3 -m venv .venv-tests
 source .venv-tests/bin/activate
 
