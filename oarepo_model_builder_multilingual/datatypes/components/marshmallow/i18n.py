@@ -1,6 +1,6 @@
 from typing import List
 
-from oarepo_model_builder.datatypes import DataType, Import, datatypes
+from oarepo_model_builder.datatypes import DataType, datatypes
 from oarepo_model_builder.datatypes.components import (
     ObjectMarshmallowComponent,
     RegularMarshmallowComponent,
@@ -9,7 +9,8 @@ from oarepo_model_builder.datatypes.components.marshmallow import MarshmallowFie
 from oarepo_model_builder.datatypes.components.marshmallow.graph import MarshmallowClass
 from oarepo_model_builder.utils.absolute_class import convert_to_absolute_class_name
 from oarepo_model_builder.utils.python_name import qualified_name
-
+from oarepo_model_builder.utils.python_name import (
+    Import)
 from oarepo_model_builder_multilingual.datatypes import I18nDataType
 
 
@@ -64,7 +65,7 @@ class I18nMarshmallowMixin:
         classes.append(
             MarshmallowClass(
                 class_name=marshmallow["class"],
-                base_classes=marshmallow.get("base-classes", []) or ["ma.Schema"],
+                base_classes=marshmallow.get("base-classes", []) or ["marshmallow.Schema"],
                 imports=Import.from_config(marshmallow.get("imports", [])),
                 fields=fields,
                 strict=True,

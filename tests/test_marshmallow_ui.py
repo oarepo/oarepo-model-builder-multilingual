@@ -20,8 +20,7 @@ def test_generated_schema_ui():
                         "type": "multilingual",
                         "ui": {
                             "marshmallow": {
-                                "imports": [{"import": "test"}],
-                                "field-class": "FieldClassa",
+                                "field-class": "test.FieldClassa",
                                 "arguments": ["test=cosi"],
                             }
                         },
@@ -30,7 +29,6 @@ def test_generated_schema_ui():
                         "type": "i18nStr",
                         "ui": {
                             "marshmallow": {
-                                "imports": [{"import": "test"}],
                                 "arguments": ["test=cosi"],
                             }
                         },
@@ -62,18 +60,12 @@ def test_generated_schema_ui():
         "",
         """
 
-from marshmallow import ValidationError
-from marshmallow import validate as ma_validate
 import marshmallow as ma
-from marshmallow_utils import fields as mu_fields
-from marshmallow_utils import schemas as mu_schemas
 
 from oarepo_runtime.i18n.ui_schema import I18nStrUIField
-from oarepo_runtime.i18n.ui_schema import MultilingualUIField
-from oarepo_runtime.ui.marshmallow import InvenioUISchema
-import test
+from test import FieldClassa
 
-
+from oarepo_runtime.services.schema.ui import InvenioUISchema
 
 
 

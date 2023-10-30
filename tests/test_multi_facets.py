@@ -101,12 +101,6 @@ class TestSearchOptions(InvenioSearchOptions):
     **getattr(InvenioSearchOptions, 'facets', {})
 
     }
-    sort_options = {
-        
-        **InvenioSearchOptions.sort_options,
-        
-
-    }
     """,
     )
 
