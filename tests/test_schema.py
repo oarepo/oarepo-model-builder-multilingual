@@ -18,7 +18,6 @@ from . import multilingual_schema
 
 
 def test_withoutApp():
-    print(langcodes.Language.get("ava").is_valid())
 
     class MD(marshmallow.Schema):
         title = List(Nested(multilingual_schema.MultilingualSchema()))

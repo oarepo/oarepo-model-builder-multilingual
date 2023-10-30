@@ -164,7 +164,7 @@ def test_dumper():
 
     builder.build(schema, "record", ["record"], "")
 
-    data = builder.filesystem.open(os.path.join("test", "records", "api.py")).read()
+    data = builder.filesystem.open(os.path.join("test", "records", "dumpers", "dumper.py")).read()
     print(data)
     data = str(data)
     assert "MultilingualSearchDumper()" in data
@@ -234,8 +234,7 @@ def test_generated_schema2():
                     "a": {
                         "type": "i18nStr",
                         "marshmallow": {
-                            "imports": [{"import": "test"}],
-                            "field-class": "FieldClassa",
+                            "field-class": "test.FieldClassa",
                             "arguments": ["test=cosi"],
                         },
                     },
@@ -269,21 +268,15 @@ def test_generated_schema2():
         r"\s",
         "",
         """
-
-from marshmallow import ValidationError
-from marshmallow import validate as ma_validate
 import marshmallow as ma
-from marshmallow_utils import fields as mu_fields
-from marshmallow_utils import schemas as mu_schemas
 
 from oarepo_runtime.i18n.schema import I18nStrField
-import test
+from test import FieldClassa
+
+from marshmallow import Schema
 
 
-
-
-
-class TestSchema(ma.Schema):
+class TestSchema(Schema):
 
     class Meta:
         unknown = ma.RAISE
@@ -339,18 +332,14 @@ def test_generated_schema():
         r"\s",
         "",
         """
-
-from marshmallow import ValidationError
-from marshmallow import validate as ma_validate
 import marshmallow as ma
-from marshmallow_utils import fields as mu_fields
-from marshmallow_utils import schemas as mu_schemas
 
 from oarepo_runtime.i18n.schema import I18nStrField
 from oarepo_runtime.i18n.schema import MultilingualField
 
+from marshmallow import Schema
 
-class TestSchema(ma.Schema):
+class TestSchema(Schema):
 
     class Meta:
         unknown = ma.RAISE
@@ -403,7 +392,6 @@ def test_sample_data():
     builder = create_builder_from_entrypoints(filesystem=filesystem)
 
     builder.build(schema, "record", ["record"], "")
-    # file = builder.filesystem.open(os.path.join("data" ,"sample_data.yaml"))
     data_yaml = builder.filesystem.open(os.path.join("data", "sample_data.yaml")).read()
     import yaml
 

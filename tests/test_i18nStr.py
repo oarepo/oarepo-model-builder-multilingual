@@ -170,16 +170,16 @@ def test_generated_schema():
         r"\s",
         "",
         """
-from marshmallow import ValidationError
-from marshmallow import validate as ma_validate
 import marshmallow as ma
-from marshmallow_utils import fields as mu_fields
-from marshmallow_utils import schemas as mu_schemas
+from marshmallow import fields as ma_fields
 
 from oarepo_runtime.i18n.schema import I18nStrField
 
+from marshmallow import Schema
 
-class TestSchema(ma.Schema):
+from marshmallow import Schema
+
+class TestSchema(Schema):
 
     class Meta:
         unknown = ma.RAISE
@@ -189,15 +189,15 @@ class TestSchema(ma.Schema):
 
     b = I18nStrField(lang_field=language, value_field=val)
     
-    c = ma.fields.Nested(lambda: CSchema())
+    c = ma_fields.Nested(lambda: CSchema())
 
-class CSchema(ma.Schema):
+class CSchema(Schema):
 
     class Meta:
         unknown = ma.RAISE
 
 
-    d = ma.fields.String()
+    d = ma_fields.String()
 
     """,
     )
