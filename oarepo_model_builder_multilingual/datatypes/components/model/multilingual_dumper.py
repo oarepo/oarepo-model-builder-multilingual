@@ -69,6 +69,6 @@ class MultilingualDumperModelComponent(DataTypeComponent):
         dumper = set_default(datatype, "record-dumper", {})
         dumper.setdefault("generate", True)
         extensions = dumper.setdefault("extensions", [])
-        extensions.append("MultilingualSearchDumper()")
+        extensions.append(f"{{{{{multilingual_dumper_module}.MultilingualSearchDumper}}}}()")
 
 
