@@ -57,7 +57,7 @@ class MultilingualDumperModelComponent(DataTypeComponent):
         multilingual_dumper.setdefault("generate", True)
 
         multilingual_dumper_module = multilingual_dumper.setdefault(
-            "module", f"{multilingual_record_module}.multilingual_dumper"
+            "module", f"{multilingual_record_module}.dumpers.multilingual"
         )
         multilingual_dumper.setdefault("class", f"{multilingual_dumper_module}.MultilingualSearchDumperExt")
         multilingual_dumper.setdefault("base-classes", ["oarepo_runtime.i18n.dumper.MultilingualDumper"])

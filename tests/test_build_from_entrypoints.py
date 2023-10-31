@@ -167,8 +167,22 @@ def test_dumper():
     data = builder.filesystem.open(os.path.join("test", "records", "dumpers", "dumper.py")).read()
     print(data)
     data = str(data)
-    assert "MultilingualSearchDumperExt()" in data
+    assert re.sub(r"\s", "", data) == re.sub(
+        r"\s",
+        "",
+        """
+from oarepo_runtime.records.dumpers import SearchDumper
 
+from test.records.dumpers.multilingual import MultilingualSearchDumperExt
+
+from test.records.dumpers.edtf import TestEDTFIntervalDumperExt
+
+
+class TestDumper(SearchDumper):
+    \"""TestRecord opensearch dumper.\"""
+    extensions =  [ MultilingualSearchDumperExt(), TestEDTFIntervalDumperExt() ]
+    """,
+    )
 
 def test_dumper_file():
     schema = load_model(
@@ -211,7 +225,7 @@ def test_dumper_file():
     builder.build(schema, "record", ["record"], "")
 
     data = builder.filesystem.open(
-        os.path.join("test", "records", "multilingual_dumper.py")
+        os.path.join("test", "records", "dumpers", "multilingual.py")
     ).read()
     print(data)
     assert "/a" in re.sub(r"\s", "", data)
