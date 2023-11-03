@@ -22,11 +22,6 @@ jobs:
           name: dist
           path: dist
 
-      - name: List files
-        run: |
-          ls -la
-          ls -la dist
-
       - name: Publish package
         if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
         uses: pypa/gh-action-pypi-publish@release/v1
