@@ -23,7 +23,7 @@ class I18nStrFacetsComponent(NestedFacetsComponent, RegularFacetsComponent):
                 searchable=facet_section.get("searchable"),
                 imports=facet_section.get("imports", []),
                 facet=facet_section.get("facet", None),
-                facet_groups=facet_section.get("facet-groups", ["default"])
+                facet_groups=facet_section.get("facet-groups", ["default"]),
             )
             label = facet_section.get(
                 "label", f'{datatype.path.replace(".", "/")}.label'
@@ -36,7 +36,7 @@ class I18nStrFacetsComponent(NestedFacetsComponent, RegularFacetsComponent):
                     f"label =_({repr(label)})",
                     *facet_section.get("args", []),
                 ],
-                field_class="invenio_records_resources.services.records.facets.TermsFacet"
+                field_class="invenio_records_resources.services.records.facets.TermsFacet",
             )
             facets.extend(
                 flatten(

@@ -18,7 +18,6 @@ from . import multilingual_schema
 
 
 def test_withoutApp():
-
     class MD(marshmallow.Schema):
         title = List(Nested(multilingual_schema.MultilingualSchema()))
 

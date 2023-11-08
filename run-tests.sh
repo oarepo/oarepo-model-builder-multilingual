@@ -13,7 +13,11 @@ fi
 python3 -m venv $BUILDER_VENV
 . $BUILDER_VENV/bin/activate
 pip install "oarepo>=$OAREPO_VERSION,<$OAREPO_VERSION_MAX"
+pip uninstall oarepo-runtime
+pip install /home/alzpetka/cli_upload/oarepo-runtime
+pip install pytest-invenio
 pip install -U setuptools pip wheel
+
 pip install -e ".[tests]"
 pytest tests -vvv
 
@@ -33,6 +37,9 @@ source $VENV_TESTS/bin/activate
 pip install -U setuptools pip wheel
 pip install "oarepo>=$OAREPO_VERSION,<$OAREPO_VERSION_MAX"
 pip install "./tests/example-model[tests]"
+pip uninstall oarepo-runtime
+pip install /home/alzpetka/cli_upload/oarepo-runtime
+pip install pytest-invenio
 pytest tests/example-model/tests
 #pip install pyyaml opensearch-dsl
 #pip install pytest-invenio

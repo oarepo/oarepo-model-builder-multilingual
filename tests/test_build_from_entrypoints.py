@@ -67,7 +67,9 @@ def test_mapping():
                         "lang": {"type": "keyword", "ignore_above": 256},
                         "value": {
                             "type": "text",
-                            "fields": {"keyword": {"type": "keyword", "ignore_above": 256}},
+                            "fields": {
+                                "keyword": {"type": "keyword", "ignore_above": 256}
+                            },
                         },
                     },
                 },
@@ -164,7 +166,9 @@ def test_dumper():
 
     builder.build(schema, "record", ["record"], "")
 
-    data = builder.filesystem.open(os.path.join("test", "records", "dumpers", "dumper.py")).read()
+    data = builder.filesystem.open(
+        os.path.join("test", "records", "dumpers", "dumper.py")
+    ).read()
     print(data)
     data = str(data)
     assert re.sub(r"\s", "", data) == re.sub(
@@ -183,6 +187,7 @@ class TestDumper(SearchDumper):
     extensions =  [ MultilingualSearchDumperExt(), TestEDTFIntervalDumperExt() ]
     """,
     )
+
 
 def test_dumper_file():
     schema = load_model(
@@ -284,7 +289,7 @@ def test_generated_schema2():
         """
 import marshmallow as ma
 
-from oarepo_runtime.i18n.schema import I18nStrField
+from oarepo_runtime.services.schema.i18n import I18nStrField
 from test import FieldClassa
 
 from marshmallow import Schema
@@ -348,8 +353,8 @@ def test_generated_schema():
         """
 import marshmallow as ma
 
-from oarepo_runtime.i18n.schema import I18nStrField
-from oarepo_runtime.i18n.schema import MultilingualField
+from oarepo_runtime.services.schema.i18n import I18nStrField
+from oarepo_runtime.services.schema.i18n import MultilingualField
 
 from marshmallow import Schema
 
@@ -432,7 +437,11 @@ def test_non_i18n_mapping():
                 "properties": {
                     "a": {"type": "fulltext", "multilingual": {"i18n": True}},
                     "b[]": {"type": "keyword", "multilingual": {"i18n": True}},
-                    "c":{"properties":{"d": {"type":"keyword", "multilingual": {"i18n": True} }  } }
+                    "c": {
+                        "properties": {
+                            "d": {"type": "keyword", "multilingual": {"i18n": True}}
+                        }
+                    },
                 },
             },
         },
@@ -452,70 +461,44 @@ def test_non_i18n_mapping():
     print(data)
     data = json.loads(data)
     assert data == {
-    "mappings": {
-        "properties": {
-            "a_cs": {
-                "type": "text",
-                "fields": {
-                    "keyword": {
-                        "type": "keyword", "ignore_above": 256
-                    }
-                }
-            },
-            "a_en": {
-                "type": "text",
-                "fields": {
-                    "keyword": {
-                        "type": "keyword", "ignore_above": 256
-                    }
-                }
-            },
-            "b_cs": {
-                "type": "text",
-                "fields": {
-                    "keyword": {
-                        "type": "keyword", "ignore_above": 256
-                    }
-                }
-            },
-            "b_en": {
-                "type": "text",
-                "fields": {
-                    "keyword": {
-                        "type": "keyword", "ignore_above": 256
-                    }
-                }
-            },
-            "a": {
-                "type": "text"
-            },
-            "b": {
-                "type": "keyword", "ignore_above": 1024
-            },
-            "c": {
-                "type": "object",
-                "properties": {
-                    "d_cs": {
-                        "type": "text",
-                        "fields": {
-                            "keyword": {
-                                "type": "keyword", "ignore_above": 256
-                            }
-                        }
+        "mappings": {
+            "properties": {
+                "a_cs": {
+                    "type": "text",
+                    "fields": {"keyword": {"type": "keyword", "ignore_above": 256}},
+                },
+                "a_en": {
+                    "type": "text",
+                    "fields": {"keyword": {"type": "keyword", "ignore_above": 256}},
+                },
+                "b_cs": {
+                    "type": "text",
+                    "fields": {"keyword": {"type": "keyword", "ignore_above": 256}},
+                },
+                "b_en": {
+                    "type": "text",
+                    "fields": {"keyword": {"type": "keyword", "ignore_above": 256}},
+                },
+                "a": {"type": "text"},
+                "b": {"type": "keyword", "ignore_above": 1024},
+                "c": {
+                    "type": "object",
+                    "properties": {
+                        "d_cs": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {"type": "keyword", "ignore_above": 256}
+                            },
+                        },
+                        "d_en": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {"type": "keyword", "ignore_above": 256}
+                            },
+                        },
+                        "d": {"type": "keyword", "ignore_above": 1024},
                     },
-                    "d_en": {
-                        "type": "text",
-                        "fields": {
-                            "keyword": {
-                                "type": "keyword", "ignore_above": 256
-                            }
-                        }
-                    },
-                    "d": {
-                        "type": "keyword", "ignore_above": 1024
-                    }
-                }
+                },
             }
         }
     }
-}

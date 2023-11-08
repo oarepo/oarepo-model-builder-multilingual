@@ -19,7 +19,9 @@ class MultilingualDataType(ArrayDataType):
         definition["items"] = {"type": "i18nStr"}
         definition_marsh = definition.get("marshmallow", {})
         if "field-class" not in definition_marsh:
-            definition_marsh["field-class"] =  "oarepo_runtime.i18n.schema.MultilingualField"
+            definition_marsh[
+                "field-class"
+            ] = "oarepo_runtime.services.schema.i18n.MultilingualField"
         deepmerge(definition, {"marshmallow": definition_marsh})
 
         definition_ui = definition.get("ui", {})
@@ -28,7 +30,9 @@ class MultilingualDataType(ArrayDataType):
             definition_ui["detail"] = "multilingual"
 
         if "field-class" not in definition_ui_marsh:
-            definition_ui_marsh["field-class"] = "oarepo_runtime.i18n.ui_schema.MultilingualUIField"
+            definition_ui_marsh[
+                "field-class"
+            ] = "oarepo_runtime.services.schema.i18n_ui.MultilingualUIField"
         deepmerge(definition_ui, {"marshmallow": definition_ui_marsh})
         deepmerge(definition, {"ui": definition_ui})
         super().prepare(context)
@@ -60,7 +64,9 @@ class I18nDataType(NestedDataType):
         if "schema-class" not in definition_marsh:
             definition_marsh["class"] = None
         if "field-class" not in definition_marsh:
-            definition_marsh["field-class"] = "oarepo_runtime.i18n.schema.I18nStrField"
+            definition_marsh[
+                "field-class"
+            ] = "oarepo_runtime.services.schema.i18n.I18nStrField"
 
         if "generate" not in definition_marsh:
             definition_marsh["generate"] = False
@@ -94,7 +100,9 @@ class I18nDataType(NestedDataType):
         if "schema-class" not in definition_ui_marsh:
             definition_ui_marsh["class"] = None
         if "field-class" not in definition_ui_marsh:
-            definition_ui_marsh["field-class"] = "oarepo_runtime.i18n.ui_schema.I18nStrUIField"
+            definition_ui_marsh[
+                "field-class"
+            ] = "oarepo_runtime.services.schema.i18n_ui.I18nStrUIField"
 
         if "lang_field" in mult_definition:
             if "arguments" not in definition_ui_marsh:

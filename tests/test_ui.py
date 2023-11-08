@@ -33,5 +33,3 @@ def test_validity():
     builder = create_builder_from_entrypoints(filesystem=filesystem)
 
     builder.build(schema, "record", ["record"], "")
-
-

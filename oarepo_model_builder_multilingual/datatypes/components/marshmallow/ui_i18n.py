@@ -8,9 +8,8 @@ from oarepo_model_builder.datatypes.components import (
 from oarepo_model_builder.datatypes.components.marshmallow import MarshmallowField
 from oarepo_model_builder.datatypes.components.marshmallow.graph import MarshmallowClass
 from oarepo_model_builder.utils.absolute_class import convert_to_absolute_class_name
-from oarepo_model_builder.utils.python_name import qualified_name
-from oarepo_model_builder.utils.python_name import (
-    Import)
+from oarepo_model_builder.utils.python_name import Import, qualified_name
+
 from oarepo_model_builder_multilingual.datatypes import I18nDataType
 
 
@@ -65,7 +64,8 @@ class I18nMarshmallowMixin:
         classes.append(
             MarshmallowClass(
                 class_name=marshmallow["class"],
-                base_classes=marshmallow.get("base-classes", []) or ["marshmallow.Schema"],
+                base_classes=marshmallow.get("base-classes", [])
+                or ["marshmallow.Schema"],
                 imports=Import.from_config(marshmallow.get("imports", [])),
                 fields=fields,
                 strict=True,
