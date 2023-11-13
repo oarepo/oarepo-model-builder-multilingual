@@ -62,7 +62,7 @@ def test_generated_schema_ui():
 
 import marshmallow as ma
 
-from oarepo_runtime.i18n.ui_schema import I18nStrUIField
+from oarepo_runtime.services.schema.i18n_ui import I18nStrUIField
 from test import FieldClassa
 
 from oarepo_runtime.services.schema.ui import InvenioUISchema

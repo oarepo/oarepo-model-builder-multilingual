@@ -15,7 +15,9 @@ class SupportedLangs(ExtendablePartSchema):
 
 
 class LanguagesSettingsSchema(ExtendablePartSchema):
-    supported_langs = fields.Raw(data_key="supported-langs",attribute="supported-langs", required=False)
+    supported_langs = fields.Raw(
+        data_key="supported-langs", attribute="supported-langs", required=False
+    )
 
 
 validators = {

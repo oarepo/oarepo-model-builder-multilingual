@@ -1,8 +1,6 @@
 import marshmallow as ma
 from oarepo_model_builder.datatypes import DataTypeComponent, ModelDataType
-from oarepo_model_builder.datatypes.components import (
-    RecordDumperModelComponent
-)
+from oarepo_model_builder.datatypes.components import RecordDumperModelComponent
 from oarepo_model_builder.datatypes.components.model.utils import set_default
 from oarepo_model_builder.utils.python_name import parent_module
 from oarepo_model_builder.validation.utils import ImportSchema
@@ -51,7 +49,9 @@ class MultilingualDumperModelComponent(DataTypeComponent):
         )
 
     def before_model_prepare(self, datatype, *, context, **kwargs):
-        multilingual_record_module = parent_module(datatype.definition["record"]["module"])
+        multilingual_record_module = parent_module(
+            datatype.definition["record"]["module"]
+        )
 
         multilingual_dumper = set_default(datatype, "multilingual-dumper", {})
         multilingual_dumper.setdefault("generate", True)
@@ -59,16 +59,19 @@ class MultilingualDumperModelComponent(DataTypeComponent):
         multilingual_dumper_module = multilingual_dumper.setdefault(
             "module", f"{multilingual_record_module}.dumpers.multilingual"
         )
-        multilingual_dumper.setdefault("class", f"{multilingual_dumper_module}.MultilingualSearchDumperExt")
-        multilingual_dumper.setdefault("base-classes", ["oarepo_runtime.i18n.dumper.MultilingualDumper"])
+        multilingual_dumper.setdefault(
+            "class", f"{multilingual_dumper_module}.MultilingualSearchDumperExt"
+        )
+        multilingual_dumper.setdefault(
+            "base-classes",
+            ["oarepo_runtime.records.dumpers.multilingual_dumper.MultilingualDumper"],
+        )
         multilingual_dumper.setdefault("extra-code", "")
         multilingual_dumper.setdefault("extensions", [])
-        multilingual_dumper.setdefault(
-            "imports", []
-        )
+        multilingual_dumper.setdefault("imports", [])
         dumper = set_default(datatype, "record-dumper", {})
         dumper.setdefault("generate", True)
         extensions = dumper.setdefault("extensions", [])
-        extensions.append(f"{{{{{multilingual_dumper_module}.MultilingualSearchDumperExt}}}}()")
-
-
+        extensions.append(
+            f"{{{{{multilingual_dumper_module}.MultilingualSearchDumperExt}}}}()"
+        )
