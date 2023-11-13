@@ -34,7 +34,4 @@ source $VENV_TESTS/bin/activate
 pip install -U setuptools pip wheel
 pip install "oarepo>=$OAREPO_VERSION,<$OAREPO_VERSION_MAX"
 pip install "./tests/example-model[tests]"
-pytest tests/example-model/tests
-#pip install pyyaml opensearch-dsl
-#pip install pytest-invenio
-#pip install oarepo-model-builder
+pytest tests/example-model/tests -vvv
