@@ -3,7 +3,6 @@
 set -e
 
 OAREPO_VERSION=${OAREPO_VERSION:-11}
-OAREPO_VERSION_MAX=$((OAREPO_VERSION+1))
 
 BUILDER_VENV=".venv-builder"
 if test -d $BUILDER_VENV ; then
@@ -12,7 +11,7 @@ fi
 
 python3 -m venv $BUILDER_VENV
 . $BUILDER_VENV/bin/activate
-pip install "oarepo>=$OAREPO_VERSION,<$OAREPO_VERSION_MAX"
+pip install "oarepo[tests]==${OAREPO_VERSION}.*"
 pip install -U setuptools pip wheel
 
 pip install -e ".[tests]"
@@ -32,6 +31,6 @@ python3 -m venv $VENV_TESTS
 source $VENV_TESTS/bin/activate
 
 pip install -U setuptools pip wheel
-pip install "oarepo>=$OAREPO_VERSION,<$OAREPO_VERSION_MAX"
+pip install "oarepo[tests]==${OAREPO_VERSION}.*"
 pip install "./tests/example-model[tests]"
 pytest tests/example-model/tests -vvv
