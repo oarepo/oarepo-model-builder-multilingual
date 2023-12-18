@@ -193,7 +193,7 @@ from oarepo_runtime.services.schema.i18n import I18nStrField
 
 from marshmallow import Schema
 
-from marshmallow import Schema
+from oarepo_runtime.services.schema.marshmallow import DictOnlySchema
 
 class TestSchema(Schema):
 
@@ -207,7 +207,7 @@ class TestSchema(Schema):
     
     c = ma_fields.Nested(lambda: CSchema())
 
-class CSchema(Schema):
+class CSchema(DictOnlySchema):
 
     class Meta:
         unknown = ma.RAISE
