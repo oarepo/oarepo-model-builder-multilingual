@@ -23,7 +23,7 @@ class I18nStrFacetsComponent(NestedFacetsComponent, RegularFacetsComponent):
                 searchable=facet_section.get("searchable"),
                 imports=facet_section.get("imports", []),
                 facet=facet_section.get("facet", None),
-                facet_groups=facet_section.get("facet-groups", ["default"]),
+                facet_groups=facet_section.get("facet-groups", {"_default": 100000}),
             )
             label = facet_section.get(
                 "label", f'{datatype.path.replace(".", "/")}.label'
