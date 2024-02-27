@@ -54,35 +54,16 @@ from invenio_records_resources.services import SearchOptions as InvenioSearchOpt
 from oarepo_runtime.i18n import lazy_gettext as _
 from . import facets
 
-
-
 class TestSearchOptions(InvenioSearchOptions):
     \"""TestRecord search options.\"""
 
-    facet_groups={
-        'default':{
-            'a_cs':facets.a_cs,
-            'a_en':facets.a_en,
-            **getattr(InvenioSearchOptions,'facet_groups',{}).get('default',{})
-        },
-    }
+    facet_groups={}
 
     facets = {
-
-
-    'a_cs': facets.a_cs,
-
-
-
-    'a_en': facets.a_en,
-
-
-
-    'a_lang': facets.a_lang,
-
-
-    **getattr(InvenioSearchOptions, 'facets', {})
-
+        'a_cs': facets.a_cs,
+        'a_en': facets.a_en,
+        'a_lang': facets.a_lang,
+        **getattr(InvenioSearchOptions, 'facets', {})
     }
     """,
     )
