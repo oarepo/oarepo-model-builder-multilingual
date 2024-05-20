@@ -7,7 +7,9 @@ class MultilingualSchema(ma.Schema):
     class Meta:
         unknown = ma.RAISE
 
-    lang_field = fields.String(data_key="lang-field", required=False)
+    lang_name = fields.String(data_key="lang-name", required=False)
+    value_name = fields.String(data_key="value-name", required=False)
+    value_type = fields.String(data_key="value-type", required=False)
     value_field = fields.String(data_key="value-field", required=False)
     i18n = fields.Boolean(required=False)
     usei18n = fields.Boolean(required=False)

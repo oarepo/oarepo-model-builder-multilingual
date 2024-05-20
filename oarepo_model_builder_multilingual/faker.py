@@ -15,7 +15,7 @@ def multilingual_sample_provider(faker, settings, stack, params):
             definition = stack.stack[-1]["multilingual"]
         else:
             definition = {}
-        lang_name = definition.get("lang-field", "lang")
+        lang_name = definition.get("lang-name", "lang")
         if stack.key == lang_name:
             return random.choice(list(settings["supported-langs"].keys()))
 

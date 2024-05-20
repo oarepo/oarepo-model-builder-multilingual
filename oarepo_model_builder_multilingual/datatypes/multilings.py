@@ -54,13 +54,16 @@ class I18nDataType(NestedDataType):
         definition = self.definition
         mult_definition = definition.get("multilingual", {})
 
-        lang = mult_definition.get("lang_field", "lang")
-        value = mult_definition.get("value_field", "value")
+        lang = mult_definition.get("lang_name", "lang")
+        value = mult_definition.get("value_name", "value")
+        value_type = mult_definition.get("value_type", "html")
+
         definition["type"] = "i18nStr"
 
         """marshmallow"""
 
         definition_marsh = definition.get("marshmallow", {})
+
         if "schema-class" not in definition_marsh:
             definition_marsh["class"] = None
         if "field-class" not in definition_marsh:
@@ -71,15 +74,16 @@ class I18nDataType(NestedDataType):
         if "generate" not in definition_marsh:
             definition_marsh["generate"] = False
 
-        if "lang_field" in mult_definition:
+        if "lang_name" in mult_definition:
             if "arguments" not in definition_marsh:
                 definition_marsh["arguments"] = [
-                    f'lang_field={mult_definition["lang_field"]}'
+                    f'lang_name={mult_definition["lang_name"]}'
                 ]
             else:
                 definition_marsh["arguments"].append(
-                    f'lang_field={mult_definition["lang_field"]}'
+                    f'lang_name={mult_definition["lang_name"]}'
                 )
+
         if "value_field" in mult_definition:
             if "arguments" not in definition_marsh:
                 definition_marsh["arguments"] = [
@@ -88,6 +92,15 @@ class I18nDataType(NestedDataType):
             else:
                 definition_marsh["arguments"].append(
                     f'value_field={mult_definition["value_field"]}'
+                )
+        if "value_name" in mult_definition:
+            if "arguments" not in definition_marsh:
+                definition_marsh["arguments"] = [
+                    f'value_name={mult_definition["value_name"]}'
+                ]
+            else:
+                definition_marsh["arguments"].append(
+                    f'value_name={mult_definition["value_name"]}'
                 )
         deepmerge(definition, {"marshmallow": definition_marsh})
 
@@ -104,23 +117,23 @@ class I18nDataType(NestedDataType):
                 "field-class"
             ] = "oarepo_runtime.services.schema.i18n_ui.I18nStrUIField"
 
-        if "lang_field" in mult_definition:
+        if "lang_name" in mult_definition:
             if "arguments" not in definition_ui_marsh:
                 definition_ui_marsh["arguments"] = [
-                    f'lang_field={mult_definition["lang_field"]}'
+                    f'lang_name={mult_definition["lang_name"]}'
                 ]
             else:
                 definition_ui_marsh["arguments"].append(
-                    f'lang_field={mult_definition["lang_field"]}'
+                    f'lang_name={mult_definition["lang_name"]}'
                 )
-        if "value_field" in mult_definition:
+        if "value_name" in mult_definition:
             if "arguments" not in definition_ui_marsh:
                 definition_ui_marsh["arguments"] = [
-                    f'value_field={mult_definition["value_field"]}'
+                    f'value_name={mult_definition["value_name"]}'
                 ]
             else:
                 definition_ui_marsh["arguments"].append(
-                    f'value_field={mult_definition["value_field"]}'
+                    f'value_name={mult_definition["value_name"]}'
                 )
 
         deepmerge(definition_ui, {"marshmallow": definition_ui_marsh})
@@ -130,7 +143,7 @@ class I18nDataType(NestedDataType):
         definition["sample"] = {"skip": False}
 
         def_properties[lang] = {"type": "keyword", "mapping": {"ignore_above": 256}}
-        def_properties[value] = {"type": "fulltext+keyword"}
+        def_properties[value] = {"type": value_type}
         definition["properties"] = def_properties
 
         super().prepare(context)

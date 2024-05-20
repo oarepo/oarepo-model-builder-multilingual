@@ -104,7 +104,7 @@ def test_facets():
                     "b": "keyword",
                     "c": {
                         "type": "i18nStr",
-                        "multilingual": {"lang-field": "language"},
+                        "multilingual": {"lang-name": "language"},
                     },
                     "a": {"type": "multilingual"},
                     "e": {
