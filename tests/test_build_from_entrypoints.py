@@ -66,10 +66,7 @@ def test_mapping():
                     "properties": {
                         "lang": {"type": "keyword", "ignore_above": 256},
                         "value": {
-                            "type": "text",
-                            "fields": {
-                                "keyword": {"type": "keyword", "ignore_above": 256}
-                            },
+                            "type": "text"
                         },
                     },
                 },
@@ -261,8 +258,8 @@ def test_generated_schema2():
                         "type": "i18nStr",
                         "marshmallow": {"arguments": ["test=cosi"]},
                         "multilingual": {
-                            "lang-field": "language",
-                            "value-field": "val",
+                            "lang-name": "language",
+                            "value-name": "val",
                         },
                     },
                 },
@@ -303,7 +300,7 @@ class TestSchema(Schema):
 
     a = FieldClassa(test=cosi)
 
-    b = I18nStrField(test=cosi, lang_field=language, value_field=val)
+    b = I18nStrField(test=cosi, lang_name=language, value_name=val)
 
     """,
     )

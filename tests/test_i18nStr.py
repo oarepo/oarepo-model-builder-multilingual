@@ -21,8 +21,8 @@ def test_generated_jsonschema():
                     "b": {
                         "type": "i18nStr",
                         "multilingual": {
-                            "lang-field": "language",
-                            "value-field": "val",
+                            "lang-name": "language",
+                            "value-name": "val",
                         },
                     },
                 },
@@ -75,8 +75,8 @@ def test_generated_mapping():
                     "b": {
                         "type": "i18nStr",
                         "multilingual": {
-                            "lang-field": "language",
-                            "value-field": "val",
+                            "lang-name": "language",
+                            "value-name": "val",
                         },
                     },
                 },
@@ -105,10 +105,7 @@ def test_generated_mapping():
                     "properties": {
                         "lang": {"type": "keyword", "ignore_above": 256},
                         "value": {
-                            "type": "text",
-                            "fields": {
-                                "keyword": {"type": "keyword", "ignore_above": 256}
-                            },
+                            "type": "text"
                         },
                     },
                 },
@@ -125,10 +122,7 @@ def test_generated_mapping():
                     "properties": {
                         "language": {"type": "keyword", "ignore_above": 256},
                         "val": {
-                            "type": "text",
-                            "fields": {
-                                "keyword": {"type": "keyword", "ignore_above": 256}
-                            },
+                            "type": "text"
                         },
                     },
                 },
@@ -159,8 +153,8 @@ def test_generated_schema():
                     "b": {
                         "type": "i18nStr",
                         "multilingual": {
-                            "lang-field": "language",
-                            "value-field": "val",
+                            "lang-name": "language",
+                            "value-name": "val",
                         },
                     },
                     "c": {"properties": {"d": "keyword"}},
@@ -203,7 +197,7 @@ class TestSchema(Schema):
 
     a = I18nStrField()
 
-    b = I18nStrField(lang_field=language, value_field=val)
+    b = I18nStrField(lang_name=language, value_name=val)
     
     c = ma_fields.Nested(lambda: CSchema())
 

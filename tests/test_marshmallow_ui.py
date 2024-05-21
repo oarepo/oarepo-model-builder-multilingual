@@ -33,8 +33,8 @@ def test_generated_schema_ui():
                             }
                         },
                         "multilingual": {
-                            "lang-field": "language",
-                            "value-field": "hodnota",
+                            "lang-name": "language",
+                            "value-name": "hodnota",
                         },
                     },
                 },
@@ -76,6 +76,6 @@ class TestUISchema(InvenioUISchema):
         
         
     a = FieldClassa(I18nStrUIField(), test=cosi)
-    b = I18nStrUIField(test=cosi, lang_field=language, value_field=hodnota)
+    b = I18nStrUIField(test=cosi, lang_name=language, value_name=hodnota)
     """,
     )

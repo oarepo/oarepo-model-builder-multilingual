@@ -3,6 +3,38 @@ from oarepo_model_builder.datatypes.containers import ArrayDataType, NestedDataT
 from oarepo_model_builder.utils.deepmerge import deepmerge
 
 
+def multilingual_definition_update(definition_marsh, mult_definition):
+    if "lang-name" in mult_definition:
+        if "arguments" not in definition_marsh:
+            definition_marsh["arguments"] = [
+                f'lang_name={mult_definition["lang-name"]}'
+            ]
+        else:
+            definition_marsh["arguments"].append(
+                f'lang_name={mult_definition["lang-name"]}'
+            )
+
+    if "value-field" in mult_definition:
+        if "arguments" not in definition_marsh:
+            definition_marsh["arguments"] = [
+                f'value_field={mult_definition["value-field"]}'
+            ]
+        else:
+            definition_marsh["arguments"].append(
+                f'value_field={mult_definition["value-field"]}'
+            )
+    if "value-name" in mult_definition:
+        if "arguments" not in definition_marsh:
+            definition_marsh["arguments"] = [
+                f'value_name={mult_definition["value-name"]}'
+            ]
+        else:
+            definition_marsh["arguments"].append(
+                f'value_name={mult_definition["value-name"]}'
+            )
+
+    return definition_marsh
+
 class MultilingualDataType(ArrayDataType):
     schema_type = "array"
     mapping_type = "multilingual"
@@ -54,15 +86,19 @@ class I18nDataType(NestedDataType):
         definition = self.definition
         mult_definition = definition.get("multilingual", {})
 
-        lang = mult_definition.get("lang_field", "lang")
-        value = mult_definition.get("value_field", "value")
+        lang = mult_definition.get("lang-name", "lang")
+        value = mult_definition.get("value-name", "value")
+        value_type = mult_definition.get("value-type", "html")
+
         definition["type"] = "i18nStr"
 
         """marshmallow"""
 
         definition_marsh = definition.get("marshmallow", {})
+
         if "schema-class" not in definition_marsh:
             definition_marsh["class"] = None
+
         if "field-class" not in definition_marsh:
             definition_marsh[
                 "field-class"
@@ -71,24 +107,7 @@ class I18nDataType(NestedDataType):
         if "generate" not in definition_marsh:
             definition_marsh["generate"] = False
 
-        if "lang_field" in mult_definition:
-            if "arguments" not in definition_marsh:
-                definition_marsh["arguments"] = [
-                    f'lang_field={mult_definition["lang_field"]}'
-                ]
-            else:
-                definition_marsh["arguments"].append(
-                    f'lang_field={mult_definition["lang_field"]}'
-                )
-        if "value_field" in mult_definition:
-            if "arguments" not in definition_marsh:
-                definition_marsh["arguments"] = [
-                    f'value_field={mult_definition["value_field"]}'
-                ]
-            else:
-                definition_marsh["arguments"].append(
-                    f'value_field={mult_definition["value_field"]}'
-                )
+        definition_marsh = multilingual_definition_update(definition_marsh, mult_definition)
         deepmerge(definition, {"marshmallow": definition_marsh})
 
         """marshmallow ui"""
@@ -104,25 +123,7 @@ class I18nDataType(NestedDataType):
                 "field-class"
             ] = "oarepo_runtime.services.schema.i18n_ui.I18nStrUIField"
 
-        if "lang_field" in mult_definition:
-            if "arguments" not in definition_ui_marsh:
-                definition_ui_marsh["arguments"] = [
-                    f'lang_field={mult_definition["lang_field"]}'
-                ]
-            else:
-                definition_ui_marsh["arguments"].append(
-                    f'lang_field={mult_definition["lang_field"]}'
-                )
-        if "value_field" in mult_definition:
-            if "arguments" not in definition_ui_marsh:
-                definition_ui_marsh["arguments"] = [
-                    f'value_field={mult_definition["value_field"]}'
-                ]
-            else:
-                definition_ui_marsh["arguments"].append(
-                    f'value_field={mult_definition["value_field"]}'
-                )
-
+        definition_ui_marsh = multilingual_definition_update(definition_ui_marsh, mult_definition)
         deepmerge(definition_ui, {"marshmallow": definition_ui_marsh})
         deepmerge(definition, {"ui": definition_ui})
 
@@ -130,7 +131,7 @@ class I18nDataType(NestedDataType):
         definition["sample"] = {"skip": False}
 
         def_properties[lang] = {"type": "keyword", "mapping": {"ignore_above": 256}}
-        def_properties[value] = {"type": "fulltext+keyword"}
+        def_properties[value] = {"type": value_type}
         definition["properties"] = def_properties
 
         super().prepare(context)
