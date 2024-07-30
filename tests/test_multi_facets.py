@@ -11,6 +11,7 @@ def test_search_options():
         "test.yaml",
         model_content={
             "settings": {
+                "i18n-languages": ["cs", "en"],
                 "supported-langs": {
                     "cs": {
                         "text": {
@@ -74,6 +75,7 @@ def test_facets():
         "test.yaml",
         model_content={
             "settings": {
+                "i18n-languages": ["cs", "en"],
                 "supported-langs": {
                     "cs": {
                         "text": {

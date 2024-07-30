@@ -10,7 +10,9 @@ def test_generated_schema_ui():
     schema = load_model(
         "test.yaml",
         model_content={
+
             "settings": {
+                "i18n-languages": ["cs", "en"],
                 "supported-langs": {"cs": {}, "en": {}},
             },
             "record": {

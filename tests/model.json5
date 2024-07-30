@@ -1,5 +1,6 @@
 {
   "settings": {
+    "i18n-languages": ["cs", "en"],
     "supported-langs": {
       "cs": {
       },

@@ -11,7 +11,9 @@ def test_generated_jsonschema():
     schema = load_model(
         "test.yaml",
         model_content={
+
             "settings": {
+                "i18n-languages": ["cs", "en"],
                 "supported-langs": {"cs": {}, "en": {}},
             },
             "record": {
@@ -65,7 +67,9 @@ def test_generated_mapping():
     schema = load_model(
         "test.yaml",
         model_content={
+
             "settings": {
+                "i18n-languages": ["cs", "en"],
                 "supported-langs": {"cs": {}, "en": {}},
             },
             "record": {
@@ -149,7 +153,9 @@ def test_generated_schema():
     schema = load_model(
         "test.yaml",
         model_content={
+
             "settings": {
+                "i18n-languages": ["cs", "en"],
                 "supported-langs": {"cs": {}, "en": {}},
             },
             "record": {
@@ -223,7 +229,9 @@ def test_mapping():
     schema = load_model(
         "test.yaml",
         model_content={
+
             "settings": {
+                "i18n-languages": ["cs", "en"],
                 "supported-langs": {"cs": {}, "en": {}},
             },
             "record": {

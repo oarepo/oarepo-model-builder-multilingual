@@ -134,7 +134,9 @@ def test_mapping2():
     schema = load_model(
         "test.yaml",
         model_content={
+
             "settings": {
+                "i18n-languages": ["cs", "en"],
                 "supported-langs": {
                     "cs": {
                         "keyword": {"type": "keyword", "ignore_above": 256},
@@ -211,7 +213,9 @@ def test_dumper_file():
     schema = load_model(
         "test.yaml",
         model_content={
+
             "settings": {
+                "i18n-languages": ["cs", "en"],
                 "supported-langs": {"cs": {}, "en": {}},
             },
             "record": {
@@ -262,7 +266,9 @@ def test_generated_schema2():
     schema = load_model(
         "test.yaml",
         model_content={
+
             "settings": {
+                "i18n-languages": ["cs", "en"],
                 "supported-langs": {"cs": {}, "en": {}},
             },
             "record": {
@@ -331,7 +337,9 @@ def test_generated_schema():
     schema = load_model(
         DUMMY_YAML,
         model_content={
+
             "settings": {
+                "i18n-languages": ["cs", "en"],
                 "supported-langs": {
                     "cs": {
                         "text": {
@@ -391,7 +399,9 @@ def test_sample_data():
     schema = load_model(
         "test.yaml",
         model_content={
+
             "settings": {
+                "i18n-languages": ["cs", "en"],
                 "supported-langs": {
                     "cs": {
                         "text": {
@@ -449,7 +459,9 @@ def test_non_i18n_mapping():
     schema = load_model(
         "test.yaml",
         model_content={
-            "settings": {"supported-langs": {"cs": {}, "en": {}}},
+
+            "settings": {"i18n-languages": ["cs", "en"],
+                         "supported-langs": {"cs": {}, "en": {}}},
             "record": {
                 "module": {"qualified": "test"},
                 "properties": {
