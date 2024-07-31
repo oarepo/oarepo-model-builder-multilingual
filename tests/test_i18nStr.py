@@ -4,8 +4,7 @@ import re
 
 from oarepo_model_builder.entrypoints import create_builder_from_entrypoints, load_model
 
-from tests.mock_filesystem import MockFilesystem
-
+from oarepo_model_builder.fs import InMemoryFileSystem
 
 def test_generated_jsonschema():
     schema = load_model(
@@ -35,7 +34,7 @@ def test_generated_jsonschema():
         autoflake=False,
     )
 
-    filesystem = MockFilesystem()
+    filesystem = InMemoryFileSystem()
     builder = create_builder_from_entrypoints(filesystem=filesystem)
 
     builder.build(schema, "record", ["record"], "")
@@ -91,7 +90,7 @@ def test_generated_mapping():
         autoflake=False,
     )
 
-    filesystem = MockFilesystem()
+    filesystem = InMemoryFileSystem()
     builder = create_builder_from_entrypoints(filesystem=filesystem)
 
     builder.build(schema, "record", ["record"], "")
@@ -178,7 +177,7 @@ def test_generated_schema():
         autoflake=False,
     )
 
-    filesystem = MockFilesystem()
+    filesystem = InMemoryFileSystem()
     builder = create_builder_from_entrypoints(filesystem=filesystem)
 
     builder.build(schema, "record", ["record"], "")
@@ -262,7 +261,7 @@ def test_mapping():
         autoflake=False,
     )
 
-    filesystem = MockFilesystem()
+    filesystem = InMemoryFileSystem()
     builder = create_builder_from_entrypoints(filesystem=filesystem)
 
     builder.build(schema, "record", ["record"], "")
