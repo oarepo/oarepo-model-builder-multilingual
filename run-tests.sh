@@ -11,7 +11,7 @@ fi
 
 python3 -m venv $BUILDER_VENV
 . $BUILDER_VENV/bin/activate
-pip install -U setuptools pip wheel oarepo-model-builder-ui
+pip install -U setuptools pip wheel oarepo-model-builder-ui json5
 
 pip install -e ".[tests]"
 pytest tests -vvv

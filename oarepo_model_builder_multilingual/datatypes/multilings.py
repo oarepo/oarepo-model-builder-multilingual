@@ -128,17 +128,17 @@ class I18nDataType(NestedDataType):
         def_properties = definition.get("properties", {})
         definition["sample"] = {"skip": False}
 
-        lang_defintion, value_defintion = labels(mult_definition)
+        lang_definition, value_definition = labels(mult_definition)
 
         def_properties[lang] = {
             "type": "keyword",
             "mapping": {"ignore_above": 256},
             "required": True,
         }
-        deepmerge(def_properties[lang], lang_defintion)
+        deepmerge(def_properties[lang], lang_definition)
 
         def_properties[value] = {"type": "fulltext+keyword", "required": True}
-        deepmerge(def_properties[value], value_defintion)
+        deepmerge(def_properties[value], value_definition)
 
         definition["properties"] = def_properties
 
@@ -147,35 +147,26 @@ class I18nDataType(NestedDataType):
 
 def labels(mult_definition):
     definition = {
-        "labels": {
-            "lang_cs": mult_definition.get("lables", {}).get("lang_cs", "Jazyk"),
-            "lang_en": mult_definition.get("lables", {}).get("lang_en", "Language"),
-            "value_cs": mult_definition.get("lables", {}).get("value_cs", "Text"),
-            "value_en": mult_definition.get("lables", {}).get("value_en", "Text"),
+        "lang_def": {
+            "label.cs": mult_definition.get("lang_def", {}).get("label.cs", "Jazyk"),
+            "label.en": mult_definition.get("lang_def", {}).get("label.en", "Language"),
         },
-        "helps": {},
+        "value_def": {
+            "label.cs": mult_definition.get("value_def", {}).get("label.cs", "Text"),
+            "label.en": mult_definition.get("value_def", {}).get("label.en", "Text"),
+        },
     }
     deepmerge(mult_definition, definition)
 
     lang_definition = {}
     value_definition = {}
 
-    labels = mult_definition.get("labels", {})
-    for key, value in labels.items():
-        if key.startswith("lang_"):
-            lang_code = key.split("_")[-1]
-            lang_definition[f"label.{lang_code}"] = value
-        elif key.startswith("value_"):
-            lang_code = key.split("_")[-1]
-            value_definition[f"label.{lang_code}"] = value
+    langs = mult_definition.get("lang_def", {})
+    for key, value in langs.items():
+        lang_definition[key] = value
 
-    helps = mult_definition.get("helps", {})
-    for key, value in helps.items():
-        if key.startswith("lang_"):
-            lang_code = key.split("_")[-1]
-            lang_definition[f"help.{lang_code}"] = value
-        elif key.startswith("value_"):
-            lang_code = key.split("_")[-1]
-            value_definition[f"help.{lang_code}"] = value
+    values = mult_definition.get("value_def", {})
+    for key, value in values.items():
+        value_definition[key] = value
 
     return lang_definition, value_definition

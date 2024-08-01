@@ -5,6 +5,7 @@ from oarepo_model_builder.entrypoints import create_builder_from_entrypoints, lo
 
 from oarepo_model_builder.fs import InMemoryFileSystem
 
+
 def test_model():
     schema = load_model(
         "test.yaml",
@@ -29,8 +30,8 @@ def test_model():
                         "label.en": "multilabel.en",
                         "label.cs": "multilabel.cs",
                         "multilingual": {
-                            "labels": {"lang_cs": "vlastni Jazyk2", "lang_en": "vlastni Language2"},
-                            "helps": {"value_cs": "vlastni Napoveda value", "lang_en": "vlastni Help language"},
+                            "lang_def": {"label.cs": "vlastni Jazyk2", "label.en": "Language2"},
+                            "value_def": {"help.cs": "vlastni Napoveda", "help.en": "Helppp"},
                         },
                     },
                     "c": {
@@ -39,8 +40,8 @@ def test_model():
                         "label.en": "multilabel.en",
                         "label.cs": "multilabel.cs",
                         "multilingual": {
-                            "labels": {"lang_cs": "Jazyk2", "lang_en": "Language2"},
-                            "helps": {"lang_cs": "Napoveda", "lang_en": "Help"},
+                            "lang_def": {"label.cs": "vlastni Jazyk2", "label.en": "Language2"},
+                            "value_def": {"label.cs": "Text2", "help.cs": "vlastni Napoveda", "help.en": "Helppp"},
                         },
                     },
                 },
@@ -58,28 +59,31 @@ def test_model():
     data = json5.load(
         builder.filesystem.open(os.path.join("test", "models", "records.json"))
     )
-    print(data["model"]["properties"]["a"])
+    # print(data["model"]["properties"]["c"])
     assert data["model"]["properties"]["a"] == {
-        'type': 'array', 'ui': {'detail': 'multilingual', 'marshmallow': {
-            'field-class': 'oarepo_runtime.services.schema.i18n_ui.MultilingualUIField'}}, 'multilingual': {
-            'labels': {'lang_cs': 'vlastni Jazyk2', 'lang_en': 'vlastni Language2', 'value_cs': 'Text',
-                       'value_en': 'Text'},
-            'helps': {'value_cs': 'vlastni Napoveda value', 'lang_en': 'vlastni Help language'}},
+        'type': 'array',
+        'ui': {'detail': 'multilingual',
+               'marshmallow': {'field-class': 'oarepo_runtime.services.schema.i18n_ui.MultilingualUIField'}},
+        'multilingual':
+            {'lang_def':
+                 {'label.cs': 'vlastni Jazyk2', 'label.en': 'Language2'},
+             'value_def':
+                 {'help.cs': 'vlastni Napoveda', 'help.en': 'Helppp', 'label.cs': 'Text', 'label.en': 'Text'}},
         'label.en': 'multilabel.en', 'label.cs': 'multilabel.cs',
         'marshmallow': {'field-class': 'oarepo_runtime.services.schema.i18n.MultilingualField'},
-        'items': {'type': 'i18nStr', 'multilingual': {
-            'labels': {'lang_cs': 'vlastni Jazyk2', 'lang_en': 'vlastni Language2', 'value_cs': 'Text',
-                       'value_en': 'Text'},
-            'helps': {'value_cs': 'vlastni Napoveda value', 'lang_en': 'vlastni Help language'}},
+        'items': {'type': 'i18nStr',
+                  'multilingual': {'lang_def': {'label.cs': 'vlastni Jazyk2', 'label.en': 'Language2'},
+                                   'value_def': {'help.cs': 'vlastni Napoveda', 'help.en': 'Helppp', 'label.cs': 'Text',
+                                                 'label.en': 'Text'}},
                   'marshmallow': {'class': None, 'field-class': 'oarepo_runtime.services.schema.i18n.I18nStrField',
-                                  'generate': False}, 'ui': {'detail': 'multilingual', 'marshmallow': {'class': None,
-                                                                                                       'field-class': 'oarepo_runtime.services.schema.i18n_ui.I18nStrUIField'}},
+                                  'generate': False},
+                  'ui': {'detail': 'multilingual', 'marshmallow': {'class': None,
+                                                                   'field-class': 'oarepo_runtime.services.schema.i18n_ui.I18nStrUIField'}},
                   'sample': {'skip': False}, 'properties': {
                 'lang': {'type': 'keyword', 'mapping': {'ignore_above': 256}, 'required': True,
-                         'label.cs': 'vlastni Jazyk2', 'label.en': 'vlastni Language2',
-                         'help.en': 'vlastni Help language'},
-                'value': {'type': 'fulltext+keyword', 'required': True, 'label.cs': 'Text', 'label.en': 'Text',
-                          'help.cs': 'vlastni Napoveda value'}}}}
+                         'label.cs': 'vlastni Jazyk2', 'label.en': 'Language2'},
+                'value': {'type': 'fulltext+keyword', 'required': True, 'help.cs': 'vlastni Napoveda',
+                          'help.en': 'Helppp', 'label.cs': 'Text', 'label.en': 'Text'}}}}
 
     assert data["model"]["properties"]["b"] == {
         "type": "keyword",
@@ -88,44 +92,17 @@ def test_model():
     }
 
     assert data["model"]["properties"]["c"] == {
-        "type": "i18nStr",
-        "ui": {
-            "detail": "multilingual",
-            "marshmallow": {
-                "class": None,
-                "field-class": "oarepo_runtime.services.schema.i18n_ui.I18nStrUIField",
-            },
-        },
-        "multilingual": {
-            "labels": {
-                "lang_cs": "Jazyk2",
-                "lang_en": "Language2",
-                "value_cs": "Text",
-                "value_en": "Text",
-            },
-            "helps": {"lang_cs": "Napoveda", "lang_en": "Help"},
-        },
-        "label.en": "multilabel.en",
-        "label.cs": "multilabel.cs",
-        "marshmallow": {
-            "class": None,
-            "field-class": "oarepo_runtime.services.schema.i18n.I18nStrField",
-            "generate": False,
-        },
-        "sample": {"skip": False},
-        "properties": {
-            "lang": {
-                "type": "keyword",
-                "mapping": {"ignore_above": 256},
-                "required": True,
-                "label.cs": "Jazyk2",
-                "label.en": "Language2",
-                "help.cs": "Napoveda",
-                "help.en": "Help",
-            },
-            "value": {'label.cs': 'Text',
-                          'label.en': 'Text',
-                          'required': True,
-                          'type': 'fulltext+keyword'},
-        },
-    }
+        'type': 'i18nStr',
+        'ui': {'detail': 'multilingual',
+               'marshmallow': {'class': None, 'field-class': 'oarepo_runtime.services.schema.i18n_ui.I18nStrUIField'}},
+        'multilingual': {'lang_def': {'label.cs': 'vlastni Jazyk2', 'label.en': 'Language2'},
+                         'value_def': {'label.cs': 'Text2', 'help.cs': 'vlastni Napoveda', 'help.en': 'Helppp',
+                                       'label.en': 'Text'}},
+        'label.en': 'multilabel.en', 'label.cs': 'multilabel.cs',
+        'marshmallow': {'class': None, 'field-class': 'oarepo_runtime.services.schema.i18n.I18nStrField',
+                        'generate': False},
+        'sample': {'skip': False}, 'properties': {
+            'lang': {'type': 'keyword', 'mapping': {'ignore_above': 256}, 'required': True,
+                     'label.cs': 'vlastni Jazyk2', 'label.en': 'Language2'},
+            'value': {'type': 'fulltext+keyword', 'required': True, 'label.cs': 'Text2', 'help.cs': 'vlastni Napoveda',
+                      'help.en': 'Helppp', 'label.en': 'Text'}}}
