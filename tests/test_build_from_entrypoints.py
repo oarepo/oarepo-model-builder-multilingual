@@ -5,7 +5,6 @@ import re
 from oarepo_model_builder.entrypoints import create_builder_from_entrypoints, load_model
 from oarepo_model_builder.fs import InMemoryFileSystem
 
-from tests.mock_filesystem import MockFilesystem
 from tests.test_helper import basic_schema
 
 DUMMY_YAML = "test.yaml"
@@ -134,7 +133,9 @@ def test_mapping2():
     schema = load_model(
         "test.yaml",
         model_content={
+
             "settings": {
+                "i18n-languages": ["cs", "en"],
                 "supported-langs": {
                     "cs": {
                         "keyword": {"type": "keyword", "ignore_above": 256},
@@ -179,7 +180,7 @@ def test_mapping2():
 def test_dumper():
     schema = basic_schema()
 
-    filesystem = MockFilesystem()
+    filesystem = InMemoryFileSystem()
     builder = create_builder_from_entrypoints(filesystem=filesystem)
 
     builder.build(schema, "record", ["record"], "")
@@ -211,7 +212,9 @@ def test_dumper_file():
     schema = load_model(
         "test.yaml",
         model_content={
+
             "settings": {
+                "i18n-languages": ["cs", "en"],
                 "supported-langs": {"cs": {}, "en": {}},
             },
             "record": {
@@ -242,7 +245,7 @@ def test_dumper_file():
         autoflake=False,
     )
 
-    filesystem = MockFilesystem()
+    filesystem = InMemoryFileSystem()
     builder = create_builder_from_entrypoints(filesystem=filesystem)
 
     builder.build(schema, "record", ["record"], "")
@@ -262,7 +265,9 @@ def test_generated_schema2():
     schema = load_model(
         "test.yaml",
         model_content={
+
             "settings": {
+                "i18n-languages": ["cs", "en"],
                 "supported-langs": {"cs": {}, "en": {}},
             },
             "record": {
@@ -291,7 +296,7 @@ def test_generated_schema2():
         autoflake=False,
     )
 
-    filesystem = MockFilesystem()
+    filesystem = InMemoryFileSystem()
     builder = create_builder_from_entrypoints(filesystem=filesystem)
 
     builder.build(schema, "record", ["record"], "")
@@ -331,7 +336,9 @@ def test_generated_schema():
     schema = load_model(
         DUMMY_YAML,
         model_content={
+
             "settings": {
+                "i18n-languages": ["cs", "en"],
                 "supported-langs": {
                     "cs": {
                         "text": {
@@ -355,7 +362,7 @@ def test_generated_schema():
         autoflake=False,
     )
 
-    filesystem = MockFilesystem()
+    filesystem = InMemoryFileSystem()
     builder = create_builder_from_entrypoints(filesystem=filesystem)
 
     builder.build(schema, "record", ["record"], "")
@@ -391,7 +398,9 @@ def test_sample_data():
     schema = load_model(
         "test.yaml",
         model_content={
+
             "settings": {
+                "i18n-languages": ["cs", "en"],
                 "supported-langs": {
                     "cs": {
                         "text": {
@@ -425,7 +434,7 @@ def test_sample_data():
         autoflake=False,
     )
 
-    filesystem = MockFilesystem()
+    filesystem = InMemoryFileSystem()
     builder = create_builder_from_entrypoints(filesystem=filesystem)
 
     builder.build(schema, "record", ["record"], "")
@@ -449,7 +458,9 @@ def test_non_i18n_mapping():
     schema = load_model(
         "test.yaml",
         model_content={
-            "settings": {"supported-langs": {"cs": {}, "en": {}}},
+
+            "settings": {"i18n-languages": ["cs", "en"],
+                         "supported-langs": {"cs": {}, "en": {}}},
             "record": {
                 "module": {"qualified": "test"},
                 "properties": {
@@ -468,7 +479,7 @@ def test_non_i18n_mapping():
         autoflake=False,
     )
 
-    filesystem = MockFilesystem()
+    filesystem = InMemoryFileSystem()
     builder = create_builder_from_entrypoints(filesystem=filesystem)
 
     builder.build(schema, "record", ["record"], "")

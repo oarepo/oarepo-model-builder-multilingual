@@ -8,6 +8,7 @@ def basic_schema():
         DUMMY_YAML,
         model_content={
             "settings": {
+                "i18n-languages": ["cs", "en"],
                 "supported-langs": {
                     "cs": {
                         "text": {

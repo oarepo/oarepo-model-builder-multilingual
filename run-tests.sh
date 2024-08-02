@@ -2,7 +2,7 @@
 
 set -e
 
-OAREPO_VERSION=${OAREPO_VERSION:-11}
+OAREPO_VERSION=${OAREPO_VERSION:-12}
 
 BUILDER_VENV=".venv-builder"
 if test -d $BUILDER_VENV ; then
@@ -11,7 +11,7 @@ fi
 
 python3 -m venv $BUILDER_VENV
 . $BUILDER_VENV/bin/activate
-pip install -U setuptools pip wheel
+pip install -U setuptools pip wheel oarepo-model-builder-ui json5
 
 pip install -e ".[tests]"
 pytest tests -vvv
