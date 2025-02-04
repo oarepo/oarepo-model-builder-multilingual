@@ -9,7 +9,7 @@ if test -d $BUILDER_VENV ; then
 	rm -rf $BUILDER_VENV
 fi
 
-python3 -m venv $BUILDER_VENV
+python3.12 -m venv $BUILDER_VENV
 . $BUILDER_VENV/bin/activate
 pip install -U setuptools pip wheel oarepo-model-builder-ui json5
 
@@ -31,7 +31,7 @@ if test -d $VENV_TESTS ; then
 fi
 oarepo-compile-model ./tests/model.json5 --output-directory example-model -vvv
 
-python3 -m venv $VENV_TESTS
+python3.12 -m venv $VENV_TESTS
 source $VENV_TESTS/bin/activate
 
 pip install -U setuptools pip wheel
