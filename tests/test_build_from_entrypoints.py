@@ -24,33 +24,90 @@ def test_json():
     print(data)
     data = json.loads(data)
     assert data == {
-        "type": "object",
-        "properties": {
-            "a": {
-                "items": {
-                    "type": "object",
-                    "properties": {
-                        "lang": {"type": "string"},
-                        "value": {"type": "string"},
-                    },
-                },
-                "type": "array",
-            },
-            "id": {"type": "string"},
-            "pid": {
-                "properties": {
-                    "obj_type": {"type": "string"},
-                    "pid_type": {"type": "string"},
-                    "pk": {"type": "integer"},
-                    "status": {"type": "string"},
-                },
-                "type": "object",
-            },
-            "created": {"type": "string", "format": "date-time"},
-            "updated": {"type": "string", "format": "date-time"},
-            "$schema": {"type": "string"},
+    "type": "object",
+    "properties": {
+        "$schema": {
+            "type": "string"
         },
+        "a": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "lang": {
+                        "type": "string"
+                    },
+                    "value": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "created": {
+            "type": "string",
+            "format": "date-time"
+        },
+        "deletion_status": {
+            "type": "string"
+        },
+        "id": {
+            "type": "string"
+        },
+        "is_deleted": {
+            "type": "boolean"
+        },
+        "is_published": {
+            "type": "boolean"
+        },
+        "pid": {
+            "type": "object",
+            "properties": {
+                "obj_type": {
+                    "type": "string"
+                },
+                "pid_type": {
+                    "type": "string"
+                },
+                "pk": {
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
+        "updated": {
+            "type": "string",
+            "format": "date-time"
+        },
+        "version_id": {
+            "type": "integer"
+        },
+        "versions": {
+            "type": "object",
+            "properties": {
+                "index": {
+                    "type": "integer"
+                },
+                "is_latest": {
+                    "type": "boolean"
+                },
+                "is_latest_draft": {
+                    "type": "boolean"
+                },
+                "latest_id": {
+                    "type": "string"
+                },
+                "latest_index": {
+                    "type": "integer"
+                },
+                "next_draft_id": {
+                    "type": "string"
+                }
+            }
+        }
     }
+}
 
 
 def test_mapping():
@@ -67,66 +124,133 @@ def test_mapping():
     print(data)
     data = json.loads(data)
     assert data == {
-        "mappings": {
-            "properties": {
-                "a": {
-                    "type": "nested",
-                    "properties": {
-                        "lang": {"type": "keyword", "ignore_above": 256},
-                        "value": {
-                            "type": "text",
-                            "fields": {
-                                "keyword": {"type": "keyword", "ignore_above": 256}
-                            },
-                        },
+    "mappings": {
+        "properties": {
+            "a_cs": {
+                "type": "text",
+                "analyzer": "czech",
+                "fields": {
+                    "sort": {
+                        "type": "icu_collation_keyword",
+                        "index": False,
+                        "language": "cs"
                     },
-                },
-                "a_cs": {
-                    "type": "text",
-                    "analyzer": "czech",
-                    "fields": {
-                        "sort": {
-                            "type": "icu_collation_keyword",
-                            "index": False,
-                            "language": "cs",
-                        },
-                        "keyword": {"type": "keyword", "ignore_above": 256},
+                    "keyword": {
+                        "type": "keyword",
+                        "ignore_above": 256
+                    }
+                }
+            },
+            "a_en": {
+                "type": "text",
+                "analyzer": "en",
+                "fields": {
+                    "sort": {
+                        "type": "icu_collation_keyword",
+                        "index": False,
+                        "language": "en"
                     },
-                },
-                "a_en": {
-                    "type": "text",
-                    "analyzer": "en",
-                    "fields": {
-                        "sort": {
-                            "type": "icu_collation_keyword",
-                            "index": False,
-                            "language": "en",
-                        },
-                        "keyword": {"type": "keyword", "ignore_above": 256},
+                    "keyword": {
+                        "type": "keyword",
+                        "ignore_above": 256
+                    }
+                }
+            },
+            "$schema": {
+                "type": "keyword",
+                "ignore_above": 1024
+            },
+            "a": {
+                "type": "nested",
+                "properties": {
+                    "lang": {
+                        "ignore_above": 256,
+                        "type": "keyword"
                     },
-                },
-                "id": {"type": "keyword", "ignore_above": 1024},
-                "pid": {
-                    "properties": {
-                        "obj_type": {"ignore_above": 1024, "type": "keyword"},
-                        "pid_type": {"ignore_above": 1024, "type": "keyword"},
-                        "pk": {"type": "integer"},
-                        "status": {"ignore_above": 1024, "type": "keyword"},
+                    "value": {
+                        "type": "text",
+                        "fields": {
+                            "keyword": {
+                                "type": "keyword",
+                                "ignore_above": 256
+                            }
+                        }
+                    }
+                }
+            },
+            "created": {
+                "type": "date",
+                "format": "strict_date_time||strict_date_time_no_millis||basic_date_time||basic_date_time_no_millis||basic_date||strict_date||strict_date_hour_minute_second||strict_date_hour_minute_second_fraction"
+            },
+            "deletion_status": {
+                "type": "keyword",
+                "ignore_above": 1024
+            },
+            "id": {
+                "type": "keyword",
+                "ignore_above": 1024
+            },
+            "is_deleted": {
+                "type": "boolean"
+            },
+            "is_published": {
+                "type": "boolean"
+            },
+            "pid": {
+                "type": "object",
+                "properties": {
+                    "obj_type": {
+                        "type": "keyword",
+                        "ignore_above": 1024
                     },
-                    "type": "object",
-                },
-                "created": {
-                    "format": "strict_date_time||strict_date_time_no_millis||basic_date_time||basic_date_time_no_millis||basic_date||strict_date||strict_date_hour_minute_second||strict_date_hour_minute_second_fraction",
-                    "type": "date",
-                },
-                "updated": {
-                    "format": "strict_date_time||strict_date_time_no_millis||basic_date_time||basic_date_time_no_millis||basic_date||strict_date||strict_date_hour_minute_second||strict_date_hour_minute_second_fraction",
-                    "type": "date",
-                },
-                "$schema": {"type": "keyword", "ignore_above": 1024},
+                    "pid_type": {
+                        "type": "keyword",
+                        "ignore_above": 1024
+                    },
+                    "pk": {
+                        "type": "integer"
+                    },
+                    "status": {
+                        "type": "keyword",
+                        "ignore_above": 1024
+                    }
+                }
+            },
+            "updated": {
+                "type": "date",
+                "format": "strict_date_time||strict_date_time_no_millis||basic_date_time||basic_date_time_no_millis||basic_date||strict_date||strict_date_hour_minute_second||strict_date_hour_minute_second_fraction"
+            },
+            "version_id": {
+                "type": "integer"
+            },
+            "versions": {
+                "type": "object",
+                "properties": {
+                    "index": {
+                        "type": "integer"
+                    },
+                    "is_latest": {
+                        "type": "boolean"
+                    },
+                    "is_latest_draft": {
+                        "type": "boolean"
+                    },
+                    "latest_id": {
+                        "type": "keyword",
+                        "ignore_above": 1024
+                    },
+                    "latest_index": {
+                        "type": "integer"
+                    },
+                    "next_draft_id": {
+                        "type": "keyword",
+                        "ignore_above": 1024
+                    }
+                }
             }
         }
     }
+}
 
 
 def test_mapping2():
