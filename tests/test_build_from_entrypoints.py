@@ -378,11 +378,11 @@ def test_dumper_file():
         os.path.join("test", "records", "dumpers", "multilingual.py")
     ).read()
     print(data)
-    assert "/a" in re.sub(r"\s", "", data)
-    assert "/b" in re.sub(r"\s", "", data)
-    assert "/c/d" in re.sub(r"\s", "", data)
-    assert "/c/f" in re.sub(r"\s", "", data)
-    assert "/jej/kch" in re.sub(r"\s", "", data)
+    assert "a" in re.sub(r"\s", "", data)
+    assert "b" in re.sub(r"\s", "", data)
+    assert "c/d" in re.sub(r"\s", "", data)
+    assert "c/f" in re.sub(r"\s", "", data)
+    assert "jej/kch" in re.sub(r"\s", "", data)
 
 
 def test_generated_schema2():

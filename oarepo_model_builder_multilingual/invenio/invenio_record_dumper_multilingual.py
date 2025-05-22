@@ -30,4 +30,4 @@ class InvenioRecordMultilingualDumperBuilder(InvenioBaseClassPythonBuilder):
 
     def process_paths(self, path):
         components = path.split(".")
-        return "/" + "/".join(components)
+        return "/".join(components)
