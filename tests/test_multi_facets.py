@@ -61,10 +61,26 @@ class TestSearchOptions(InvenioSearchOptions):
     facet_groups={}
 
     facets = {
-        'a_cs': facets.a_cs,
-        'a_en': facets.a_en,
-        'a_lang': facets.a_lang,
-        **getattr(InvenioSearchOptions, 'facets', {})
+
+
+    **getattr(InvenioSearchOptions, 'facets', {}), 'a_cs': facets.a_cs,
+
+
+
+    'a_en': facets.a_en,
+
+
+
+    'a': facets.a,
+
+
+
+    'a_lang': facets.a_lang,
+
+
+
+    
+
     }
     """,
     )
@@ -141,27 +157,34 @@ from invenio_search.engine import dsl
 from oarepo_runtime.i18n import lazy_gettext as _
 
 from invenio_records_resources.services.records.facets import TermsFacet
+from oarepo_runtime.services.facets import MultilingualFacet
 from oarepo_runtime.services.facets.nested_facet import NestedLabeledFacet
 
 
 
-a_cs = TermsFacet(field='a.cs.keyword', label =_('a.label'))
+a_cs = TermsFacet(field='a_cs.keyword', label =_('a.label'))
 
-a_en = TermsFacet(field='a.en.keyword', label =_('a.label'))
+a_en = TermsFacet(field='a_en.keyword', label =_('a.label'))
+
+a = MultilingualFacet(lang_facets={ 'cs': a_cs, 'en': a_en }, label=_('a.label'))
 
 a_lang = NestedLabeledFacet(path = 'a', nested_facet = TermsFacet(field='a.lang', label =_('a/lang.label')))
 
 b = TermsFacet(field='b', label =_('b.label'))
 
-c_cs = TermsFacet(field='c.cs.keyword', label =_('c.label'))
+c_cs = TermsFacet(field='c_cs.keyword', label =_('c.label'))
 
-c_en = TermsFacet(field='c.en.keyword', label =_('c.label'))
+c_en = TermsFacet(field='c_en.keyword', label =_('c.label'))
+
+c = MultilingualFacet(lang_facets={ 'cs': c_cs, 'en': c_en }, label=_('c.label'))
 
 c_language = NestedLabeledFacet(path = 'c', nested_facet = TermsFacet(field='c.language', label =_('c/language.label')))
 
-d_cs = TermsFacet(field='d.cs.keyword', label =_('d.label'))
+d_cs = TermsFacet(field='d_cs.keyword', label =_('d.label'))
 
-d_en = TermsFacet(field='d.en.keyword', label =_('d.label'))
+d_en = TermsFacet(field='d_en.keyword', label =_('d.label'))
+
+d = MultilingualFacet(lang_facets={ 'cs': d_cs, 'en': d_en }, label=_('d.label'))
 
 d_lang = NestedLabeledFacet(path = 'd', nested_facet = TermsFacet(field='d.lang', label =_('d/lang.label')))
 
@@ -169,9 +192,11 @@ d_navic_kxh = NestedLabeledFacet(path = 'd', nested_facet = TermsFacet(field='d.
 
 e_f = TermsFacet(field='e.f', label =_('e/f.label'))
 
-e_g_cs = TermsFacet(field='e.g.cs.keyword', label =_('e/g.label'))
+e_g_cs = TermsFacet(field='e.g_cs.keyword', label =_('e/g.label'))
 
-e_g_en = TermsFacet(field='e.g.en.keyword', label =_('e/g.label'))
+e_g_en = TermsFacet(field='e.g_en.keyword', label =_('e/g.label'))
+
+e_g = MultilingualFacet(lang_facets={ 'cs': e_g_cs, 'en': e_g_en }, label=_('e/g.label'))
 
 e_g_lang = NestedLabeledFacet(path = 'e.g', nested_facet = TermsFacet(field='e.g.lang', label =_('e/g/lang.label')))
 
