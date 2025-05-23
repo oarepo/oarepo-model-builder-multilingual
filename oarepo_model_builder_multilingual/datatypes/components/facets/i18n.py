@@ -47,7 +47,8 @@ class I18nStrFacetsComponent(NestedFacetsComponent, RegularFacetsComponent):
                     )
                 )
             )
-            langs_facets[l] =  facet_definition.path
+            if l not in langs_facets:
+                langs_facets[l] =  facet_definition.path
 
         facet_section["field"] = f"MultilingualFacet(lang_facets ={langs_facets}, label=_('{label}'))"
 
