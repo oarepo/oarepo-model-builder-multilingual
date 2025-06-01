@@ -66,7 +66,6 @@ class TestSearchOptions(InvenioSearchOptions):
     'a_cs': facets.a_cs,
 
 
-
     'a_en': facets.a_en,
 
 
@@ -79,6 +78,7 @@ class TestSearchOptions(InvenioSearchOptions):
 
 
     **getattr(InvenioSearchOptions, 'facets', {})
+
 
     
 

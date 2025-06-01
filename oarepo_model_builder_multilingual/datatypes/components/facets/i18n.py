@@ -52,6 +52,7 @@ class I18nStrFacetsComponent(NestedFacetsComponent, RegularFacetsComponent):
         facet_section_args = ", ".join(f"{repr(k)}: {v}" for k, v in langs_facets.items())
         facet_section["field"] = f"MultilingualFacet(lang_facets ={{{facet_section_args}}}, label=_('{label}'))"
 
+
         if "imports" not in facet_section:
             facet_section["imports"] = ["oarepo_runtime.services.facets.MultilingualFacet"]
         else:

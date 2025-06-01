@@ -38,4 +38,5 @@ source $VENV_TESTS/bin/activate
 pip install -U setuptools pip wheel
 pip install "oarepo[tests, rdm]==${OAREPO_VERSION}.*"
 pip install "./example-model[tests]"
+
 pytest ./example-model/tests -vvv
