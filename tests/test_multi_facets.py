@@ -63,7 +63,7 @@ class TestSearchOptions(InvenioSearchOptions):
     facets = {
 
 
-    **getattr(InvenioSearchOptions, 'facets', {}), 'a_cs': facets.a_cs,
+    'a_cs': facets.a_cs,
 
 
 
@@ -78,6 +78,7 @@ class TestSearchOptions(InvenioSearchOptions):
     'a_lang': facets.a_lang,
 
 
+    **getattr(InvenioSearchOptions, 'facets', {})
 
     
 
